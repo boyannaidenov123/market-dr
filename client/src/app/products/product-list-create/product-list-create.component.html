@@ -1,0 +1,31 @@
+<mat-card>
+    <form [formGroup]="form" (submit)="onSaveProduct()">
+        <mat-form-field>
+            <mat-label>Select flower</mat-label>
+            <mat-select>
+                <mat-option>Other</mat-option>
+                <mat-option *ngFor="let car of cars" [value]="car.value">{{car.value}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+                <input matInput type="text" formControlName="type" placeholder="Type ">
+                <mat-error *ngIf="form.get('type').invalid">Invalid</mat-error>
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput type="number" min="1" formControlName="count" placeholder="Count">
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput type="number" min="1" formControlName="price" placeholder="Price(cent)">
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput type="number" min="1" formControlName="min" placeholder="Minimum count">
+        </mat-form-field>
+        <button mat-raised-button color="accent" type="submit">
+            Save Product
+        </button>
+    </form>
+</mat-card>
+
+
+
+

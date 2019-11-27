@@ -1,0 +1,14 @@
+<mat-toolbar color="primary">
+    <span>
+        <a routerLink="/"> Home Page</a>
+    </span>
+    <span class="spacer"></span>
+    <button mat-button [matMenuTriggerFor]="beforeMenu" class="bold">&#9776;</button>
+    <mat-menu #beforeMenu="matMenu" xPosition="before">
+        <button *ngIf="!userIsAuthenticated" mat-menu-item routerLink="/login">Log in</button>
+        <button *ngIf="!userIsAuthenticated" mat-menu-item routerLink="/signup">Sign up</button>
+        <button *ngIf="userIsAuthenticated" mat-menu-item routerLink="/profile">Profile</button>
+        <button *ngIf="userIsAuthenticated" mat-menu-item routerLink="/market">Market</button>
+        <button *ngIf="userIsAuthenticated" mat-menu-item (click)="onLogout()">Log out</button>
+    </mat-menu>
+</mat-toolbar>

@@ -1,0 +1,14 @@
+.container{
+    display: flex;
+}
+.listWithProducts{
+    width: 500px;
+    margin-top: 1rem;
+    margin-left: 1rem;
+}
+.clock{
+    flex-grow: 1;
+}
+table {
+    width: 100%;
+  }

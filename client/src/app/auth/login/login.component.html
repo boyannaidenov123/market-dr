@@ -1,0 +1,21 @@
+<mat-card>
+    <mat-card-header>
+        <mat-card-title>{{ name }}</mat-card-title>
+      </mat-card-header>
+    <form (submit)="onLogin(loginForm)" #loginForm="ngForm">
+        <mat-form-field>
+            <input matInput name="email" ngModel type="email" placeholder="E-Mail" #emailInput="ngModel" required email>
+            <mat-error *ngIf="emailInput.invalid">Please enter a valid email.</mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+            <input type="password" name="password" ngModel matInput placeholder="Password" #passwordInput="ngModel" required>
+            <mat-error *ngIf="passwordInput.invalid">Please enter a valid password.</mat-error>
+        </mat-form-field>
+        <button mat-raised-button color="accent" type="submit">Log in
+        </button>
+    </form>
+    <button *ngIf="!isTrader" mat-raised-button (click)="changeStatut()">Log in as trader</button>
+    <button *ngIf="isTrader" mat-raised-button (click)="changeStatut()">Log in as user</button>
+
+</mat-card>
