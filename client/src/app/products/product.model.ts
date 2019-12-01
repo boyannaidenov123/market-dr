@@ -6,4 +6,5 @@ export class Product{
     price:number;
     min:number;
     image?:string;
+    id?:string;
 }

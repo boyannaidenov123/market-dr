@@ -14,7 +14,7 @@ export class AuthService {
   private userId:string;
   private tokenTimer:any;
   private authStatusListener = new Subject<boolean>();
-  private isTrader:boolean = false;
+  private isTraderListener = new Subject<boolean>();
 
   constructor(
     private router:Router,
@@ -33,8 +33,8 @@ export class AuthService {
     getUserId(){
       return this.userId;
     }
-    getIsTrader(){
-      return this.isTrader;
+    getIsTraderListener(){
+      return this.isTraderListener;
     }
 
   signup(email:string, password:string, isTrader:boolean){
@@ -57,12 +57,11 @@ export class AuthService {
       password:password,
       isTrader: isTrader
     };
-    this.http.post<{token:string, expiresIn:number, userId:string, isTrader:boolean}>("http://localhost:9000/users/login", user)
+    this.http.post<{token:string, expiresIn:number, userId:string}>("http://localhost:9000/users/login", user)
     .subscribe(response =>{
       const token = response.token;
       this.token = token;
-      const isTrader = response.isTrader;
-      this.isTrader = isTrader;
+
       if(token){
         const expiresInDuration = response.expiresIn;
         this.setAuthTimer(expiresInDuration);
@@ -79,6 +78,13 @@ export class AuthService {
       }
     })
       
+  }
+  
+  getIsTrader():any{
+    this.http.get<{isTrader: boolean}>("http://localhost:9000/users/isTrader")
+    .subscribe(response =>{
+      this.isTraderListener.next(response.isTrader);
+    })
   }
 
 
@@ -134,6 +140,7 @@ export class AuthService {
     this.isAuthenticated = false;
     this.authStatusListener.next(false);
     this.userId = null;
+    this.isTraderListener.next(false);
     clearTimeout(this.tokenTimer);
     this.clearAuthData();
 

@@ -8,14 +8,14 @@ import { ProductsService } from '../products.service';
   styleUrls: ['./product-list-create.component.css']
 })
 export class ProductListCreateComponent implements OnInit {
-
+  selected;
   form:FormGroup;
 
   constructor(private productService: ProductsService) { }
 
   ngOnInit() {
     this.form = new FormGroup({
-      selectedCar: new FormControl(null, {
+      name: new FormControl(null, {
         validators:[Validators.required]
       }),
       type:new FormControl(null, {
@@ -34,7 +34,7 @@ export class ProductListCreateComponent implements OnInit {
   }
 
 
-  cars: Car[] = [
+  flowers: Flower[] = [
     {value: 'Acacia'},
     {value: 'Acanthus'},
     {value: 'Aloe'},
@@ -51,13 +51,17 @@ export class ProductListCreateComponent implements OnInit {
 
   ];
   onSaveProduct(){
-    if(!this.form.invalid){
+    if(this.form.invalid){
       return;
+    }else{
+      this.productService.addNewProduct(this.form.value.name, this.form.value.type, this.form.value.count, this.form.value.price, this.form.value.min);
+
     }
-    this.productService.addNewProduct(this.form.value.name, this.form.value.type, this.form.value.count, this.form.value.price, this.form.value.min);
+    this.form.reset();
   }
 
 }
-export interface Car {
+
+export interface Flower {
   value: string;
 }

@@ -3,6 +3,7 @@ var router = express.Router();
 const User = require('../models/user');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const checkAuth = require('../middleware/check-auth');
 
 
 /* GET users listing. */
@@ -56,7 +57,7 @@ router.post('/login', (req, res, next) =>{
     }
     console.log("Ima user");
     const token = jwt.sign(
-      {email: fetchedUser.email, userId: fetchedUser._id, isTrader:fetchedUser.isTrader},
+      {email: fetchedUser.email, userId: fetchedUser._id},
       'secret_this_should_be_longer',
       {expiresIn: "24h"}
     )
@@ -64,11 +65,28 @@ router.post('/login', (req, res, next) =>{
     res.status(200).json({
       token: token,
       expiresIn: 86400,
-      userId: fetchedUser._id,
-      isTrader:fetchedUser.isTrader
+      userId: fetchedUser._id
     })
 
   })
 });
+
+router.get('/isTrader', checkAuth, (req, res, next)=>{
+  console.log("tuk")
+  User.findOne({
+    _id: req.userData.userId,
+    email: req.userData.email
+  }).then(user =>{
+    if(!user){
+      return res.status(404).json({
+        message: "User not found"
+      })
+    }
+    console.log(user)
+    res.status(200).json({
+      isTrader: user.isTrader
+    })
+  })
+})
 
 module.exports = router;

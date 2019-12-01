@@ -15,6 +15,10 @@ import {
 import {MatTableModule} from '@angular/material/table';
 import {MatSelectModule} from '@angular/material/select';
 import {MatSliderModule} from '@angular/material/slider';
+import {MatExpansionModule} from '@angular/material/expansion';
+import {MatRadioModule} from '@angular/material/radio';
+
+
 
 
 
@@ -64,7 +68,9 @@ import { ClockComponent } from './clock/clock.component';
     MatPaginatorModule,
     MatTableModule,
     MatSelectModule,
-    MatSliderModule
+    MatSliderModule,
+    MatExpansionModule,
+    MatRadioModule
     
   ],
   providers: [{

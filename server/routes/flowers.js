@@ -13,6 +13,7 @@ router.post('/newFlower', checkAuth, (req, res, next)=>{
         min: +req.body.min,
         image: req.body.image
     });
+    console.log(flower)
     flower.save().then(createFlower =>{
         res.status(201).json({
             message: "Flower added successfully",
@@ -24,18 +25,28 @@ router.post('/newFlower', checkAuth, (req, res, next)=>{
     })
 })
 
-router.get('/getFlowers', checkAuth, (req, res, next)=>{
-    Flower.find()
+router.get('/', checkAuth, (req, res, next)=>{
+    const pageSize = +req.query.pagesize;
+    const currentPage = +req.query.page;
+    const productQuery = Flower.find();
+    let fetchedProducts;
+
+    if(pageSize && currentPage){
+        productQuery
+        .skip(pageSize * (currentPage-1))
+        .limit(pageSize)
+    }
+    productQuery
     .then(flowers =>{
-        if(!flowers){
-            return res.status(404).json({
-                message:"Not found"
-            })
-        }
+        fetchedProducts = flowers;
+        return Flower.count();
+    }).then(count =>{
         res.status(200).json({
-            flowers:flowers
-        })
-    })
-})
+            message:"Products fetch successfully",
+            products: fetchedProducts,
+            maxProducts: count
+        });
+    });
+});
 
 module.exports = router;

@@ -17,3 +17,7 @@ input[type="file"]{
 .image-preview img{
     height: 100%;
 }
+.mat-radio-button {
+    margin-top: 1rem;
+    margin-left: 16px;
+  }

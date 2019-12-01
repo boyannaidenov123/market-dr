@@ -1,34 +1,42 @@
-<mat-card>
-    <form [formGroup]="form" (submit)="onSaveProduct()">
-        <mat-form-field>
-            <mat-label>Select flower</mat-label>
-            <mat-select>
-                <mat-option>Other</mat-option>
-                <mat-option *ngFor="let car of cars" [value]="car.value">{{car.value}}</mat-option>
-            </mat-select>
-        </mat-form-field>
-        <mat-form-field>
-                <input matInput type="text" formControlName="type" placeholder="Type ">
-                <mat-error *ngIf="form.get('type').invalid">This field is required.</mat-error>
-        </mat-form-field>
-        <mat-form-field>
-            <input matInput type="number" min="1" formControlName="count" placeholder="Count">
-            <mat-error *ngIf="form.get('count').invalid">This field is required.</mat-error>
-        </mat-form-field>
-        <mat-form-field>
-            <input matInput type="number" min="1" formControlName="price" placeholder="Price(cent)">
-            <mat-error *ngIf="form.get('price').invalid">This field is required.</mat-error>
-        </mat-form-field>
-        <mat-form-field>
-            <input matInput type="number" min="1" formControlName="min" placeholder="Minimum count">
-            <mat-error *ngIf="form.get('min').invalid">This field is required.</mat-error>
-        </mat-form-field>
-        <button mat-raised-button color="accent" type="submit">
-            Save Product
-        </button>
-    </form>
-</mat-card>
-
-
-
+<mat-accordion multi="true">
+    <mat-expansion-panel [expanded]="true">
+        <mat-expansion-panel-header>
+            Add new order
+        </mat-expansion-panel-header>
+        <mat-card>
+            <form [formGroup]="form" (submit)="onSaveProduct()">
+                <mat-form-field>
+                    <mat-label>Select flower</mat-label>
+                    <mat-select formControlName="name">
+                        <mat-option>Other</mat-option>
+                        <mat-option *ngFor="let flower of flowers" [value]="flower.value">{{flower.value}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field>
+                    <input matInput type="text" formControlName="type" placeholder="Type ">
+                    <mat-error *ngIf="form.get('type').invalid">This field is required.</mat-error>
+                </mat-form-field>
+                <mat-form-field>
+                    <input matInput type="number" min="1" formControlName="count" placeholder="Count">
+                    <mat-error *ngIf="form.get('count').invalid">This field is required.</mat-error>
+                </mat-form-field>
+                <mat-form-field>
+                    <input matInput type="number" min="1" formControlName="price" placeholder="Price(cent)">
+                    <mat-error *ngIf="form.get('price').invalid">This field is required.</mat-error>
+                </mat-form-field>
+                <mat-form-field>
+                    <input matInput type="number" min="1" formControlName="min" placeholder="Minimum count">
+                    <mat-error *ngIf="form.get('min').invalid">This field is required.</mat-error>
+                </mat-form-field>
+                <button mat-raised-button color="accent" type="submit">
+                    Save Product
+                </button>
+            </form>
+        </mat-card>
+    </mat-expansion-panel>
+</mat-accordion>
+<mat-radio-group aria-label="Select an option" [(ngModel)]="selected">
+    <mat-radio-button [checked]="true" value="1">All</mat-radio-button>
+    <mat-radio-button value="2">Yours</mat-radio-button>
+</mat-radio-group>
 
