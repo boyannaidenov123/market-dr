@@ -15,17 +15,25 @@ const flowerSchema = mongoose.Schema({
         type:String,
         require:true
     },
-    count:{
+    containers:{
         type: Number,
         require: true
+    },
+    itemsInContainer:{
+        type: Number,
+        require: true
+    },
+    height:{
+        type:Number,
+        require: true
+    },
+    weight:{
+        type:Number,
+        require:true
     },
     price:{
         type: Number,
         require:true
-    },
-    min:{
-        type:Number,
-        default: 1
     },
     image:{
         type:String,

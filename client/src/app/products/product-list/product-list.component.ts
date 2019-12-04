@@ -23,7 +23,7 @@ export class ProductListComponent implements OnInit {
 
 
 
-  displayedColumns: string[] = ['name', 'type', 'count', 'price', 'min'];
+  displayedColumns: string[] = ['name', 'type', 'containers', 'items', 'height', 'weight', 'price'];
   dataSource = new MatTableDataSource<Product>(this.products);  
 
   constructor(private productsService: ProductsService){}

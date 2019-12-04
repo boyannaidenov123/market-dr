@@ -10,16 +10,19 @@ import { map } from 'rxjs/operators'
 export class ProductsService {
   private products: Product[] = [];
   private productsUpdated = new Subject<{products:Product[], productCount: number}>();
+  private selected:number = 1;
 
-  constructor(public http: HttpClient) { }
+  constructor(private http: HttpClient) { }
 
-  addNewProduct(name:string, type:string, count:number, price:number, min:number){
+  addNewProduct(name:string, type:string, containers:number, price:number, itemsInContainer:number, height:number, weight:number){
     const product:Product = {
       name: name,
       type: type,
-      count: count,
-      price: price,
-      min: min
+      containers: containers,
+      itemsInContainer: itemsInContainer,
+      height: height,
+      weight: weight,
+      price: price
     }
     this.http.post<{message:string, flower:any}>("http://localhost:9000/flowers/newFlower", product)
     .subscribe(response =>{
@@ -28,20 +31,29 @@ export class ProductsService {
     })
   }
 
-  getProducts(productsPerPage: number, currentPage:number){
-    const queryParams = `?pagesize=${productsPerPage}&page=${currentPage}`;
+  getProducts(productsPerPage: number, currentPage:number, selected?:number){
+    let queryParams;
+    if(selected){
+      queryParams = `?pagesize=${productsPerPage}&page=${currentPage}&selected=${selected}`;
+      this.selected = selected;
+    }else{
+      queryParams = `?pagesize=${productsPerPage}&page=${currentPage}&selected=${this.selected}`;
+    }
     this.http.get<{message:string; products:any, maxProducts}>("http://localhost:9000/flowers/" + queryParams)
     .pipe(
       map((productData) => {
           return {
             products: productData.products.map(product => {
                   return {
+                      seller: product.seller,
                       name: product.name,
                       type: product.type,
                       id: product._id,
-                      count: product.count,
-                      price: product.price,
-                      min: product.min
+                      containers: product.containers,
+                      itemsInContainer: product.itemsInContainer,
+                      height: product.height,
+                      weight: product.weight,
+                      price: product.price
                   };
               }), maxProducts: productData.maxProducts
           };
@@ -49,7 +61,6 @@ export class ProductsService {
   )
 
     .subscribe(transformedProducts =>{
-      console.log(transformedProducts)
       this.products = transformedProducts.products;
       this.productsUpdated.next({
         products: [...this.products],

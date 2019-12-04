@@ -44,9 +44,12 @@ export class AuthService {
       password:password,
       isTrader: isTrader
     };
-    this.http.post<{message:string, result:any}>("http://localhost:9000/users/signup", newUser)
+    this.http.post<{message:string, result:any, signup:boolean}>("http://localhost:9000/users/signup", newUser)
     .subscribe(response =>{
       console.log(response.message);
+      if(response.signup){
+        this.router.navigate(['/market']);
+      }
     })
   }
 

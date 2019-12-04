@@ -8,9 +8,11 @@ router.post('/newFlower', checkAuth, (req, res, next)=>{
         seller: req.userData.userId,
         name: req.body.name,
         type: req.body.type,
-        count: +req.body.count,
+        containers: +req.body.containers,
+        itemsInContainer: +req.body.itemsInContainer,
+        height: req.body.height,
+        weight: req.body.weight,
         price: +req.body.price,
-        min: +req.body.min,
         image: req.body.image
     });
     console.log(flower)
@@ -28,14 +30,25 @@ router.post('/newFlower', checkAuth, (req, res, next)=>{
 router.get('/', checkAuth, (req, res, next)=>{
     const pageSize = +req.query.pagesize;
     const currentPage = +req.query.page;
+    const selected = +req.query.selected;
+
     const productQuery = Flower.find();
     let fetchedProducts;
 
     if(pageSize && currentPage){
-        productQuery
-        .skip(pageSize * (currentPage-1))
-        .limit(pageSize)
+        if(selected == 2){// "Yours" products
+            productQuery
+            .find({seller: req.userData.userId})
+            .skip(pageSize * (currentPage-1))
+            .limit(pageSize)
+            
+        }else{
+            productQuery
+            .skip(pageSize * (currentPage-1))
+            .limit(pageSize)            
+        }
     }
+
     productQuery
     .then(flowers =>{
         fetchedProducts = flowers;
