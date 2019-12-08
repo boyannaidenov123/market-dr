@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ProductsService } from '../products.service';
 import { MatRadioChange } from '@angular/material';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -13,9 +14,27 @@ export class ProductListCreateComponent implements OnInit {
   selected;
   form:FormGroup;
 
+  private id:string;
+  private editProductSub: Subscription;
+  private mode:string = 'create';
+
   constructor(private productService: ProductsService) { }
 
   ngOnInit() {
+
+    this.editProductSub = this.productService.getEditProductListener()
+    .subscribe(result =>{
+      this.mode = 'edit';
+      this.id = result.product._id;
+      this.form.controls['name'].setValue(result.product.name);
+      this.form.controls['type'].setValue(result.product.type);
+      this.form.controls['containers'].setValue(result.product.containers);
+      this.form.controls['items'].setValue(result.product.itemsInContainer);
+      this.form.controls['height'].setValue(result.product.height);
+      this.form.controls['weight'].setValue(result.product.weight);
+      this.form.controls['price'].setValue(result.product.price);
+    })
+
     this.form = new FormGroup({
       name: new FormControl(null, {
         validators:[]
@@ -62,7 +81,13 @@ export class ProductListCreateComponent implements OnInit {
     if(this.form.invalid){
       return;
     }else{
+      if(this.mode === 'create'){
       this.productService.addNewProduct(this.form.value.name, this.form.value.type, this.form.value.containers, this.form.value.items, this.form.value.height, this.form.value.weight, this.form.value.price);
+      }
+      else{
+        this.productService.updateProduct(this.id, this.form.value.name, this.form.value.type, this.form.value.containers, this.form.value.items, this.form.value.height, this.form.value.weight, this.form.value.price);
+        this.mode = 'create'
+      }
 
     }
     //this.form.reset(); not work!!!
@@ -71,7 +96,12 @@ export class ProductListCreateComponent implements OnInit {
   radioChange(event: MatRadioChange) {
     this.selected = event.value;
     this.productService.getProducts(5, 1, this.selected);
-}
+  }
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    this.editProductSub.unsubscribe();
+  }
 
 }
 

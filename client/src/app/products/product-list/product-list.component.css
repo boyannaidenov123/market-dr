@@ -4,3 +4,7 @@ table {
 div{
     margin-bottom: 1rem;
 }
+td{
+  text-align: center;
+  width: 100px
+}

@@ -2,7 +2,7 @@
     display: flex;
 }
 .listWithProducts{
-    width: 500px;
+    width: 700px;
     margin-top: 1rem;
     margin-left: 1rem;
 }
@@ -11,6 +11,3 @@
     text-align: center;
     margin-top: 1rem;
 }
-table {
-    width: 100%;
-  }

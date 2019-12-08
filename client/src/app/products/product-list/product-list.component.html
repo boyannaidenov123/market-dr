@@ -4,43 +4,58 @@
         <!-- Name Column -->
         <ng-container matColumnDef="name">
             <th mat-header-cell *matHeaderCellDef> Name </th>
-            <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+            <td mat-cell *matCellDef="let product"> {{product.name}} </td>
         </ng-container>
 
         <!-- Type Column -->
         <ng-container matColumnDef="type">
             <th mat-header-cell *matHeaderCellDef> Type </th>
-            <td mat-cell *matCellDef="let element"> {{element.type}} </td>
+            <td mat-cell *matCellDef="let product"> {{product.type}} </td>
         </ng-container>
 
         <!-- Containers Column -->
         <ng-container matColumnDef="containers">
             <th mat-header-cell *matHeaderCellDef> containers </th>
-            <td mat-cell *matCellDef="let element"> {{element.containers}} </td>
+            <td mat-cell *matCellDef="let product"> {{product.containers}} </td>
         </ng-container>
 
         <!-- Items Column -->
         <ng-container matColumnDef="items">
             <th mat-header-cell *matHeaderCellDef> items </th>
-            <td mat-cell *matCellDef="let element"> {{element.itemsInContainer}} </td>
+            <td mat-cell *matCellDef="let product"> {{product.itemsInContainer}} </td>
         </ng-container>
 
         <!-- height Column -->
         <ng-container matColumnDef="height">
             <th mat-header-cell *matHeaderCellDef> height </th>
-            <td mat-cell *matCellDef="let element"> {{element.height}} </td>
+            <td mat-cell *matCellDef="let product"> {{product.height}} </td>
         </ng-container>
 
         <!-- weight Column -->
         <ng-container matColumnDef="weight">
             <th mat-header-cell *matHeaderCellDef> weight </th>
-            <td mat-cell *matCellDef="let element"> {{element.weight}} </td>
+            <td mat-cell *matCellDef="let product"> {{product.weight}} </td>
         </ng-container>
 
         <!-- price Column -->
         <ng-container matColumnDef="price">
             <th mat-header-cell *matHeaderCellDef> price </th>
-            <td mat-cell *matCellDef="let element"> {{element.price}} </td>
+            <td mat-cell *matCellDef="let product"> {{product.price}} </td>
+        </ng-container>
+        <!-- EDIT Column -->
+        <ng-container matColumnDef="EDIT">
+            <th mat-header-cell *matHeaderCellDef> EDIT </th>
+            <td mat-cell *matCellDef="let product">
+                <button mat-button color="primary" *ngIf="userIsAuthenticated && userId == product.seller" (click)="onEdit(product.id)">EDIT</button>
+            </td>
+        </ng-container>
+
+        <!-- DELETE Column -->
+        <ng-container matColumnDef="DELETE">
+            <th mat-header-cell *matHeaderCellDef> DELETE </th>
+            <td mat-cell *matCellDef="let product">
+                <button mat-button color="warn" *ngIf="userIsAuthenticated && userId == product.seller" (click)="onDelete(product.id)">DELETE</button>
+            </td>
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

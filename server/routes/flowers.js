@@ -52,7 +52,7 @@ router.get('/', checkAuth, (req, res, next)=>{
     productQuery
     .then(flowers =>{
         fetchedProducts = flowers;
-        return Flower.count();
+        return productQuery.count();
     }).then(count =>{
         res.status(200).json({
             message:"Products fetch successfully",
@@ -61,5 +61,66 @@ router.get('/', checkAuth, (req, res, next)=>{
         });
     });
 });
+
+router.delete('/:id', checkAuth, (req, res, next)=>{
+    Flower.deleteOne({
+        _id: req.params.id,
+        seller: req.userData.userId
+    }).then(relult =>{
+        if(relult.n > 0){
+            res.status(200).json({
+                message: 'Delition successful!'
+            })
+        }else{
+            res.status(401).json({
+                message:'Not authorized!'
+            })
+        }
+    })
+})
+
+router.get('/:id', (req, res, next)=>{
+    Flower.findById(req.params.id).then(product =>{
+        if(product){
+            res.status(200).json({
+                product: product
+            })
+        }
+        else{
+            res.status(404);
+        }
+    })
+})
+
+router.put("/:id", checkAuth, (req, res, next) => {
+    console.log('tuk')
+    const product = new Flower({
+        _id: req.body.id,
+        seller: req.userData.userId,
+        name: req.body.name,
+        type: req.body.type,
+        containers: +req.body.containers,
+        itemsInContainer: +req.body.itemsInContainer,
+        height: +req.body.height,
+        weight: +req.body.weight,
+        price: +req.body.price,
+        image: req.body.image
+    });
+    console.log(product);
+    Flower.updateOne({
+        _id: req.params.id,
+        seller: req.userData.userId
+    }, product).then(result => {
+        if (result.nModified > 0) {
+            res.status(200).json({
+                message: "Update successful!"
+            })
+        } else {
+            res.status(401).json({
+                message: "Not authorized!"
+            })
+        }
+    })
+})
 
 module.exports = router;

@@ -11,6 +11,8 @@ export class ProductsService {
   private products: Product[] = [];
   private productsUpdated = new Subject<{products:Product[], productCount: number}>();
   private selected:number = 1;
+  product: Product;
+  private editProduct = new Subject<{product:Product | any}>();
 
   constructor(private http: HttpClient) { }
 
@@ -26,7 +28,6 @@ export class ProductsService {
     }
     this.http.post<{message:string, flower:any}>("http://localhost:9000/flowers/newFlower", product)
     .subscribe(response =>{
-      console.log(response.flower);
       this.getProducts(5, 1);
     })
   }
@@ -69,8 +70,42 @@ export class ProductsService {
     })
 
   }
+
+  updateProduct(id:string, name:string, type:string, containers:number, price:number, itemsInContainer:number, height:number, weight:number){
+    const product:Product = {
+      id: id,
+      name: name,
+      type: type,
+      containers: containers,
+      itemsInContainer: itemsInContainer,
+      height: height,
+      weight: weight,
+      price: price
+    }
+    this.http.put(`http://localhost:9000/flowers/${id}`, product)
+    .subscribe(response =>{
+      this.getProducts(5, 1);
+    })
+  }
+
   getProductsUpdatedListener(){
     return this.productsUpdated.asObservable();
+  }
+  getOneProduct(editId:string){
+    this.http.get<{product: Product}>(`http://localhost:9000/flowers/${editId}`)
+    
+    .subscribe(result =>{
+      this.editProduct.next({
+        product: result.product
+      });
+    })
+  }
+
+  deleteProduct(deleteId:string){
+    return this.http.delete<{message:string}>(`http://localhost:9000/flowers/${deleteId}`);
+  }
+  getEditProductListener(){
+    return this.editProduct.asObservable();
   }
 
 }
