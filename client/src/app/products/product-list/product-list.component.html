@@ -43,7 +43,7 @@
             <td mat-cell *matCellDef="let product"> {{product.price}} </td>
         </ng-container>
         <!-- EDIT Column -->
-        <ng-container matColumnDef="EDIT">
+        <ng-container matColumnDef="EDIT" *ngIf="isTrader_">
             <th mat-header-cell *matHeaderCellDef> EDIT </th>
             <td mat-cell *matCellDef="let product">
                 <button mat-button color="primary" *ngIf="userIsAuthenticated && userId == product.seller" (click)="onEdit(product.id)">EDIT</button>
@@ -51,7 +51,7 @@
         </ng-container>
 
         <!-- DELETE Column -->
-        <ng-container matColumnDef="DELETE">
+        <ng-container matColumnDef="DELETE" *ngIf="isTrader_">
             <th mat-header-cell *matHeaderCellDef> DELETE </th>
             <td mat-cell *matCellDef="let product">
                 <button mat-button color="warn" *ngIf="userIsAuthenticated && userId == product.seller" (click)="onDelete(product.id)">DELETE</button>

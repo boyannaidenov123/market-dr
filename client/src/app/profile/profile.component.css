@@ -1,0 +1,15 @@
+.profile{
+    margin-top: 1rem;
+    margin-left: 1rem;
+}
+.info {
+    width: 100%;
+    text-align:center;
+  }
+  
+.userInfo{
+    width: 400px;
+}
+.history{
+    width: 800px;
+}

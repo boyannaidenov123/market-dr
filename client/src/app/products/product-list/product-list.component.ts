@@ -20,19 +20,29 @@ export class ProductListComponent implements OnInit {
   pageSizeOptions = [5, 10, 20];
   products: Product[] = [];
 
+  isTrader_:boolean = false;
   userIsAuthenticated = false;
   userId:string;
   private productsSub:Subscription;
-  private editProductSub: Subscription;
+  private isTraderSub: Subscription;
 
 
 
-  displayedColumns: string[] = ['name', 'type', 'containers', 'items', 'height', 'weight', 'price', 'EDIT', 'DELETE'];
+  displayedColumns: string[] = ['name', 'type', 'containers', 'items', 'height', 'weight', 'price'];
   dataSource = new MatTableDataSource<Product>(this.products);  
 
   constructor(private productsService: ProductsService, private authService: AuthService){}
 
   ngOnInit() {
+    this.isTraderSub = this.authService.getIsTraderListener()
+      .subscribe(isTrader => {
+        if (isTrader) {
+          this.displayedColumns.push('EDIT');
+          this.displayedColumns.push('DELETE');
+          this.isTrader_ = true;
+        }
+      })
+
     this.userIsAuthenticated = this.authService.getIsAuth();
     this.userId = this.authService.getUserId();
 
@@ -62,9 +72,15 @@ export class ProductListComponent implements OnInit {
     this.productsService.getOneProduct(id);
   }
 
+  isTrader(){
+    return this.authService.getIsTrader();
+  }
+
   ngOnDestroy(): void {
     this.productsSub.unsubscribe();
+    this.isTraderSub.unsubscribe()
   }
+
 
 
 }

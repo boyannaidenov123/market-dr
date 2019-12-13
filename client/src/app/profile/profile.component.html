@@ -1,1 +1,27 @@
-<p>profile works!</p>
+<div class="profile">
+    <img src="http://forum.lilithgame.com/styles/canvas/theme/images/no_avatar.jpg" alt="profile picture" width="200" height="200">
+
+    <div class="info">
+        <mat-card class="userInfo">
+            <mat-card-header>
+              <mat-card-title> {{ user.name }}  </mat-card-title>
+              <mat-card-title>  {{ user.email }}  </mat-card-title>
+              <mat-card-title>
+                  <button mat-button id="edit" color="primary" (click)="editProfile()">Edit</button>
+                </mat-card-title>
+            </mat-card-header>
+            
+          </mat-card>
+
+          <mat-card *ngIf="editForm" class="userInfo">
+              Edit profile
+          </mat-card>
+
+          <mat-card class="history">
+              <mat-card-content>
+                  History
+              </mat-card-content>
+          </mat-card>
+    </div>
+
+</div>

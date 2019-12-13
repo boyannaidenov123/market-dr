@@ -16,7 +16,7 @@ export class ProductsService {
 
   constructor(private http: HttpClient) { }
 
-  addNewProduct(name:string, type:string, containers:number, price:number, itemsInContainer:number, height:number, weight:number){
+  addNewProduct(name:string, type:string, containers:number, itemsInContainer:number, height:number, weight:number, price:number){
     const product:Product = {
       name: name,
       type: type,

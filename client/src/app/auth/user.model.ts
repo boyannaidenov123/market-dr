@@ -1,5 +1,6 @@
 export interface User{
     email:string;
-    password:string;
+    name?:string;
+    password?:string;
     isTrader:boolean;
 }

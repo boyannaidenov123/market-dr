@@ -90,4 +90,21 @@ router.get('/isTrader', checkAuth, (req, res, next)=>{
   })
 })
 
+router.get('/info', checkAuth, (req, res, next)=>{
+  User.findById(req.userData.userId)
+  .then(user =>{
+    if(!user){
+      res.status(404).json({
+        message:'Not found'
+      })
+    }
+    console.log(user)
+    res.status(200).json({
+      email:user.email,
+      name: user.name,
+      isTrader: user.isTrader
+    })
+  })
+})
+
 module.exports = router;
