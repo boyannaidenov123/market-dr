@@ -71,7 +71,7 @@ export class ProductsService {
 
   }
 
-  updateProduct(id:string, name:string, type:string, containers:number, price:number, itemsInContainer:number, height:number, weight:number){
+  updateProduct(id:string, name:string, type:string, containers:number, itemsInContainer:number, height:number, weight:number, price:number){
     const product:Product = {
       id: id,
       name: name,

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ProfileService } from './profile.service';
 import { User } from '../auth/user.model';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-profile',
@@ -9,12 +10,13 @@ import { User } from '../auth/user.model';
 })
 export class ProfileComponent implements OnInit {
   
-  editForm:boolean = false;
+  editProfileForm:boolean = false;
   user:User = {
     email:'',
     name:'',
     isTrader:false
   }
+  editForm: FormGroup;
   
   constructor(private profileService: ProfileService) { }
 
@@ -22,19 +24,37 @@ export class ProfileComponent implements OnInit {
     this.profileService.getUserInfo()
     .subscribe(user =>{
       console.log(user)
-        if(!name){
-          this.user.name = "Name: none";
-        }else{
         this.user.name = "Name: " + user.name;          
-        }
-
         this.user.email = "Email: " + user.email;
         this.user.isTrader = user.isTrader;
     })
+
+    this.editForm = new FormGroup({
+      name: new FormControl(null, {
+        validators:[Validators.minLength(6), Validators.maxLength(15), Validators.required]
+      })
+    })
+
   }
 
   editProfile(){
-    this.editForm = true;
+    this.editProfileForm = true;
+  }
+  closeProfileEditForm(){
+    this.editProfileForm = false;
+  }
+
+  changeProfile(){
+    if(this.editForm.invalid){
+      return
+    }
+    this.editProfileForm = false;
+    this.profileService.changeName(this.editForm.value.name)
+    .subscribe(result =>{
+      this.user.name = "Name: " + result.name;
+
+    })
+
   }
 
 }

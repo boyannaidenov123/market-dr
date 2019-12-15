@@ -38,6 +38,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { ProductListCreateComponent } from './products/product-list-create/product-list-create.component';
 import { ProductListComponent } from './products/product-list/product-list.component';
 import { ClockComponent } from './clock/clock.component';
+import { NgCircleProgressModule } from 'ng-circle-progress';
 
 
 @NgModule({
@@ -71,7 +72,8 @@ import { ClockComponent } from './clock/clock.component';
     MatSelectModule,
     MatSliderModule,
     MatExpansionModule,
-    MatRadioModule
+    MatRadioModule,
+    NgCircleProgressModule.forRoot({})
     
   ],
   providers: [{

@@ -9,7 +9,11 @@ export class ProfileService {
   constructor(private http: HttpClient) { }
 
   getUserInfo(){
-    return this.http.get<{email:string, name:string, isTrader:boolean}>("http://localhost:9000/users/info");
+    return this.http.get<{email:string, name:string, isTrader:boolean}>("http://localhost:9000/profile/info");
+  }
+  changeName(name: string){
+    console.log(name);
+    return this.http.post<{message: string, name: string}>("http://localhost:9000/profile/changeName", {name:name});
   }
 
 }

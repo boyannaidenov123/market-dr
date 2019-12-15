@@ -6,10 +6,26 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./clock.component.css']
 })
 export class ClockComponent implements OnInit {
-
+  progress = 100;
   constructor() { }
+  progressBar = document.querySelector('.progress-bar');
+  intervalId;
 
   ngOnInit() {
+    const getDownloadProgress = () => {
+      console.log('getDownload', this);
+      if (this.progress >= 0) {
+        console.log('inside if', this.progress);
+        this.progress = this.progress - 1;
+      }
+      else {
+        clearInterval(this.intervalId);
+      }
+    }
+    this.intervalId = setInterval(getDownloadProgress, 100);
   }
 
+  ngOnDestroy() {
+    clearInterval(this.intervalId);
+  }
 }

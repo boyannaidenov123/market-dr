@@ -5,9 +5,11 @@ div{
     margin-bottom: 1rem;
 }
 td{
-  text-align: center;
   width: 100px
 }
 #edit{
   font-size: 20px;
+}
+button{
+  margin-left: -20px;
 }

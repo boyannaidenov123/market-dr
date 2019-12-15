@@ -7,14 +7,23 @@
               <mat-card-title> {{ user.name }}  </mat-card-title>
               <mat-card-title>  {{ user.email }}  </mat-card-title>
               <mat-card-title>
-                  <button mat-button id="edit" color="primary" (click)="editProfile()">Edit</button>
+                  <button *ngIf="!editProfileForm" mat-raised-button id="edit" color="primary" (click)="editProfile()">Edit</button>
                 </mat-card-title>
             </mat-card-header>
             
           </mat-card>
 
-          <mat-card *ngIf="editForm" class="userInfo">
-              Edit profile
+          <mat-card *ngIf="editProfileForm" class="userInfo">
+              <form [formGroup]="editForm" (submit)="changeProfile()">
+                  <mat-form-field>
+                      <input matInput type="text" formControlName="name" placeholder="Enter new Name">
+                  </mat-form-field>
+                <mat-card-actions>
+                    <button mat-raised-button color="accent" type="submit">Save Name</button>
+                    <button mat-raised-button color="accent" (click)="closeProfileEditForm()">Close</button>
+                </mat-card-actions>
+                 
+              </form>
           </mat-card>
 
           <mat-card class="history">
