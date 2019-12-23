@@ -1,30 +1,40 @@
 <div class="profile">
-    <img src="http://forum.lilithgame.com/styles/canvas/theme/images/no_avatar.jpg" alt="profile picture" width="200" height="200">
+    <div class="image">
+      <img src="http://forum.lilithgame.com/styles/canvas/theme/images/no_avatar.jpg" alt="profile picture" width="200" height="200">  
+    </div>
+    
 
     <div class="info">
-        <mat-card class="userInfo">
-            <mat-card-header>
-              <mat-card-title> {{ user.name }}  </mat-card-title>
-              <mat-card-title>  {{ user.email }}  </mat-card-title>
-              <mat-card-title>
-                  <button *ngIf="!editProfileForm" mat-raised-button id="edit" color="primary" (click)="editProfile()">Edit</button>
-                </mat-card-title>
-            </mat-card-header>
-            
-          </mat-card>
+        <mat-tab-group mat-stretch-tabs class="example-stretched-tabs mat-elevation-z4" mat-align-tabs="center" animationDuration="1000ms">
+            <mat-tab label="Name">
+                <h3>Email: {{ user.email }}</h3>
+                <h3>Name: {{ user.name }}</h3>
+                <form (submit)="changeName(nameForm)" #nameForm="ngForm">
+                    <mat-form-field>
+                        <input matInput name="name" ngModel type="name" placeholder="{{ user.name }}" #nameInput="ngModel" minlength="5" maxlength="15">
+                        <mat-error *ngIf="nameInput.invalid">Please enter a valid name.</mat-error>
+                    </mat-form-field>
+                    <button mat-raised-button color="primary" type="submit">Change name</button>
+                </form>
+            </mat-tab>
 
-          <mat-card *ngIf="editProfileForm" class="userInfo">
-              <form [formGroup]="editForm" (submit)="changeProfile()">
-                  <mat-form-field>
-                      <input matInput type="text" formControlName="name" placeholder="Enter new Name">
-                  </mat-form-field>
-                <mat-card-actions>
-                    <button mat-raised-button color="accent" type="submit">Save Name</button>
-                    <button mat-raised-button color="accent" (click)="closeProfileEditForm()">Close</button>
-                </mat-card-actions>
-                 
-              </form>
-          </mat-card>
+            <mat-tab label="Password">
+                <form (submit)="changePassword(passwordForm)" #passwordForm="ngForm">
+                    <mat-form-field>
+                        <input matInput name="password" ngModel type="password" #passwordInput="ngModel" placeholder="Enter your password" required>
+                        <mat-error *ngIf="passwordInput.invalid">Please enter a valid password.</mat-error>
+                    </mat-form-field>
+                    <br>
+                    <mat-form-field>
+                        <input matInput name="newPassword" ngModel type="password" #newPasswordInput="ngModel" placeholder="Enter new password" required>
+                        <mat-error *ngIf="newPasswordInput.invalid">Please enter a valid password.</mat-error>
+                    </mat-form-field>
+                    <br>
+                    <button mat-raised-button color="primary" type="submit">Change password</button>
+                </form>
+            </mat-tab>
+            <mat-tab label="Payment"> Money: 1 000 000$ </mat-tab>
+          </mat-tab-group>
 
           <mat-card class="history">
               <mat-card-content>

@@ -2,6 +2,8 @@ var express = require('express');
 var router = express.Router();
 const User = require('../models/user');
 const checkAuth = require('../middleware/check-auth');
+const bcrypt = require('bcrypt');
+
 
 
 router.get('/info', checkAuth, (req, res, next)=>{
@@ -38,6 +40,45 @@ router.post('/changeName', checkAuth, (req, res, next)=>{
         message: "Not authorized"
       })
     }
+  })
+})
+router.post('/changePassword', checkAuth, (req, res, next)=>{
+  User.findById({_id: req.userData.userId})
+  .then(user =>{
+    if(!user){
+      return res.status(401).json({
+        message:"Auth failed"
+      });
+    }
+    return bcrypt.compare(req.body.password, user.password);
+  }).then(result =>{
+    if(!result){
+      return res.status(401).json({
+        message:"Auth failed"
+      })
+    }
+    console.log("Suvpada");
+    console.log(req.body.newPassword);
+    bcrypt.hash(req.body.newPassword, 10)
+      .then(hash => {
+        User.updateOne({
+          _id: req.userData.userId
+        }, {
+          password: hash
+        })
+          .then(result => {
+            if (result.nModified > 0) {
+              res.status(200).json({
+                message: "Update successful",
+              })
+            } else {
+              res.status(401).json({
+                message: "Not authorized"
+              })
+            }
+          })
+      })
+
   })
 })
 

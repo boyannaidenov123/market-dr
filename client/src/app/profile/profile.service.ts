@@ -15,5 +15,12 @@ export class ProfileService {
     console.log(name);
     return this.http.post<{message: string, name: string}>("http://localhost:9000/profile/changeName", {name:name});
   }
+  changePassword(password:string, newPassword){
+    const passwords = {
+      password:password,
+      newPassword:newPassword
+    };
+    return this.http.post<{message:string}>("http://localhost:9000/profile/changePassword", passwords);
+  }
 
 }

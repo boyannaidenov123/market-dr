@@ -11,5 +11,15 @@
     width: 400px;
 }
 .history{
-    width: 800px;
+    max-width: 800px;
+    margin: 0 auto;
+    margin-top: 5rem;
 }
+.image{
+    display: table;
+    margin: 0 auto;
+}
+.example-stretched-tabs {
+    max-width: 800px;
+    margin: 0 auto;
+  }

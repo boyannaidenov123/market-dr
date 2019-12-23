@@ -21,6 +21,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var flowersRouter = require('./routes/flowers');
 var profileRouter = require('./routes/profile');
+var auctionRouter = require('./routes/auction');
 
 var app = express();
 
@@ -53,6 +54,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/flowers', flowersRouter);
 app.use('/profile', profileRouter);
+app.use('/auction', auctionRouter);
 
 
 // catch 404 and forward to error handler

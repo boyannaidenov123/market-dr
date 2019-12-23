@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ProfileService } from './profile.service';
 import { User } from '../auth/user.model';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
-
+import { NgForm } from '@angular/forms';
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
@@ -10,13 +9,11 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 })
 export class ProfileComponent implements OnInit {
   
-  editProfileForm:boolean = false;
   user:User = {
     email:'',
     name:'',
     isTrader:false
   }
-  editForm: FormGroup;
   
   constructor(private profileService: ProfileService) { }
 
@@ -24,37 +21,36 @@ export class ProfileComponent implements OnInit {
     this.profileService.getUserInfo()
     .subscribe(user =>{
       console.log(user)
-        this.user.name = "Name: " + user.name;          
-        this.user.email = "Email: " + user.email;
+        this.user.name = user.name;          
+        this.user.email = user.email;
         this.user.isTrader = user.isTrader;
     })
 
-    this.editForm = new FormGroup({
-      name: new FormControl(null, {
-        validators:[Validators.minLength(6), Validators.maxLength(15), Validators.required]
-      })
-    })
+
 
   }
 
-  editProfile(){
-    this.editProfileForm = true;
-  }
-  closeProfileEditForm(){
-    this.editProfileForm = false;
-  }
-
-  changeProfile(){
-    if(this.editForm.invalid){
-      return
+  changeName(form:NgForm){
+    if(form.invalid){
+      return;
     }
-    this.editProfileForm = false;
-    this.profileService.changeName(this.editForm.value.name)
-    .subscribe(result =>{
-      this.user.name = "Name: " + result.name;
-
+    console.log(form.value.name);
+    this.profileService.changeName(form.value.name)
+    .subscribe(result=>{
+      this.user.name = result.name;
+      form.reset();
     })
+  }
 
+  changePassword(form:NgForm){
+    if(form.invalid){
+      return;
+    }
+    console.log(form.value.password)
+    this.profileService.changePassword(form.value.password, form.value.newPassword)
+    .subscribe(result=>{
+      console.log(result.message);
+    })
   }
 
 }

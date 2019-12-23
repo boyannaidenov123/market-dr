@@ -17,6 +17,8 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatSliderModule} from '@angular/material/slider';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatRadioModule} from '@angular/material/radio';
+import {MatTabsModule} from '@angular/material/tabs';
+
 
 
 
@@ -73,6 +75,7 @@ import { NgCircleProgressModule } from 'ng-circle-progress';
     MatSliderModule,
     MatExpansionModule,
     MatRadioModule,
+    MatTabsModule,
     NgCircleProgressModule.forRoot({})
     
   ],
