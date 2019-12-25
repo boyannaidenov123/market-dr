@@ -4,6 +4,8 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const mongoose = require('mongoose');
+const startAuction = require('./functions/startAuction');
+
 
 const uri = "mongodb+srv://danobaca:plsbacai@aramisdb-635xs.mongodb.net/test?retryWrites=true&w=majority"
 mongoose.connect(uri,{useNewUrlParser:true, useUnifiedTopology: true},function(err, client) {
@@ -55,6 +57,10 @@ app.use('/users', usersRouter);
 app.use('/flowers', flowersRouter);
 app.use('/profile', profileRouter);
 app.use('/auction', auctionRouter);
+
+
+//startAuction();
+
 
 
 // catch 404 and forward to error handler

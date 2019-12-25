@@ -12,14 +12,25 @@ export class ClockComponent implements OnInit {
   intervalId;
 
   ngOnInit() {
+    console.log(Date());
+
+
+
+
+
+
+
     const getDownloadProgress = () => {
-      console.log('getDownload', this);
+      //console.log('getDownload', this);
       if (this.progress >= 0) {
-        console.log('inside if', this.progress);
+        //console.log('inside if', this.progress);
         this.progress = this.progress - 1;
       }
       else {
         clearInterval(this.intervalId);
+      }
+      if(this.progress == 30){
+        this.progress += 50;
       }
     }
     this.intervalId = setInterval(getDownloadProgress, 100);

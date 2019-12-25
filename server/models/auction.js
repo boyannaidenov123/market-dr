@@ -7,6 +7,10 @@ const auctionSchema = mongoose.Schema({
         require:true,
         unique:true
     },
+    active:{
+        type: Boolean,
+        require: true
+    },
     startDate:{
         type:Date,
         require:true

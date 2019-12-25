@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import { AuthService } from '../auth/auth.service';
 import { Subscription } from 'rxjs';
+import { MarketService } from './market.service';
 
 
 @Component({
@@ -12,14 +13,26 @@ export class MarketComponent implements OnInit {
 
   private isTrader_;
   private isTraderSub: Subscription;
+  private activate = false;
 
-  constructor(public authService: AuthService){}
+  constructor(private authService: AuthService, private marketService: MarketService){}
 
   ngOnInit() {
     this.authService.getIsTrader();
     this.isTraderSub = this.authService.getIsTraderListener()
     .subscribe(isTrader =>{
       this.isTrader_ = isTrader;
+    })
+
+    this.marketService.getInfoForAuction()
+    .subscribe(response =>{
+      this.activate = response.activate;
+      if(!response.activate){
+        this.activate = response.activate;
+        setTimeout(() =>{
+          this.activate = true;
+        }, ((new Date(response.startTime).getTime() - Date.now())))
+      }
     })
     
   }

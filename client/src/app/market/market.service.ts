@@ -8,11 +8,9 @@ export class MarketService {
 
   constructor(private http:HttpClient) { }
 
-  getFlowersForSell(){
-    this.http.get("http://localhost:9000/flowers/getFlowers")
-    .subscribe(flowers =>{
-      
-    })
+
+  getInfoForAuction(){
+    return this.http.get<{startTime:Date, activate:boolean}>("http://localhost:9000/auction");
   }
 
 }

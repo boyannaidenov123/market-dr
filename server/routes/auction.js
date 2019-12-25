@@ -22,11 +22,12 @@ router.post('/', (req, res, next)=>{
       })
 })
 
-router.get('/', (req, res, next)=>{
+router.get('/', checkAuth, (req, res, next)=>{
     Auction.findOne({
         name:"Sofia"
     }).then(result=>{
         res.status(200).json({
+            activate: result.active,
             startTime: result.startDate
         })
     })

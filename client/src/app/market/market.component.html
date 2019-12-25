@@ -4,7 +4,8 @@
         <app-product-list></app-product-list>
     </div>
     <div class="clock">
-        <app-clock></app-clock>
+        <app-clock *ngIf="activate"></app-clock>
+        <app-timer *ngIf="!activate"></app-timer>
     </div>
 </div>
 

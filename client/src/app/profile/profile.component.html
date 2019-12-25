@@ -19,6 +19,7 @@
             </mat-tab>
 
             <mat-tab label="Password">
+                <h3>Change password: </h3>
                 <form (submit)="changePassword(passwordForm)" #passwordForm="ngForm">
                     <mat-form-field>
                         <input matInput name="password" ngModel type="password" #passwordInput="ngModel" placeholder="Enter your password" required>

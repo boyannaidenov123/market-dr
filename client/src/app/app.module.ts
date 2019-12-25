@@ -19,7 +19,7 @@ import {MatExpansionModule} from '@angular/material/expansion';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatTabsModule} from '@angular/material/tabs';
 
-
+import { CountdownModule } from 'ngx-countdown';
 
 
 
@@ -41,6 +41,7 @@ import { ProductListCreateComponent } from './products/product-list-create/produ
 import { ProductListComponent } from './products/product-list/product-list.component';
 import { ClockComponent } from './clock/clock.component';
 import { NgCircleProgressModule } from 'ng-circle-progress';
+import { TimerComponent } from './timer/timer.component';
 
 
 @NgModule({
@@ -54,7 +55,8 @@ import { NgCircleProgressModule } from 'ng-circle-progress';
     ProfileComponent,
     ProductListCreateComponent,
     ProductListComponent,
-    ClockComponent
+    ClockComponent,
+    TimerComponent
   ],
   imports: [
     BrowserModule,
@@ -76,7 +78,8 @@ import { NgCircleProgressModule } from 'ng-circle-progress';
     MatExpansionModule,
     MatRadioModule,
     MatTabsModule,
-    NgCircleProgressModule.forRoot({})
+    NgCircleProgressModule.forRoot({}),
+    CountdownModule
     
   ],
   providers: [{
