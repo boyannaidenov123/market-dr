@@ -5,10 +5,11 @@ const checkAuth = require('../middleware/check-auth');
 
 router.post('/', (req, res, next)=>{
     console.log("asdf")
-    const event = new Date('December 23, 2019 10:00:00');
+    const event = new Date('December 27, 2019 10:00:00');
     const city = new Auction({
         name:"Sofia",
-        startDate:event
+        active:false,
+        startDate:event,
     })
     city.save()
     .then(result => {
