@@ -18,6 +18,7 @@ import {MatSliderModule} from '@angular/material/slider';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatTabsModule} from '@angular/material/tabs';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 import { CountdownModule } from 'ngx-countdown';
 
@@ -42,7 +43,6 @@ import { ProductListComponent } from './products/product-list/product-list.compo
 import { ClockComponent } from './clock/clock.component';
 import { NgCircleProgressModule } from 'ng-circle-progress';
 import { TimerComponent } from './timer/timer.component';
-
 
 @NgModule({
   declarations: [
@@ -79,8 +79,8 @@ import { TimerComponent } from './timer/timer.component';
     MatRadioModule,
     MatTabsModule,
     NgCircleProgressModule.forRoot({}),
-    CountdownModule
-    
+    CountdownModule,
+    MatProgressSpinnerModule
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi:true

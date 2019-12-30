@@ -26,9 +26,9 @@ export class MarketComponent implements OnInit {
 
     this.marketService.getInfoForAuction()
     .subscribe(response =>{
+      console.log(response)
       this.activate = response.activate;
       if(!response.activate){
-        this.activate = response.activate;
         setTimeout(() =>{
           this.activate = true;
         }, ((new Date(response.startTime).getTime() - Date.now())))

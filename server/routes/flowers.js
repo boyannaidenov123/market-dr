@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const Flower = require('../models/flower');
+const Lot = require('../models/lot');
 const checkAuth = require('../middleware/check-auth');
 
 router.post('/newFlower', checkAuth, (req, res, next)=>{
@@ -8,6 +9,7 @@ router.post('/newFlower', checkAuth, (req, res, next)=>{
         seller: req.userData.userId,
         name: req.body.name,
         type: req.body.type,
+        auctionName: req.body.auctionName,
         containers: +req.body.containers,
         itemsInContainer: +req.body.itemsInContainer,
         height: req.body.height,
@@ -15,8 +17,23 @@ router.post('/newFlower', checkAuth, (req, res, next)=>{
         price: +req.body.price,
         image: req.body.image
     });
-    console.log(flower)
+
+    let lot = new Lot({
+        auctionName: req.body.auctionName,
+        currentPrice: 100,
+        status:{
+            registered:true,
+            scheduledState:false,
+            active:false,
+            sold:false
+        }
+    })
+
     flower.save().then(createFlower =>{
+        lot.flowerId = createFlower._id;
+        lot.save().then(createLot => {
+            console.log(createLot);
+        })
         res.status(201).json({
             message: "Flower added successfully",
             flower: {
@@ -32,17 +49,18 @@ router.get('/', checkAuth, (req, res, next)=>{
     const currentPage = +req.query.page;
     const selected = +req.query.selected;
 
+
     const productQuery = Flower.find();
     let fetchedProducts;
 
     if(pageSize && currentPage){
-        if(selected == 2){// "Yours" products
+        if(selected == 2){// If radio button option is "Yours" products
             productQuery
             .find({seller: req.userData.userId})
             .skip(pageSize * (currentPage-1))
             .limit(pageSize)
             
-        }else{
+        }else{ // If radio button option is "All" products
             productQuery
             .skip(pageSize * (currentPage-1))
             .limit(pageSize)            
@@ -52,7 +70,10 @@ router.get('/', checkAuth, (req, res, next)=>{
     productQuery
     .then(flowers =>{
         fetchedProducts = flowers;
-        return productQuery.count();
+        if(selected == 2){
+            return Flower.find({seller: req.userData.userId}).countDocuments();
+        }
+        return Flower.countDocuments();
     }).then(count =>{
         res.status(200).json({
             message:"Products fetch successfully",
@@ -63,6 +84,11 @@ router.get('/', checkAuth, (req, res, next)=>{
 });
 
 router.delete('/:id', checkAuth, (req, res, next)=>{
+    Lot.deleteOne({
+        flowerId: req.params.id
+    }).then(result =>{
+        console.log("delete lot")
+    })
     Flower.deleteOne({
         _id: req.params.id,
         seller: req.userData.userId

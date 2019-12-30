@@ -1,24 +1,29 @@
 const CronJob = require('cron').CronJob;
 const Auction = require('../models/auction');
+const {performance} = require('perf_hooks');
+const socket  = require('../socketIO/socket');
+var IO;
 
-const job = new CronJob('*/5 * * * * *', function() {
+const auction = new CronJob(' * * * * *', function() {
 	const d = new Date();
     console.log('Date: ', d);
-    Auction.findOne({name: "Sofia"})
-    .then(result => {
-        console.log(result)
-        result.active = false;
-        result.save()
-        .then(result =>{
-            console.log(result);
-        })
+    
+    Auction.updateOne({name:"Sofia"}, {active:true})
+    .then(result =>{
+        //Auction is starting
+        //Start SocketIO communication
+        console.log(IO);
+        socket.startClockIO(IO);
+    }).catch(err =>{
+
     })
 
 });
 
-module.exports = function(){
+module.exports = function(io){
+    IO = io;
     console.log('Before job instantiation');
     console.log('After job instantiation');
-    job.start();
+    auction.start();
 }
 

@@ -33,6 +33,8 @@ export class ProductListCreateComponent implements OnInit {
       this.form.controls['height'].setValue(result.product.height);
       this.form.controls['weight'].setValue(result.product.weight);
       this.form.controls['price'].setValue(result.product.price);
+      this.form.controls['auctionName'].setValue(result.product.auctionName);
+      this.form.controls['endPrice'].setValue(result.product.endPrice);
     })
 
     this.form = new FormGroup({
@@ -56,6 +58,12 @@ export class ProductListCreateComponent implements OnInit {
       }),
       price: new FormControl(null, {
         validators: [Validators.required]
+      }),
+      auctionName: new FormControl(null, {
+        validators: [Validators.required]
+      }),
+      endPrice: new FormControl(null, {
+        validators: []
       })
     })
   }
@@ -74,18 +82,22 @@ export class ProductListCreateComponent implements OnInit {
     {value: 'Ash-leaved Trumpet-flower'},
     {value: 'Aspen'},
     {value: 'Aster, China'}
-
-
   ];
+  auctionNames: Name[] = [
+    {value: 'Sofia'},
+    {value: 'Varna'},
+    {value: 'Plovdiv'}
+  ];
+
   onSaveProduct():void{
     if(this.form.invalid){
       return;
     }else{
       if(this.mode === 'create'){
-      this.productService.addNewProduct(this.form.value.name, this.form.value.type, this.form.value.containers, this.form.value.items, this.form.value.height, this.form.value.weight, this.form.value.price);
+      this.productService.addNewProduct(this.form.value.name, this.form.value.type, this.form.value.containers, this.form.value.items, this.form.value.height, this.form.value.weight, this.form.value.price, this.form.value.auctionName);
       }
       else{
-        this.productService.updateProduct(this.id, this.form.value.name, this.form.value.type, this.form.value.containers, this.form.value.items, this.form.value.height, this.form.value.weight, this.form.value.price);
+        this.productService.updateProduct(this.id, this.form.value.name, this.form.value.type, this.form.value.containers, this.form.value.items, this.form.value.height, this.form.value.weight, this.form.value.price, this.form.value.auctionName);
         this.mode = 'create'
       }
 
@@ -106,5 +118,9 @@ export class ProductListCreateComponent implements OnInit {
 }
 
 export interface Flower {
+  value: string;
+}
+
+export interface Name {
   value: string;
 }

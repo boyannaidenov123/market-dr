@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const uniqueValidator = require('mongoose-unique-validator');
 
 const flowerSchema = mongoose.Schema({
     seller:{
@@ -38,9 +37,11 @@ const flowerSchema = mongoose.Schema({
     image:{
         type:String,
         require:true
-    }
+    },
+    auctionName:{
+        type: String,
+        require: true
+    },
 });
-
-flowerSchema.plugin(uniqueValidator);
 
 module.exports = mongoose.model("Flower", flowerSchema);

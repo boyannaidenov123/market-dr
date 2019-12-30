@@ -32,8 +32,17 @@
                     <mat-error *ngIf="form.get('weight').invalid">This field is required.</mat-error>
                 </mat-form-field>
                 <mat-form-field>
-                    <input matInput type="price" min="1" formControlName="price" placeholder="Price">
+                    <input matInput type="number" min="1" formControlName="price" placeholder="Price">
                     <mat-error *ngIf="form.get('price').invalid">This field is required.</mat-error>
+                </mat-form-field>
+
+                <mat-form-field>
+                    <mat-label>Select Auction</mat-label>
+                    <mat-select formControlName="auctionName">
+                        <mat-option *ngFor="let name of auctionNames" [value]="name.value">
+                            {{name.value}}
+                        </mat-option>
+                    </mat-select>
                 </mat-form-field>
                 <button mat-raised-button color="accent" type="submit">
                     Save Product
@@ -46,4 +55,3 @@
     <mat-radio-button value="1">All</mat-radio-button>
     <mat-radio-button value="2">Yours</mat-radio-button>
 </mat-radio-group>
-

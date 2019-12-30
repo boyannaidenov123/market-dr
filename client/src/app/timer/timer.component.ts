@@ -9,8 +9,7 @@ import { MarketService } from '../market/market.service';
 export class TimerComponent implements OnInit {
 
   private time: number = 0;
-  private timeIsSet: boolean = false;
-  private days:string = "00";
+  private days:string | number = "00";
 
   constructor(private marketService: MarketService) { }
 
@@ -20,6 +19,9 @@ export class TimerComponent implements OnInit {
         const dateNow = new Date();
         this.time = (new Date(response.startTime).getTime() - dateNow.getTime()) / 1000;
         this.days = "" + (new Date(response.startTime).getDay() - dateNow.getDay());
+        if(new Date(response.startTime).getHours() < dateNow.getHours()){
+          this.days = Number(this.days) - 1;
+        }
       })
   }
 

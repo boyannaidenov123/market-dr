@@ -19,6 +19,7 @@ export class ProductListComponent implements OnInit {
   currentPage = 1;
   pageSizeOptions = [5, 10, 20];
   products: Product[] = [];
+  private loading= false;
 
   isTrader_:boolean = false;
   userIsAuthenticated = false;
@@ -28,7 +29,7 @@ export class ProductListComponent implements OnInit {
 
 
 
-  displayedColumns: string[] = ['name', 'type', 'containers', 'items', 'height', 'weight', 'price'];
+  displayedColumns: string[] = ['name', 'type', 'containers', 'items', 'height', 'weight', 'price', 'auctionName'];
   dataSource = new MatTableDataSource<Product>(this.products);  
 
   constructor(private productsService: ProductsService, private authService: AuthService){}
@@ -49,6 +50,7 @@ export class ProductListComponent implements OnInit {
     this.productsService.getProducts(this.productsPerPage, this.currentPage);
     this.productsSub = this.productsService.getProductsUpdatedListener()
     .subscribe((productsData:{products:Product[], productCount: number})=>{
+      this.loading = true;
       this.totalProducts = productsData.productCount;
       this.products = productsData.products;
       this.dataSource = new MatTableDataSource<Product>(this.products);  

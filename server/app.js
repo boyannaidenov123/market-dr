@@ -1,10 +1,18 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
 const mongoose = require('mongoose');
 const startAuction = require('./functions/startAuction');
+const app = require('express')();
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
+const socket  = require('./socketIO/socket');
+
+socket.startConnection(io);
+startAuction(io);
+
 
 
 const uri = "mongodb+srv://danobaca:plsbacai@aramisdb-635xs.mongodb.net/test?retryWrites=true&w=majority"
@@ -19,13 +27,15 @@ mongoose.connect(uri,{useNewUrlParser:true, useUnifiedTopology: true},function(e
 
 
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var flowersRouter = require('./routes/flowers');
-var profileRouter = require('./routes/profile');
-var auctionRouter = require('./routes/auction');
 
-var app = express();
+
+const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/users');
+const flowersRouter = require('./routes/flowers');
+const profileRouter = require('./routes/profile');
+const auctionRouter = require('./routes/auction');
+
+
 
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -37,6 +47,8 @@ app.use((req, res, next) => {
     "Access-Control-Allow-Methods",
     "GET, POST, PATCH, DELETE, OPTIONS, PUT"
   );
+  res.header("Access-Control-Allow-Origin", "http://localhost:4200");
+  res.header('Access-Control-Allow-Credentials', true);
   next();
 });
 
@@ -59,7 +71,8 @@ app.use('/profile', profileRouter);
 app.use('/auction', auctionRouter);
 
 
-//startAuction();
+
+
 
 
 
@@ -77,6 +90,9 @@ app.use(function(err, req, res, next) {
   // render the error page
   res.status(err.status || 500);
   res.render('error');
+});
+http.listen(9001, () => {
+  console.log('Socket io on port 9001');
 });
 
 module.exports = app;
