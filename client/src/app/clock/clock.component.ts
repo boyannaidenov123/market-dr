@@ -9,96 +9,51 @@ import {SocketService} from './socket.service';
 export class ClockComponent implements OnInit {
   progress;
   progressBar = document.querySelector('.progress-bar');
-  intervalId;
+  private lotId:string;
+  private userId:string;
+  private countUsers=0;
   constructor(private srv :SocketService){}
 
 
   ngOnInit() {
     console.log(Date());
 
-
+    //Connect socket
     this.srv.listen('connection')
     .subscribe((res:any) => {
       console.log(res);
     })
+
+    //Get clock value
     this.srv.listen('clockValue')
     .subscribe((res:any) => {
       console.log(res.value);
       this.progress = res.value;
     })
 
+    //Get which Lot is for sale
     this.srv.listen('lotForSale')
     .subscribe((res:any) => {
       console.log(res);
       this.progress = res.currentPrice;
+      this.lotId = res._id;
+      //trqbva da ocvetq dadeniq Flower v tablicata 
     })
+
+    this.srv.listen('countUsers')
+    .subscribe((res:any) => {
+       this.countUsers = res.countUsers;
+    })
+
    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-    //this.clockService.sendMessage('connection', "zdr");
-    
-  /*  this.clockService.onNewMessage("newMessage")
-    .subscribe(msg => {
-      console.log(msg);
-    })*/
-    
-
-
-
-
-
- /*   const getDownloadProgress = () => {
-      //console.log('getDownload', this);
-      if (this.progress >= 0) {
-        //console.log('inside if', this.progress);
-        this.progress = this.progress;
-      }
-      else {
-        clearInterval(this.intervalId);
-      }
-      if(this.progress == 30){
-        this.progress += 50;
-      }
-    }
-    this.intervalId = setInterval(getDownloadProgress, 100);*/
+  }
+  onBuyLot(){
+    this.userId = localStorage.getItem("userId");
+    //Buy lot
+    this.srv.sent('buyLot', {lotId: this.lotId, userId: this.userId});
   }
 
   ngOnDestroy() {
-    clearInterval(this.intervalId);
+
   }
 }

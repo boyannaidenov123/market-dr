@@ -3,8 +3,8 @@ const Auction = require('../models/auction');
 const {performance} = require('perf_hooks');
 const socket  = require('../socketIO/socket');
 var IO;
-
-const auction = new CronJob(' * * * * *', function() {
+//26 14 31 * *
+const auction = new CronJob('21 16 31 * *', function() {
 	const d = new Date();
     console.log('Date: ', d);
     
@@ -12,7 +12,6 @@ const auction = new CronJob(' * * * * *', function() {
     .then(result =>{
         //Auction is starting
         //Start SocketIO communication
-        console.log(IO);
         socket.startClockIO(IO);
     }).catch(err =>{
 
