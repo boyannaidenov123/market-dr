@@ -16,7 +16,7 @@ export class ProductsService {
 
   constructor(private http: HttpClient) { }
 
-  addNewProduct(name:string, type:string, containers:number, itemsInContainer:number, height:number, weight:number, price:number, auctionName:string){
+  addNewProduct(name:string, type:string, containers:number, itemsInContainer:number, height:number, weight:number, blockPrice:number, auctionName:string){
     const product:Product = {
       name: name,
       type: type,
@@ -24,7 +24,7 @@ export class ProductsService {
       itemsInContainer: itemsInContainer,
       height: height,
       weight: weight,
-      price: price,
+      blockPrice: blockPrice,
       auctionName: auctionName
     }
     this.http.post<{message:string, flower:any}>("http://localhost:9000/flowers/newFlower", product)
@@ -55,7 +55,7 @@ export class ProductsService {
                       itemsInContainer: product.itemsInContainer,
                       height: product.height,
                       weight: product.weight,
-                      price: product.price,
+                      blockPrice: product.blockPrice,
                       auctionName: product.auctionName
                   };
               }), maxProducts: productData.maxProducts
@@ -73,7 +73,7 @@ export class ProductsService {
 
   }
 
-  updateProduct(id:string, name:string, type:string, containers:number, itemsInContainer:number, height:number, weight:number, price:number, auctionName:string){
+  updateProduct(id:string, name:string, type:string, containers:number, itemsInContainer:number, height:number, weight:number, blockPrice:number, auctionName:string){
     const product:Product = {
       id: id,
       name: name,
@@ -82,7 +82,7 @@ export class ProductsService {
       itemsInContainer: itemsInContainer,
       height: height,
       weight: weight,
-      price: price,
+      blockPrice: blockPrice,
       auctionName: auctionName
     }
     this.http.put(`http://localhost:9000/flowers/${id}`, product)

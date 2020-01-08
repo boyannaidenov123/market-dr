@@ -40,9 +40,9 @@
         </ng-container>
 
         <!-- price Column -->
-        <ng-container matColumnDef="price">
-            <th mat-header-cell *matHeaderCellDef> price </th>
-            <td mat-cell *matCellDef="let product"> {{product.price}} </td>
+        <ng-container matColumnDef="blockPrice" > 
+            <th mat-header-cell matTooltip="Block Price" [matTooltipPosition]="position" *matHeaderCellDef> block price </th>
+            <td mat-cell *matCellDef="let product"> {{product.blockPrice}} </td>
         </ng-container>
         <!-- price Column -->
         <ng-container matColumnDef="auctionName">

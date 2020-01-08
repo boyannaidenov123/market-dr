@@ -1,25 +1,90 @@
-<circle-progress
-  [percent]="progress"
-  [radius]="200"
-  [outerStrokeWidth]="10"
-  [innerStrokeWidth]="10"
-  [space] = "-10"
-  [outerStrokeColor]="'#4882c2'"
-  [innerStrokeColor]="'#e7e8ea'"
-  [titleFontSize]= "24"
-  [unitsFontSize]= "24"
-  [showSubtitle] = "false"
-  [animation]="true"
-  [animationDuration]="300"
-  [startFromZero]="false"
-  [backgroundGradient]= "true"
-  [clockwise]= "true"
-  [backgroundGradientStopColor]= "'#6dafda'"
-></circle-progress>
+<div class="clock">
+  <circle-progress
+    [percent]="progress"
+    [radius]="170"
+    [outerStrokeWidth]="10"
+    [innerStrokeWidth]="10"
+    [space]="-10"
+    [outerStrokeColor]="'#4882c2'"
+    [innerStrokeColor]="'#e7e8ea'"
+    [titleFontSize]="30"
+    [unitsFontSize]="24"
+    [showSubtitle]="false"
+    [animation]="true"
+    [animationDuration]="300"
+    [startFromZero]="false"
+    [backgroundGradient]="true"
+    [clockwise]="true"
+    [backgroundGradientStopColor]="'#6dafda'"
+    [showUnits]="false"
+  ></circle-progress>
 
-<div>
-  <button mat-raised-button color="primary" (click)="onBuyLot()">Buy</button>
+  <div>
+    <button mat-raised-button color="primary" (click)="onBuyLot()">Buy</button>
+    <mat-form-field>
+      <input matInput type="number" min="1" placeholder="Containers" [(ngModel)]="containers">
+    </mat-form-field>
+  </div>
+
+  <div>
+    <h3>Connected users: {{ countUsers }}</h3>
+  </div>
 </div>
-<div>
-  <h3>Connected users: {{ countUsers }}</h3>
+
+<div class="flowerTable">
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+    <!-- name Column -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>name</th>
+      <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+    </ng-container>
+    <!-- type Column -->
+    <ng-container matColumnDef="type">
+      <th mat-header-cell *matHeaderCellDef>type</th>
+      <td mat-cell *matCellDef="let element">{{ element.type }}</td>
+    </ng-container>
+    <!-- containers Column -->
+    <ng-container matColumnDef="containers">
+      <th mat-header-cell *matHeaderCellDef>containers</th>
+      <td mat-cell *matCellDef="let element">{{ element.containers }}</td>
+    </ng-container>
+    <!-- items Column -->
+    <ng-container matColumnDef="items">
+      <th mat-header-cell *matHeaderCellDef>items</th>
+      <td mat-cell *matCellDef="let element">{{ element.itemsInContainer }}</td>
+    </ng-container>
+    <!-- height Column -->
+    <ng-container matColumnDef="height">
+      <th mat-header-cell *matHeaderCellDef>height</th>
+      <td mat-cell *matCellDef="let element">{{ element.height }}</td>
+    </ng-container>
+    <!-- weight Column -->
+    <ng-container matColumnDef="weight">
+      <th mat-header-cell *matHeaderCellDef>weight</th>
+      <td mat-cell *matCellDef="let element">{{ element.weight }}</td>
+    </ng-container>
+    <!-- price Column -->
+    <ng-container matColumnDef="price">
+      <th mat-header-cell *matHeaderCellDef>price</th>
+      <td mat-cell *matCellDef="let element">{{ element.price }}</td>
+    </ng-container>
+    <!-- minPrice Column -->
+    <ng-container matColumnDef="minPrice">
+      <th mat-header-cell *matHeaderCellDef>minPrice</th>
+      <td mat-cell *matCellDef="let element">{{ element.minPrice }}</td>
+    </ng-container>
+    <!-- blockPrice Column -->
+    <ng-container matColumnDef="blockPrice">
+      <th mat-header-cell *matHeaderCellDef>block price</th>
+      <td mat-cell *matCellDef="let element">{{ element.blockPrice }}</td>
+    </ng-container>
+    <!-- auctionName Column -->
+    <ng-container matColumnDef="auctionName">
+      <th mat-header-cell *matHeaderCellDef>auction</th>
+      <td mat-cell *matCellDef="let element">{{ element.auctionName }}</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
 </div>

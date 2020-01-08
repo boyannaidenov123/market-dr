@@ -5,6 +5,7 @@ import { ProductsService } from '../products.service';
 import { Product } from '../product.model';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
+import {TooltipPosition} from '@angular/material/tooltip';
 
 
 @Component({
@@ -20,6 +21,7 @@ export class ProductListComponent implements OnInit {
   pageSizeOptions = [5, 10, 20];
   products: Product[] = [];
   private loading= false;
+  private position: TooltipPosition = "above";
 
   isTrader_:boolean = false;
   userIsAuthenticated = false;
@@ -29,7 +31,7 @@ export class ProductListComponent implements OnInit {
 
 
 
-  displayedColumns: string[] = ['name', 'type', 'containers', 'items', 'height', 'weight', 'price', 'auctionName'];
+  displayedColumns: string[] = ['name', 'type', 'containers', 'items', 'height', 'weight', 'blockPrice', 'auctionName'];
   dataSource = new MatTableDataSource<Product>(this.products);  
 
   constructor(private productsService: ProductsService, private authService: AuthService){}

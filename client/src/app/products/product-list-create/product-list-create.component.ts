@@ -32,9 +32,8 @@ export class ProductListCreateComponent implements OnInit {
       this.form.controls['items'].setValue(result.product.itemsInContainer);
       this.form.controls['height'].setValue(result.product.height);
       this.form.controls['weight'].setValue(result.product.weight);
-      this.form.controls['price'].setValue(result.product.price);
+      this.form.controls['blockPrice'].setValue(result.product.blockPrice);
       this.form.controls['auctionName'].setValue(result.product.auctionName);
-      this.form.controls['endPrice'].setValue(result.product.endPrice);
     })
 
     this.form = new FormGroup({
@@ -56,14 +55,11 @@ export class ProductListCreateComponent implements OnInit {
       weight: new FormControl(null, {
         validators: [Validators.required]
       }),
-      price: new FormControl(null, {
+      blockPrice: new FormControl(null, {
         validators: [Validators.required]
       }),
       auctionName: new FormControl(null, {
         validators: [Validators.required]
-      }),
-      endPrice: new FormControl(null, {
-        validators: []
       })
     })
   }
@@ -94,10 +90,10 @@ export class ProductListCreateComponent implements OnInit {
       return;
     }else{
       if(this.mode === 'create'){
-      this.productService.addNewProduct(this.form.value.name, this.form.value.type, this.form.value.containers, this.form.value.items, this.form.value.height, this.form.value.weight, this.form.value.price, this.form.value.auctionName);
+      this.productService.addNewProduct(this.form.value.name, this.form.value.type, this.form.value.containers, this.form.value.items, this.form.value.height, this.form.value.weight, this.form.value.blockPrice, this.form.value.auctionName);
       }
       else{
-        this.productService.updateProduct(this.id, this.form.value.name, this.form.value.type, this.form.value.containers, this.form.value.items, this.form.value.height, this.form.value.weight, this.form.value.price, this.form.value.auctionName);
+        this.productService.updateProduct(this.id, this.form.value.name, this.form.value.type, this.form.value.containers, this.form.value.items, this.form.value.height, this.form.value.weight, this.form.value.blockPrice, this.form.value.auctionName);
         this.mode = 'create'
       }
 

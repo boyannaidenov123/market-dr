@@ -1,6 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import { AuthService } from '../auth/auth.service';
-import { Subscription } from 'rxjs';
 import { MarketService } from './market.service';
 
 
@@ -11,19 +9,13 @@ import { MarketService } from './market.service';
 })
 export class MarketComponent implements OnInit {
 
-  private isTrader_;
-  private isTraderSub: Subscription;
+  
+  
   private activate = false;
 
-  constructor(private authService: AuthService, private marketService: MarketService){}
+  constructor(private marketService: MarketService){}
 
   ngOnInit() {
-    this.authService.getIsTrader();
-    this.isTraderSub = this.authService.getIsTraderListener()
-    .subscribe(isTrader =>{
-      this.isTrader_ = isTrader;
-    })
-
     this.marketService.getInfoForAuction()
     .subscribe(response =>{
       console.log(response)
@@ -37,12 +29,6 @@ export class MarketComponent implements OnInit {
     
   }
 
-  isTrader(){
-    return this.isTrader_;
-  }
-  ngOnDestroy(): void {
-    this.isTraderSub.unsubscribe();
-  }
 
 }
 

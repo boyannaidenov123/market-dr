@@ -1,3 +1,19 @@
-.buyButton{
-    
+table {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  td{
+    width: 100px
+  }
+#edit{
+  font-size: 20px;
+}
+
+.clock{
+  text-align: center;
+}
+input{
+  text-align: center
 }

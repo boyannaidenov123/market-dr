@@ -6,7 +6,9 @@ export class Product{
     itemsInContainer:number;
     height:number;
     weight: number;
-    price: number;
+    price?: number;
+    minPrice?: number;
+    blockPrice?: number;
     image?:string;
     id?:string;
     auctionName:string;

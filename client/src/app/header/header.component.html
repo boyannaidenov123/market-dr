@@ -9,6 +9,7 @@
         <button *ngIf="!userIsAuthenticated" mat-menu-item routerLink="/signup">Sign up</button>
         <button *ngIf="userIsAuthenticated" mat-menu-item routerLink="/profile">Profile</button>
         <button *ngIf="userIsAuthenticated" mat-menu-item routerLink="/market">Market</button>
+        <button *ngIf="userIsAuthenticated" mat-menu-item routerLink="/products">Products</button>
         <button *ngIf="userIsAuthenticated" mat-menu-item (click)="onLogout()">Log out</button>
     </mat-menu>
 </mat-toolbar>
