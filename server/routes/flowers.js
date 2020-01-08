@@ -14,7 +14,7 @@ router.post('/newFlower', checkAuth, (req, res, next)=>{
         itemsInContainer: +req.body.itemsInContainer,
         height: req.body.height,
         weight: req.body.weight,
-        price: +req.body.price,
+        blockPrice: +req.body.blockPrice,
         image: req.body.image
     });
 
@@ -129,7 +129,7 @@ router.put("/:id", checkAuth, (req, res, next) => {
         itemsInContainer: +req.body.itemsInContainer,
         height: +req.body.height,
         weight: +req.body.weight,
-        price: +req.body.price,
+        blockPrice: +req.body.blockPrice,
         image: req.body.image
     });
     console.log(product);

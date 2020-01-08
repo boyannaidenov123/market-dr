@@ -24,6 +24,7 @@ mongoose.connect(uri,{useNewUrlParser:true, useUnifiedTopology: true},function(e
     console.log('Mongoose Connected...'); 
   }
 });
+mongoose.set('useFindAndModify', false);
 
 
 

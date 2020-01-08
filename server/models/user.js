@@ -18,7 +18,22 @@ const userSchema = mongoose.Schema({
     isTrader:{
         type:Boolean,
         require:true
-    }
+    },
+    history: [{
+        date: { type: Date, require: true},
+        lotId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Lot",
+            require: true
+        },
+        containers:{type:Number, require: true},
+        flowerId:{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Flower",
+            require: true
+        },
+        price:{type:Number, require: true}
+    }]
 })
 
 userSchema.plugin(uniqueValidator);

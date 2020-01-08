@@ -30,7 +30,7 @@ const flowerSchema = mongoose.Schema({
         type:Number,
         require:true
     },
-    price:{
+    blockPrice:{
         type: Number,
         require:true
     },

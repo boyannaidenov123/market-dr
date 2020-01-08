@@ -6,10 +6,6 @@ const lotShema = mongoose.Schema({
         ref:"Flower",
         require: true
     },
-    endPrice:{
-        type: Number,
-        default: 10
-    },
     currentPrice:{
         type:Number,
         require:true
