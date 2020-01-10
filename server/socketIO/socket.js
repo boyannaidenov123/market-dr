@@ -56,24 +56,25 @@ function clockMovement(io, lotId, price) {
 function start(io) {
   io.on("connection", socket => {
     console.log("----------------------Client Connected----------------------");
+    countUsers++;
+    io.emit("countUsers", { countUsers: countUsers });
     socket.on("disconnect", function() {
       console.log("User disconnected");
       countUsers--;
       io.emit("countUsers", { countUsers: countUsers });
     });
+    socket.on('forceDisconnect', function(){
+      socket.disconnect();
+  });
 
     if (auctionStart) {
       io.emit("lotForSale", lotForSellInfo);
       io.emit("flowerForSale", flowerForSaleInfo);
     }
-    socket.on("connectUser", function() {
-      countUsers++;
-      io.emit("countUsers", { countUsers: countUsers });
-    });
 
     socket.on("buyLot", function(data) {
       if (canBuy) {
-        console.log("buy----------")
+        console.log("buy----------");
         canBuy = false;
         clearInterval(timer);
         console.log(data); //_id na buyer; containers buying;

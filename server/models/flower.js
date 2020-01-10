@@ -34,7 +34,7 @@ const flowerSchema = mongoose.Schema({
         type: Number,
         require:true
     },
-    image:{
+    imagePath:{
         type:String,
         require:true
     },

@@ -9,7 +9,7 @@ export class Product{
     price?: number;
     minPrice?: number;
     blockPrice?: number;
-    image?:string;
+    imagePath?:string;
     id?:string;
     auctionName:string;
 }

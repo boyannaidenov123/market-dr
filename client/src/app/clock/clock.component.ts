@@ -76,7 +76,6 @@ export class ClockComponent implements OnInit {
        console.log(this.countUsers)
     });
 
-    this.SocketService.sent('connectUser', {});
    
   }
   onBuyLot(){
@@ -93,6 +92,7 @@ export class ClockComponent implements OnInit {
   }
 
   ngOnDestroy() {
-
+    this.SocketService.sent('forceDisconnect',{});
+    console.log('sent disconnect')
   }
 }
