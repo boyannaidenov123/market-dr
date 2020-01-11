@@ -6,6 +6,8 @@ import { Product } from '../product.model';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
 import {TooltipPosition} from '@angular/material/tooltip';
+import {MatDialog} from '@angular/material/dialog';
+import { LargerImage } from './LargerImage';
 
 
 @Component({
@@ -31,10 +33,10 @@ export class ProductListComponent implements OnInit {
 
 
 
-  displayedColumns: string[] = ['name', 'type', 'containers', 'items', 'height', 'weight', 'blockPrice', 'auctionName'];
+  displayedColumns: string[] = ['name', 'type', 'containers', 'items', 'height', 'weight', 'blockPrice', 'auctionName', 'image'];
   dataSource = new MatTableDataSource<Product>(this.products);  
 
-  constructor(private productsService: ProductsService, private authService: AuthService){}
+  constructor(private productsService: ProductsService, private authService: AuthService, public dialog: MatDialog){}
 
   ngOnInit() {
     this.isTraderSub = this.authService.getIsTraderListener()
@@ -79,6 +81,13 @@ export class ProductListComponent implements OnInit {
   isTrader(){
     return this.authService.getIsTrader();
   }
+  openImage(imagePath:string){
+    this.dialog.open(LargerImage, {
+      data: {
+        imagePath: imagePath
+      }
+    });
+  }
 
   ngOnDestroy(): void {
     this.productsSub.unsubscribe();
@@ -88,3 +97,4 @@ export class ProductListComponent implements OnInit {
 
 
 }
+

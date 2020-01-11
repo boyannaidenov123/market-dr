@@ -49,6 +49,11 @@
             <th mat-header-cell *matHeaderCellDef> auction </th>
             <td mat-cell *matCellDef="let product"> {{product.auctionName}} </td>
         </ng-container>
+        <!--image-->
+        <ng-container matColumnDef="image">
+            <th mat-header-cell *matHeaderCellDef> image </th>
+            <td mat-cell *matCellDef="let product"><img src="{{product.imagePath}}" alt="" height="20" (click)="openImage(product.imagePath)"></td>
+        </ng-container>
         <!-- EDIT Column -->
         <ng-container matColumnDef="EDIT" *ngIf="isTrader_">
             <th mat-header-cell *matHeaderCellDef> EDIT </th>

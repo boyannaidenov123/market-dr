@@ -51,7 +51,7 @@ function clockMovement(io, lotId, price) {
       clearTimeout(waitBeforeStarting);
       console.log("sledva6t LOT , -------finished");
     }
-  }, 2000);
+  }, 150);
 }
 function start(io) {
   io.on("connection", socket => {

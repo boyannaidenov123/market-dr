@@ -4,7 +4,7 @@ const {performance} = require('perf_hooks');
 const socket  = require('../socketIO/socket');
 var IO;
 
-const auction = new CronJob('59 * * * *', function() {
+const auction = new CronJob('36 14 * * *', function() {
 	const d = new Date();
     console.log('Date: ', d);
     

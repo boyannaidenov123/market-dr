@@ -20,6 +20,7 @@ import {MatRadioModule} from '@angular/material/radio';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import {MatDialogModule} from '@angular/material/dialog';
 
 import { CountdownModule } from 'ngx-countdown';
 
@@ -41,6 +42,7 @@ import { AuthInterceptor } from './auth/auth.interceptor';
 import { ProfileComponent } from './profile/profile.component';
 import { ProductListCreateComponent } from './products/product-list-create/product-list-create.component';
 import { ProductListComponent } from './products/product-list/product-list.component';
+import { LargerImage } from "./products/product-list/LargerImage";
 import { ClockComponent } from './clock/clock.component';
 import { NgCircleProgressModule } from 'ng-circle-progress';
 import { TimerComponent } from './timer/timer.component';
@@ -59,7 +61,8 @@ import { ProductsComponent } from './products/products.component';
     ProductListComponent,
     ClockComponent,
     TimerComponent,
-    ProductsComponent
+    ProductsComponent,
+    LargerImage
   ],
   imports: [
     BrowserModule,
@@ -84,11 +87,13 @@ import { ProductsComponent } from './products/products.component';
     NgCircleProgressModule.forRoot({}),
     CountdownModule,
     MatProgressSpinnerModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatDialogModule
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi:true
   }],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [LargerImage]
 })
 export class AppModule { }
