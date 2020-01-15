@@ -22,12 +22,14 @@
   <div>
     <button mat-raised-button color="primary" (click)="onBuyLot()">Buy</button>
     <mat-form-field>
-      <input matInput type="number" min="1" placeholder="Containers" [(ngModel)]="containers">
+      <input
+        matInput
+        type="number"
+        min="1"
+        placeholder="Containers"
+        [(ngModel)]="containers"
+      />
     </mat-form-field>
-  </div>
-
-  <div>
-    <h3>Connected users: {{ countUsers }}</h3>
   </div>
 </div>
 
@@ -87,4 +89,16 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
   </table>
+</div>
+<div class="image">
+  <img
+    src="{{ imagePath }}"
+    alt="image flower"
+  />
+</div>
+
+<div class="clock">
+  <div>
+    <h3>Connected users: {{ countUsers }}</h3>
+  </div>
 </div>

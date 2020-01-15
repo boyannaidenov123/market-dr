@@ -35,6 +35,8 @@ const usersRouter = require('./routes/users');
 const flowersRouter = require('./routes/flowers');
 const profileRouter = require('./routes/profile');
 const auctionRouter = require('./routes/auction');
+const historyRouter = require('./routes/history');
+
 
 
 
@@ -70,7 +72,7 @@ app.use('/users', usersRouter);
 app.use('/flowers', flowersRouter);
 app.use('/profile', profileRouter);
 app.use('/auction', auctionRouter);
-
+app.use('/history', historyRouter);
 
 
 

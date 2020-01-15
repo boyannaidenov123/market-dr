@@ -1,0 +1,16 @@
+table {
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+td, th{
+  width: 100px;
+}
+
+mat-spinner{
+  margin:0 auto;
+}
+h2{
+  text-align: center
+}

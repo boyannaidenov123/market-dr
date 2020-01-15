@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {SocketService} from './socket.service';
 import { Product } from '../products/product.model';
 import { MatTableDataSource } from '@angular/material';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-clock',
@@ -15,18 +16,18 @@ export class ClockComponent implements OnInit {
   private userId:string;
   private containers:number = 1;
   private product:Product;
+  private imagePath:string = '';
 
   private countUsers;
 
   displayedColumns: string[] = ['name', 'type', 'containers', 'items', 'height', 'weight', 'price', 'minPrice', 'blockPrice', 'auctionName'];
   dataSource = new MatTableDataSource<Product>([]);  
 
-  constructor(private SocketService :SocketService){}
+  constructor(private SocketService :SocketService, private snackBar: MatSnackBar){}
 
 
   ngOnInit() {
     console.log(Date());
-
     //Connect socket
     this.SocketService.listen('connection')
     .subscribe((res:any) => {
@@ -38,7 +39,7 @@ export class ClockComponent implements OnInit {
     .subscribe((res:any) => {
       this.progress = res.value;
       this.product.price = (res.value * this.product.blockPrice);
-      this.dataSource = new MatTableDataSource<Product>([this.product]);  
+      this.dataSource = new MatTableDataSource<Product>([this.product]);
     })
 
     //Get which Lot is for sale
@@ -53,7 +54,7 @@ export class ClockComponent implements OnInit {
     this.SocketService.listen('flowerForSale')
     .subscribe((res:any) => {
       console.log(res);
-
+      this.imagePath = res.imagePath;
       this.product = {
         name: res.name,
         type: res.type,
@@ -74,6 +75,11 @@ export class ClockComponent implements OnInit {
     .subscribe((res:any) => {
        this.countUsers = res.countUsers;
        console.log(this.countUsers)
+    });
+
+    this.SocketService.listen('bought')
+    .subscribe(() => {
+      this.snackBar.open('Bought !')
     });
 
    

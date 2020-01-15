@@ -52,7 +52,7 @@
         <!--image-->
         <ng-container matColumnDef="image">
             <th mat-header-cell *matHeaderCellDef> image </th>
-            <td mat-cell *matCellDef="let product"><img src="{{product.imagePath}}" alt="" height="20" (click)="openImage(product.imagePath)"></td>
+            <td mat-cell *matCellDef="let product"><img src="{{product.imagePath}}" alt="" height="20" width="40" (click)="openImage(product.imagePath)"></td>
         </ng-container>
         <!-- EDIT Column -->
         <ng-container matColumnDef="EDIT" *ngIf="isTrader_">

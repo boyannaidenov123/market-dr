@@ -2,6 +2,7 @@ const Auction = require("../models/auction");
 const Lot = require("../models/lot");
 const Flower = require("../models/flower");
 const User = require("../models/user");
+const History = require("../models/history");
 const { performance } = require("perf_hooks");
 
 let timer; //variable for setInterval
@@ -22,15 +23,13 @@ function clockMovement(io, lotId, price) {
   timer = setInterval(() => {
     console.log(value);
     io.emit("clockValue", { value: value });
-    Lot.updateOne(
-      { _id: lotId },
-      { currentPrice: value - 1 }
-    ).then(result => {});
+    Lot.updateOne({ _id: lotId }, { currentPrice: value - 1 }).then(() => {});
 
-    if (value > 10 && countOfNoSelling < 3) {
+    if (value >= 10 && countOfNoSelling < 3) {
       value -= 1;
     }
-    if (value <= 10 && countOfNoSelling < 3) {
+    if (value < 10 && countOfNoSelling < 3) {
+      canBuy = false;
       countOfNoSelling++;
       clearInterval(timer);
       waitBeforeStarting = setTimeout(() => {
@@ -42,7 +41,7 @@ function clockMovement(io, lotId, price) {
       canBuy = false;
       Lot.updateOne({ _id: lotId }, { "status.scheduledState": true }).then(
         () => {
-          asdf(io);
+          getCountOfLots(io);
         }
       );
       countOfNoSelling = 0;
@@ -63,9 +62,9 @@ function start(io) {
       countUsers--;
       io.emit("countUsers", { countUsers: countUsers });
     });
-    socket.on('forceDisconnect', function(){
+    socket.on("forceDisconnect", function() {
       socket.disconnect();
-  });
+    });
 
     if (auctionStart) {
       io.emit("lotForSale", lotForSellInfo);
@@ -77,10 +76,12 @@ function start(io) {
         console.log("buy----------");
         canBuy = false;
         clearInterval(timer);
+        socket.emit("bought", {});
+
         console.log(data); //_id na buyer; containers buying;
         countOfNoSelling = 0;
         flowerForSaleInfo.containers -= data.containers;
-
+        io.emit("flowerForSale", flowerForSaleInfo);
         if (flowerForSaleInfo.containers < 0) {
           data.containers += flowerForSaleInfo.containers;
           flowerForSaleInfo.containers = 0;
@@ -88,37 +89,37 @@ function start(io) {
             "status.sold": true
           }).then(() => {
             setTimeout(() => {
-              asdf(io);
+              getCountOfLots(io);
             }, 2000);
           });
         }
         Flower.findByIdAndUpdate(flowerForSaleInfo._id, {
           containers: flowerForSaleInfo.containers
-        }).then(() => {});
-
-        User.updateOne(
-          { _id: data.userId },
-          {
-            $push: {
-              "history.date": new Date(),
-              "history.lotId": lotForSellInfo._id,
-              "history.containers": data.containers,
-              "history.flowerId": flowerForSaleInfo._id,
-              "history.price": (value + 1) * flowerForSaleInfo.blockPrice
-            }
-          }
-        )
-          .then(result => {
-            console.log("buyer history saved");
-            if (flowerForSaleInfo.containers > 0) {
-              setTimeout(() => {
-                asdf(io);
-              }, 2000);
-            }
-          })
-          .catch(err => {
-            console.log(err);
+        }).then(result => {
+          const history = new History({
+            flowerId: flowerForSaleInfo._id,
+            buyer: data.userId,
+            seller: result.seller,
+            date: new Date(),
+            containers: data.containers,
+            price: (value + 1) * flowerForSaleInfo.blockPrice
           });
+          history
+            .save()
+            .then(() => {
+              console.log("history saved");
+              if (flowerForSaleInfo.containers > 0) {
+                setTimeout(() => {
+                  clockMovement(io, lotForSellInfo._id, 90);
+                }, 2000);
+              }
+            })
+            .catch(err => {
+              console.log(err);
+            });
+        });
+
+
       }
     });
   });
@@ -139,13 +140,15 @@ function startClock(io) {
         io.emit("flowerForSale", flower);
         flowerForSaleInfo = flower;
       });
-      clockMovement(io, lot._id, lot.currentPrice); //start selling
+      setTimeout(() => {
+        clockMovement(io, lot._id, lot.currentPrice); //start selling
+      }, 2000);
     })
     .catch(err => {
       console.log("error");
     });
 }
-function asdf(io) {
+function getCountOfLots(io) {
   Lot.countDocuments({
     auctionName: "Sofia",
     "status.scheduledState": false,
@@ -170,6 +173,6 @@ module.exports = {
     start(io);
   },
   startClockIO: function(io) {
-    asdf(io);
+    getCountOfLots(io);
   }
 };

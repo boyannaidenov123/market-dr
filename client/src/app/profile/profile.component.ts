@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ProfileService } from './profile.service';
 import { User } from '../auth/user.model';
 import { NgForm } from '@angular/forms';
+
+
+
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
@@ -14,6 +17,7 @@ export class ProfileComponent implements OnInit {
     name:'',
     isTrader:false
   }
+
   
   constructor(private profileService: ProfileService) { }
 
@@ -25,8 +29,6 @@ export class ProfileComponent implements OnInit {
         this.user.email = user.email;
         this.user.isTrader = user.isTrader;
     })
-
-
 
   }
 

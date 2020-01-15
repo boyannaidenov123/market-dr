@@ -21,6 +21,7 @@ import {MatTabsModule} from '@angular/material/tabs';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatDialogModule} from '@angular/material/dialog';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 
 import { CountdownModule } from 'ngx-countdown';
 
@@ -47,6 +48,7 @@ import { ClockComponent } from './clock/clock.component';
 import { NgCircleProgressModule } from 'ng-circle-progress';
 import { TimerComponent } from './timer/timer.component';
 import { ProductsComponent } from './products/products.component';
+import { HistoryComponent } from './history/history.component';
 
 @NgModule({
   declarations: [
@@ -62,7 +64,8 @@ import { ProductsComponent } from './products/products.component';
     ClockComponent,
     TimerComponent,
     ProductsComponent,
-    LargerImage
+    LargerImage,
+    HistoryComponent
   ],
   imports: [
     BrowserModule,
@@ -88,7 +91,8 @@ import { ProductsComponent } from './products/products.component';
     CountdownModule,
     MatProgressSpinnerModule,
     MatTooltipModule,
-    MatDialogModule
+    MatDialogModule,
+    MatSnackBarModule
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi:true

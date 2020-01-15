@@ -59,7 +59,7 @@ export class ProductsService {
       queryParams = `?pagesize=${productsPerPage}&page=${currentPage}&selected=${this.selected}`;
     }
     this.http
-      .get<{ message: string; products: any; maxProducts }>(
+      .get<{ message: string; products: any; maxProducts:any }>(
         "http://localhost:9000/flowers/" + queryParams
       )
       .pipe(
