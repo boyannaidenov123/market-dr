@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { FormGroup, FormControl, Validators, NgForm } from "@angular/forms";
 import { ProductsService } from "../products.service";
 import { MatRadioChange } from "@angular/material";
 import { Subscription } from "rxjs";
@@ -36,6 +36,9 @@ export class ProductListCreateComponent implements OnInit {
         this.form.controls["weight"].setValue(result.product.weight);
         this.form.controls["blockPrice"].setValue(result.product.blockPrice);
         this.form.controls["auctionName"].setValue(result.product.auctionName);
+        this.form.controls["image"].setValue(result.product.imagePath);
+        this.form.controls["additionalInformation"].setValue(result.product.additionalInformation);
+        this.imagePreview = result.product.imagePath;
       });
 
     this.form = new FormGroup({
@@ -70,7 +73,8 @@ export class ProductListCreateComponent implements OnInit {
       image: new FormControl(null, {
         validators: [Validators.required],
         asyncValidators: [mimeType]
-      })
+      }),
+      additionalInformation: new FormControl(null, {})
     });
   }
 
@@ -119,7 +123,8 @@ export class ProductListCreateComponent implements OnInit {
           this.form.value.weight,
           this.form.value.blockPrice,
           this.form.value.auctionName,
-          this.form.value.image
+          this.form.value.image,
+          this.form.value.additionalInformation
         );
       } else {
         this.productService.updateProduct(
@@ -132,12 +137,13 @@ export class ProductListCreateComponent implements OnInit {
           this.form.value.weight,
           this.form.value.blockPrice,
           this.form.value.auctionName,
-          this.form.value.image
+          this.form.value.image,
+          this.form.value.additionalInformation
         );
         this.mode = "create";
       }
     }
-    //this.form.reset(); not work!!!
+    //this.form.reset() //not work!!!
   }
 
   radioChange(event: MatRadioChange) {

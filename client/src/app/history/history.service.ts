@@ -16,8 +16,10 @@ export class HistoryService {
 
   constructor(private http: HttpClient) { }
 
-  getBuyerHistory(){
-    this.http.get<{message:string, flowers: any, maxFlowers:number}>("http://localhost:9000/history/buyerHistory")
+  getBuyerHistory(productsPerPage: number, currentPage: number) {
+    const queryParams = `?pagesize=${productsPerPage}&page=${currentPage}`;
+    
+    this.http.get<{message:string, flowers: any, maxFlowers:number}>("http://localhost:9000/history/buyerHistory" + queryParams)
     .pipe(
       map(flowersData => {
         return {
@@ -42,6 +44,7 @@ export class HistoryService {
       })
     )
     .subscribe(transformedFlowers =>{
+      console.log(transformedFlowers.maxFlowers)
       this.flowers = transformedFlowers.flowers;
       this.flowersUpdated.next({
         flowers: [...this.flowers],

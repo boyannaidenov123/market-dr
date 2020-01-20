@@ -1,15 +1,34 @@
 <mat-toolbar color="primary">
-    <span>
-        <a routerLink="/"> Home Page</a>
-    </span>
-    <span class="spacer"></span>
-    <button mat-button [matMenuTriggerFor]="beforeMenu" class="bold">&#9776;</button>
-    <mat-menu #beforeMenu="matMenu" xPosition="before">
-        <button *ngIf="!userIsAuthenticated" mat-menu-item routerLink="/login">Log in</button>
-        <button *ngIf="!userIsAuthenticated" mat-menu-item routerLink="/signup">Sign up</button>
-        <button *ngIf="userIsAuthenticated" mat-menu-item routerLink="/profile">Profile</button>
-        <button *ngIf="userIsAuthenticated" mat-menu-item routerLink="/market">Market</button>
-        <button *ngIf="userIsAuthenticated" mat-menu-item routerLink="/products">Products</button>
-        <button *ngIf="userIsAuthenticated" mat-menu-item (click)="onLogout()">Log out</button>
-    </mat-menu>
+  <span>
+    <a routerLink="/"> Home Page</a>
+  </span>
+  <span class="spacer"></span>
+  <ul>
+    <li *ngIf="!userIsAuthenticated">
+      <a mat-button routerLink="/login" routerLinkActive="mat-accent">Login</a>
+    </li>
+    <li *ngIf="!userIsAuthenticated">
+      <a mat-button routerLink="/signup" routerLinkActive="mat-accent"
+        >Signup</a
+      >
+    </li>
+    <li *ngIf="userIsAuthenticated">
+      <a mat-button routerLink="/profile" routerLinkActive="mat-accent"
+        >Profile</a
+      >
+    </li>
+    <li *ngIf="userIsAuthenticated">
+      <a mat-button routerLink="/market" routerLinkActive="mat-accent"
+        >Market</a
+      >
+    </li>
+    <li *ngIf="userIsAuthenticated">
+      <a mat-button routerLink="/products" routerLinkActive="mat-accent"
+        >Products</a
+      >
+    </li>
+    <li *ngIf="userIsAuthenticated">
+      <button mat-button (click)="onLogout()">Logout</button>
+    </li>
+  </ul>
 </mat-toolbar>

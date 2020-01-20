@@ -42,6 +42,9 @@ const flowerSchema = mongoose.Schema({
         type: String,
         require: true
     },
+    additionalInformation:{
+        type: String
+    }
 });
 
 module.exports = mongoose.model("Flower", flowerSchema);

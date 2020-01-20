@@ -12,4 +12,5 @@ export class Product{
     imagePath?:string;
     id?:string;
     auctionName:string;
+    additionalInformation: string;
 }

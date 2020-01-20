@@ -51,7 +51,8 @@ router.post(
       height: req.body.height,
       weight: req.body.weight,
       blockPrice: +req.body.blockPrice,
-      imagePath: url + "/images/" + req.file.filename
+      imagePath: url + "/images/" + req.file.filename,
+      additionalInformation: req.body.additionalInformation
     });
     console.log(flower);
 
@@ -87,7 +88,9 @@ router.get("/", checkAuth, (req, res, next) => {
   const currentPage = +req.query.page;
   const selected = +req.query.selected;
 
-  const productQuery = Flower.find();
+  const productQuery = Flower
+  .find()
+  .where('containers').gte(1)
   let fetchedProducts;
 
   if (pageSize && currentPage) {
@@ -106,10 +109,8 @@ router.get("/", checkAuth, (req, res, next) => {
   productQuery
     .then(flowers => {
       fetchedProducts = flowers;
-      if (selected == 2) {
-        return Flower.find({ seller: req.userData.userId }).countDocuments();
-      }
-      return Flower.countDocuments();
+
+      return productQuery.countDocuments();
     })
     .then(count => {
       res.status(200).json({
@@ -160,6 +161,11 @@ router.put(
   multer({ storage: storage }).single("image"),
   (req, res, next) => {
     console.log("tuk");
+    let imagePath = req.body.imagePath;
+    if (req.file) {
+      const url = req.protocol + '://' + req.get("host");
+      imagePath = url + "/images/" + req.file.filename;
+    }
     const product = new Flower({
       _id: req.body.id,
       seller: req.userData.userId,
@@ -170,9 +176,10 @@ router.put(
       height: +req.body.height,
       weight: +req.body.weight,
       blockPrice: +req.body.blockPrice,
-      imagePath: req.body.image
+      imagePath: imagePath,
+      additionalInformation: req.body.additionalInformation
     });
-    console.log(product);
+    console.log(req.body);
     Flower.updateOne(
       {
         _id: req.params.id,
@@ -189,7 +196,9 @@ router.put(
           message: "Not authorized!"
         });
       }
-    });
+    }).catch(function (err) {
+      console.log(err)
+    })
   }
 );
 

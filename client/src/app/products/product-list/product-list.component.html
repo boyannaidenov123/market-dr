@@ -23,28 +23,28 @@
 
         <!-- Items Column -->
         <ng-container matColumnDef="items">
-            <th mat-header-cell *matHeaderCellDef> items </th>
+            <th mat-header-cell *matHeaderCellDef matTooltip="Items in conteiner" [matTooltipPosition]="position"> items </th>
             <td mat-cell *matCellDef="let product"> {{product.itemsInContainer}} </td>
         </ng-container>
 
         <!-- height Column -->
         <ng-container matColumnDef="height">
-            <th mat-header-cell *matHeaderCellDef> height </th>
+            <th mat-header-cell *matHeaderCellDef matTooltip="Height in centimeters" [matTooltipPosition]="position"> height </th>
             <td mat-cell *matCellDef="let product"> {{product.height}} </td>
         </ng-container>
 
         <!-- weight Column -->
         <ng-container matColumnDef="weight">
-            <th mat-header-cell *matHeaderCellDef> weight </th>
+            <th mat-header-cell *matHeaderCellDef matTooltip="Weight in grams" [matTooltipPosition]="position"> weight </th>
             <td mat-cell *matCellDef="let product"> {{product.weight}} </td>
         </ng-container>
 
-        <!-- price Column -->
+        <!-- block price Column -->
         <ng-container matColumnDef="blockPrice" > 
             <th mat-header-cell matTooltip="Block Price" [matTooltipPosition]="position" *matHeaderCellDef> block price </th>
             <td mat-cell *matCellDef="let product"> {{product.blockPrice}} </td>
         </ng-container>
-        <!-- price Column -->
+        <!-- auction name Column -->
         <ng-container matColumnDef="auctionName">
             <th mat-header-cell *matHeaderCellDef> auction </th>
             <td mat-cell *matCellDef="let product"> {{product.auctionName}} </td>
@@ -53,6 +53,11 @@
         <ng-container matColumnDef="image">
             <th mat-header-cell *matHeaderCellDef> image </th>
             <td mat-cell *matCellDef="let product"><img src="{{product.imagePath}}" alt="" height="20" width="40" (click)="openImage(product.imagePath)"></td>
+        </ng-container>
+        <!--Additional Information-->
+        <ng-container matColumnDef="additionalInformation">
+            <th mat-header-cell *matHeaderCellDef> more info </th>
+            <td mat-cell *matCellDef="let product" matTooltip="{{product.additionalInformation}}" [matTooltipPosition]="position">{{getLenght(product.additionalInformation)}}</td>
         </ng-container>
         <!-- EDIT Column -->
         <ng-container matColumnDef="EDIT" *ngIf="isTrader_">

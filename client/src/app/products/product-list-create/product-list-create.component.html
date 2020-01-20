@@ -12,37 +12,40 @@
                     </mat-select>
                 </mat-form-field>
                 <mat-form-field>
-                    <input matInput type="text" formControlName="type" placeholder="Type ">
+                    <input matInput type="text" formControlName="type" placeholder="Type " required>
                     <mat-error *ngIf="form.get('type').invalid">This field is required.</mat-error>
                 </mat-form-field>
                 <mat-form-field>
-                    <input matInput type="number" min="1" formControlName="containers" placeholder="Containers">
+                    <input matInput type="number" min="1" formControlName="containers" placeholder="Containers" required>
                     <mat-error *ngIf="form.get('containers').invalid">This field is required.</mat-error>
                 </mat-form-field>
                 <mat-form-field>
-                    <input matInput type="number" min="1" formControlName="items" placeholder="Items">
+                    <input matInput type="number" min="1" formControlName="items" placeholder="Items" required>
                     <mat-error *ngIf="form.get('items').invalid">This field is required.</mat-error>
                 </mat-form-field>
                 <mat-form-field>
-                    <input matInput type="number" min="1" formControlName="height" placeholder="Height">
+                    <input matInput type="number" min="1" formControlName="height" placeholder="Height" required>
                     <mat-error *ngIf="form.get('height').invalid">This field is required.</mat-error>
                 </mat-form-field>
                 <mat-form-field>
-                    <input matInput type="number" min="1" formControlName="weight" placeholder="Weight">
+                    <input matInput type="number" min="1" formControlName="weight" placeholder="Weight" required>
                     <mat-error *ngIf="form.get('weight').invalid">This field is required.</mat-error>
                 </mat-form-field>
                 <mat-form-field>
-                    <input matInput type="number" min="1" formControlName="blockPrice" placeholder="Block Price">
+                    <input matInput type="number" min="1" formControlName="blockPrice" placeholder="Block Price" required>
                     <mat-error *ngIf="form.get('blockPrice').invalid">This field is required.</mat-error>
                 </mat-form-field>
 
                 <mat-form-field>
                     <mat-label>Select Auction</mat-label>
-                    <mat-select formControlName="auctionName">
+                    <mat-select formControlName="auctionName" required>
                         <mat-option *ngFor="let name of auctionNames" [value]="name.value">
                             {{name.value}}
                         </mat-option>
                     </mat-select>
+                </mat-form-field>
+                <mat-form-field>
+                    <textarea matInput formControlName="additionalInformation" placeholder="Additional information"></textarea>
                 </mat-form-field>
 
                 <div>

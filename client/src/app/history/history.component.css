@@ -4,13 +4,25 @@ table {
   margin: 0 auto;
 }
 
-td, th{
+td,
+th {
   width: 100px;
 }
 
-mat-spinner{
-  margin:0 auto;
+mat-spinner {
+  margin: 0 auto;
 }
-h2{
-  text-align: center
+h2 {
+  text-align: center;
+}
+.flowerTable {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding-bottom: 2rem;
+}
+img {
+  border: 0px groove transparent;
+  border-radius: 40px;
+  -webkit-box-shadow: 6px 0px 8px -2px #000000;
+  box-shadow: 6px 0px 8px -2px #000000;
 }

@@ -33,12 +33,13 @@ export class ProductListComponent implements OnInit {
 
 
 
-  displayedColumns: string[] = ['name', 'type', 'containers', 'items', 'height', 'weight', 'blockPrice', 'auctionName', 'image'];
+  displayedColumns: string[] = ['name', 'type', 'containers', 'items', 'height', 'weight', 'blockPrice', 'auctionName', 'image', 'additionalInformation'];
   dataSource = new MatTableDataSource<Product>(this.products);  
 
   constructor(private productsService: ProductsService, private authService: AuthService, public dialog: MatDialog){}
 
   ngOnInit() {
+    console.log(this.getLenght("1234567890"))
     this.isTraderSub = this.authService.getIsTraderListener()
       .subscribe(isTrader => {
         if (isTrader) {
@@ -87,6 +88,14 @@ export class ProductListComponent implements OnInit {
         imagePath: imagePath
       }
     });
+  }
+  getLenght(text: string){
+    if(text){
+      if(text.length > 8){
+        return text.substring(0,5) + "...";
+      }
+    }
+
   }
 
   ngOnDestroy(): void {

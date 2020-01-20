@@ -28,7 +28,8 @@ export class ProductsService {
     weight: number,
     blockPrice: number,
     auctionName: string,
-    image: File
+    image: File,
+    additionalInformation: string
   ) {
     const product = new FormData();
     product.append("name", name);
@@ -40,6 +41,7 @@ export class ProductsService {
     product.append("blockPrice", "" + blockPrice);
     product.append("auctionName", auctionName);
     product.append("image", image, name);
+    product.append("additionalInformation", additionalInformation);
     this.http
       .post<{ message: string; flower: any }>(
         "http://localhost:9000/flowers/newFlower",
@@ -77,7 +79,8 @@ export class ProductsService {
                 weight: product.weight,
                 blockPrice: product.blockPrice,
                 auctionName: product.auctionName,
-                imagePath: product.imagePath
+                imagePath: product.imagePath,
+                additionalInformation: product.additionalInformation
               };
             }),
             maxProducts: productData.maxProducts
@@ -104,7 +107,8 @@ export class ProductsService {
     weight: number,
     blockPrice: number,
     auctionName: string,
-    image: File | string
+    image: File | string,
+    additionalInformation: string
   ) {
     let product: Product | FormData;
 
@@ -120,6 +124,7 @@ export class ProductsService {
       product.append("blockPrice", "" + blockPrice);
       product.append("auctionName", auctionName);
       product.append("image", image);
+      product.append("additionalInformation", additionalInformation);
     } else {
       product = {
         id: id,
@@ -131,10 +136,11 @@ export class ProductsService {
         weight: weight,
         blockPrice: blockPrice,
         auctionName: auctionName,
-        imagePath: image
+        imagePath: image,
+        additionalInformation: additionalInformation
       };
     }
-
+    console.log(product)
     this.http
       .put(`http://localhost:9000/flowers/${id}`, product)
       .subscribe(response => {

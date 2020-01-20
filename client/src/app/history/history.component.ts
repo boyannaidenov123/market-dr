@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HistoryService } from './history.service';
-import { MatTableDataSource } from '@angular/material';
+import { MatTableDataSource, PageEvent } from '@angular/material';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { MatDialog } from '@angular/material/dialog';
 import { LargerImage } from '../products/product-list/LargerImage';
@@ -28,10 +28,12 @@ export class HistoryComponent implements OnInit {
 
   ngOnInit() {
     this.loading = false;
-    this.historyService.getBuyerHistory();
+    this.historyService.getBuyerHistory(5, 1);
     this.productsSub = this.historyService.getFlowersUpdatedListener()
     .subscribe((flowerData:{flowers:any, flowersCount: number})=>{
       this.loading = true;
+      this.totalProducts = flowerData.flowersCount;
+      console.log(this.totalProducts)
       this.history = flowerData.flowers;
       this.dataSource = new MatTableDataSource<any>(this.history);
     })
@@ -44,6 +46,12 @@ export class HistoryComponent implements OnInit {
         imagePath: imagePath
       }
     });
+  }
+
+  onChangePage(pageData: PageEvent){
+    this.currentPage = pageData.pageIndex + 1;
+    this.productsPerPage = pageData.pageSize;
+    this.historyService.getBuyerHistory(this.productsPerPage, this.currentPage)
   }
 
 

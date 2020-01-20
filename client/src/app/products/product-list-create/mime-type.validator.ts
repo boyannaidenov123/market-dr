@@ -30,7 +30,7 @@ export const mimeType = (
             isValid = true;
             break;
           default:
-            isValid = false; // Or you can use the blob.type as fallback
+            isValid = false;
             break;
         }
         if (isValid) {
