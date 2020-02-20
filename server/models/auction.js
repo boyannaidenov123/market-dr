@@ -14,11 +14,6 @@ const auctionSchema = mongoose.Schema({
     startDate:{
         type:Date,
         require:true
-    },
-    lotForSale:{
-        type: Number,
-        default: 0,
-        require:true
     }
 
 })

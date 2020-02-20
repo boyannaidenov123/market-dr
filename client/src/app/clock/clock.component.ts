@@ -64,7 +64,8 @@ export class ClockComponent implements OnInit {
         weight: res.weight,
         minPrice: (10*res.blockPrice),
         blockPrice: res.blockPrice,
-        auctionName: res.auctionName
+        auctionName: res.auctionName,
+        additionalInformation: res.additionalInformation
       }
       this.dataSource = new MatTableDataSource<Product>([this.product]);
       console.log(this.product);

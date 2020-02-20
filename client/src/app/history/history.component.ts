@@ -21,7 +21,7 @@ export class HistoryComponent implements OnInit {
 
   private productsSub:Subscription;
 
-  displayedColumns: string[] = ['name', 'type', 'containers', 'items', 'height', 'weight', 'price', 'auctionName', 'date', 'seller', 'imagePath'];
+  displayedColumns: string[] = ['name', 'type', 'containers', 'items', 'height', 'weight', 'price', 'auctionName', 'date', 'seller', 'imagePath', 'asdf'];
   dataSource = new MatTableDataSource<any>(this.history);  
   
   constructor(private historyService: HistoryService, private dialog: MatDialog) {}
