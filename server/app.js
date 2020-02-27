@@ -4,14 +4,20 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const mongoose = require('mongoose');
-const startAuction = require('./functions/startAuction');
+const startAuctions = require('./functions/startAuctions');
 const app = require('express')();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
-const socket  = require('./socketIO/socket');
+const sofia  = require('./socketIO/startSofiaClockIO');
+const plovdiv  = require('./socketIO/startPlovdivClockIO');
+const varna  = require('./socketIO/startVarnaClockIO');
 
-socket.startConnection(io);
-startAuction(io);
+sofia.startConnection(io);
+plovdiv.startConnection(io);
+varna.startConnection(io);
+
+startAuctions(io);
+
 
 
 

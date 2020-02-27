@@ -10,6 +10,9 @@ import { AuthService } from '../auth/auth.service';
 export class HeaderComponent implements OnInit {
   userIsAuthenticated = false;
   private authListenerSubs: Subscription;
+  private isAdmin = false;
+  private AdminSubs: Subscription;
+
 
   constructor(private authService:AuthService) { }
 
@@ -20,6 +23,15 @@ export class HeaderComponent implements OnInit {
     .subscribe(isAuthenticated =>{
       this.userIsAuthenticated = isAuthenticated;
     })
+
+
+    this.AdminSubs = this.authService.getIsAdminListener()
+    .subscribe(response => {
+      this.isAdmin = response;
+      console.log(response);
+    })
+
+
   }
 
   onLogout(){

@@ -22,7 +22,7 @@ router.get("/info", checkAuth, (req, res, next) => {
   });
 });
 
-router.post("/changeName", checkAuth, (req, res, next) => {
+router.put("/changeName", checkAuth, (req, res, next) => {
   console.log(req.body);
   User.updateOne(
     {
@@ -44,7 +44,7 @@ router.post("/changeName", checkAuth, (req, res, next) => {
     }
   });
 });
-router.post("/changePassword", checkAuth, (req, res, next) => {
+router.put("/changePassword", checkAuth, (req, res, next) => {
   User.findById({ _id: req.userData.userId })
     .then(user => {
       if (!user) {

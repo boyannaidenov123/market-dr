@@ -15,6 +15,9 @@ export class AuthService {
   private tokenTimer:any;
   private authStatusListener = new Subject<boolean>();
   private isTraderListener = new Subject<boolean>();
+  private isAdminListener = new Subject<boolean>();
+
+  private isAdmin:boolean = false;
 
   constructor(
     private router:Router,
@@ -35,6 +38,12 @@ export class AuthService {
     }
     getIsTraderListener(){
       return this.isTraderListener;
+    }
+    getIsAdmin_(){
+      return this.isAdmin;
+    }
+    getIsAdminListener(){
+      return this.isAdminListener;
     }
 
   signup(email:string, password:string, isTrader:boolean){
@@ -60,8 +69,9 @@ export class AuthService {
       password:password,
       isTrader: isTrader
     };
-    this.http.post<{token:string, expiresIn:number, userId:string}>("http://localhost:9000/users/login", user)
+    this.http.post<{token:string, expiresIn:number, userId:string, isAdmin:boolean}>("http://localhost:9000/users/login", user)
     .subscribe(response =>{
+      console.log(response)
       const token = response.token;
       this.token = token;
 
@@ -71,6 +81,8 @@ export class AuthService {
         this.isAuthenticated = true;
         this.userId = response.userId;
         this.authStatusListener.next(true);
+        this.isAdmin = response.isAdmin;
+        this.isAdminListener.next(response.isAdmin);
 
         const now = new Date();
         const expiresDate = new Date(now.getTime() + expiresInDuration*1000);
@@ -90,9 +102,14 @@ export class AuthService {
     })
   }
 
+  getIsAdmin(){
+    return this.http.get<{isAdmin: boolean}>("http://localhost:9000/users/isAdmin");
+
+  }
 
   authAuthUser(){
     const authInformation = this.getAuthData();
+    
     if(!authInformation){
       return;
     }
@@ -104,8 +121,15 @@ export class AuthService {
       this.userId = authInformation.userId;
       this.setAuthTimer(expiresIn / 1000);
       this.authStatusListener.next(true);
+      this.getIsAdmin().subscribe(result => {
+        this.isAdmin = result.isAdmin;
+        this.isAdminListener.next(result.isAdmin)
+        console.log(this.isAdmin)
+      })
     }
   }
+
+
 
 
   getAuthData(){

@@ -1,22 +1,20 @@
-import {Component, OnInit} from '@angular/core';
-import { MarketService } from '../markets/market.service';
-
+import { Component, OnInit } from '@angular/core';
+import { MarketService } from '../market.service';
 
 @Component({
-  selector: 'app-market',
-  templateUrl: './market.component.html',
-  styleUrls: ['./market.component.css']
+  selector: 'app-sofia',
+  templateUrl: './sofia.component.html',
+  styleUrls: ['./sofia.component.css']
 })
-export class MarketComponent implements OnInit {
+export class SofiaComponent implements OnInit {
 
-  
-  
   private activate = false;
+  auction:string = "Sofia";
 
   constructor(private marketService: MarketService){}
 
   ngOnInit() {
-    this.marketService.getInfoForAuction('')
+    this.marketService.getInfoForAuction(this.auction)
     .subscribe(response =>{
       console.log(response)
       this.activate = response.activate;
@@ -29,6 +27,4 @@ export class MarketComponent implements OnInit {
     
   }
 
-
 }
-

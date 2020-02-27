@@ -1,9 +1,8 @@
-const Auction = require("../models/auction");
 const Lot = require("../models/lot");
 const Flower = require("../models/flower");
-const User = require("../models/user");
 const History = require("../models/history");
-const { performance } = require("perf_hooks");
+const Auction = require("../models/auction");
+
 
 let timer; //variable for setInterval
 let value; //blocks of the clock
@@ -12,7 +11,6 @@ let flowerForSaleInfo; //all info for flower which is for selling
 let auctionStart = false; //boolean => is Auction started
 let countUsers = 0; //count of connecting users
 let countOfNoSelling = 0; //count of no selling
-let countOfLotsForSelling = 0; //count of lot For Selling
 let waitBeforeStarting; //variable for setTimeout
 let canBuy = false;
 
@@ -62,9 +60,7 @@ function start(io) {
       countUsers--;
       io.emit("countUsers", { countUsers: countUsers });
     });
-    socket.on("forceDisconnect", function() {
-      socket.disconnect();
-    });
+
 
     if (auctionStart) {
       io.emit("lotForSale", lotForSellInfo);
@@ -129,7 +125,7 @@ function startClock(io) {
   console.log("---------------New Lot--------------------");
   Lot.findOne({
     //get lot for selling
-    auctionName: "Sofia",
+    auctionName: "Varna",
     "status.scheduledState": false,
     "status.sold": false
   })
@@ -144,13 +140,13 @@ function startClock(io) {
         clockMovement(io, lot._id, lot.currentPrice); //start selling
       }, 2000);
     })
-    .catch(err => {
+    .catch(() => {
       console.log("error");
     });
 }
 function getCountOfLots(io) {
   Lot.countDocuments({
-    auctionName: "Sofia",
+    auctionName: "Varna",
     "status.scheduledState": false,
     "status.sold": false
   }).then(count => {
@@ -173,6 +169,21 @@ module.exports = {
     start(io);
   },
   startClockIO: function(io) {
-    getCountOfLots(io);
+    Auction.findOne({name: "Varna"})
+    .then(result => {
+      if(result.startDate.getFullYear() == new Date().getFullYear() 
+      && result.startDate.getMonth() == new Date().getMonth()
+      && result.startDate.getDate() == new Date().getDate()
+      && result.startDate.getHours() == new Date().getHours()
+      && result.startDate.getMinutes() == new Date().getMinutes()){
+        console.log("start");
+        console.log(result.startDate, new Date())
+        //getCountOfLots(io);
+      }else{
+        console.log("stop");
+        return;
+      }
+    });
+    
   }
 };

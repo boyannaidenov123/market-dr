@@ -12,15 +12,26 @@
         >Signup</a
       >
     </li>
+    <li *ngIf="isAdmin && userIsAuthenticated">
+      <a mat-button routerLink="/admin" routerLinkActive="mat-accent"
+        >Admin</a
+      >
+    </li>
     <li *ngIf="userIsAuthenticated">
       <a mat-button routerLink="/profile" routerLinkActive="mat-accent"
         >Profile</a
       >
     </li>
     <li *ngIf="userIsAuthenticated">
-      <a mat-button routerLink="/market" routerLinkActive="mat-accent"
+      <a mat-button [matMenuTriggerFor]="menu" routerLinkActive="mat-accent"
         >Market</a
       >
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item routerLink="/market/Sofia" >Sofia</button>
+        <button mat-menu-item routerLink="/market/Plovdiv" >Plovdiv</button>
+        <button mat-menu-item routerLink="/market/Varna" >Varna</button>
+
+      </mat-menu>
     </li>
     <li *ngIf="userIsAuthenticated">
       <a mat-button routerLink="/products" routerLinkActive="mat-accent"

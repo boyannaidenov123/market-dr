@@ -8,7 +8,8 @@ import {
   MatToolbarModule,
   MatInputModule,
   MatButtonModule,
-  MatPaginatorModule
+  MatPaginatorModule,
+  MatNativeDateModule
   
 
 } from '@angular/material';
@@ -22,9 +23,10 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {MatDatepickerModule} from '@angular/material/datepicker';
 
 import { CountdownModule } from 'ngx-countdown';
-
+import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 
 
 
@@ -49,6 +51,10 @@ import { NgCircleProgressModule } from 'ng-circle-progress';
 import { TimerComponent } from './timer/timer.component';
 import { ProductsComponent } from './products/products.component';
 import { HistoryComponent } from './history/history.component';
+import { AdminComponent } from './admin/admin.component';
+import { SofiaComponent } from './markets/sofia/sofia.component';
+import { PlovdivComponent } from './markets/plovdiv/plovdiv.component';
+import { VarnaComponent } from './markets/varna/varna.component';
 
 @NgModule({
   declarations: [
@@ -65,7 +71,11 @@ import { HistoryComponent } from './history/history.component';
     TimerComponent,
     ProductsComponent,
     LargerImage,
-    HistoryComponent
+    HistoryComponent,
+    AdminComponent,
+    SofiaComponent,
+    PlovdivComponent,
+    VarnaComponent
   ],
   imports: [
     BrowserModule,
@@ -92,11 +102,14 @@ import { HistoryComponent } from './history/history.component';
     MatProgressSpinnerModule,
     MatTooltipModule,
     MatDialogModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    NgxMaterialTimepickerModule
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi:true
-  }],
+  }, MatDatepickerModule],
   bootstrap: [AppComponent],
   entryComponents: [LargerImage]
 })

@@ -7,6 +7,8 @@ ul{
 a{
     text-decoration: none;
     color:white;
+    font-size: 20px;
+    text-shadow: 2px 2px 8px #000000;
 }
 .spacer{
     flex: 1 1 auto;

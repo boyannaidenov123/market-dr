@@ -18,6 +18,11 @@ const userSchema = mongoose.Schema({
     isTrader:{
         type:Boolean,
         require:true
+    },
+    admin:{
+        type:Boolean,
+        require:true,
+        default:false
     }
 })
 

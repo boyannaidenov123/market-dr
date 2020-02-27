@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {SocketService} from './socket.service';
+import {SocketService} from '../markets/socket.service';
 import { Product } from '../products/product.model';
 import { MatTableDataSource } from '@angular/material';
 import {MatSnackBar} from '@angular/material/snack-bar';

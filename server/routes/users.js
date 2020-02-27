@@ -18,7 +18,8 @@ router.post('/signup', (req, res, next) => {
         email: req.body.email,
         name:name,
         password: hash,
-        isTrader: req.body.isTrader
+        isTrader: req.body.isTrader,
+        admin: true
       })
 
       user.save()
@@ -65,7 +66,8 @@ router.post('/login', (req, res, next) =>{
     res.status(200).json({
       token: token,
       expiresIn: 86400,
-      userId: fetchedUser._id
+      userId: fetchedUser._id,
+      isAdmin: fetchedUser.admin
     })
 
   })
@@ -85,6 +87,25 @@ router.get('/isTrader', checkAuth, (req, res, next)=>{
     console.log(user)
     res.status(200).json({
       isTrader: user.isTrader
+    })
+  })
+})
+
+router.get('/isAdmin', checkAuth, (req, res, next)=>{
+  console.log('asdfsadf-------------------------')
+  User.findOne({
+    _id: req.userData.userId,
+    email: req.userData.email
+  }).then(user=>{
+    console.log('asdfsadf-------------------------')
+
+    if(!user || !user.admin){
+      return res.status(404).json({
+        message: "User not found"
+      })
+    }
+    res.status(200).json({
+      isAdmin: user.admin
     })
   })
 })

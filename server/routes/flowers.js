@@ -4,6 +4,7 @@ const multer = require("multer");
 const Flower = require("../models/flower");
 const Lot = require("../models/lot");
 const checkAuth = require("../middleware/check-auth");
+const User = require("../models/user");
 
 const MIME_TYPE_MAP = {
   "image/png": "png",
@@ -88,9 +89,9 @@ router.get("/", checkAuth, (req, res, next) => {
   const currentPage = +req.query.page;
   const selected = +req.query.selected;
 
-  const productQuery = Flower
-  .find()
-  .where('containers').gte(1)
+  const productQuery = Flower.find()
+    .where("containers")
+    .gte(1);
   let fetchedProducts;
 
   if (pageSize && currentPage) {
@@ -163,7 +164,7 @@ router.put(
     console.log("tuk");
     let imagePath = req.body.imagePath;
     if (req.file) {
-      const url = req.protocol + '://' + req.get("host");
+      const url = req.protocol + "://" + req.get("host");
       imagePath = url + "/images/" + req.file.filename;
     }
     const product = new Flower({
@@ -186,19 +187,22 @@ router.put(
         seller: req.userData.userId
       },
       product
-    ).then(result => {
-      if (result.nModified > 0) {
-        res.status(200).json({
-          message: "Update successful!"
-        });
-      } else {
-        res.status(401).json({
-          message: "Not authorized!"
-        });
-      }
-    }).catch(function (err) {
-      console.log(err)
-    })
+    )
+      .then(result => {
+        console.log(result)
+        if (result.nModified > 0) {
+          res.status(200).json({
+            message: "Update successful!"
+          });
+        } else {
+          res.status(401).json({
+            message: "Not authorized!"
+          });
+        }
+      })
+      .catch(function(err) {
+        console.log(err);
+      });
   }
 );
 

@@ -23,16 +23,13 @@ router.get("/buyerHistory", checkAuth, (req, res, next) => {
       return History.find({ buyer: req.userData.userId }).countDocuments();
     })
     .then(count => {
-      if (count == 0) {
-        return res.status(404).json({
-          message: "Not Found",
-        });
-      }
       res.status(200).json({
         flowers: fetchFlowers,
         maxFlowers: count
       });
-    });
+    }).catch(err =>{
+      res.send(err);
+    })
 });
 
 module.exports = router;

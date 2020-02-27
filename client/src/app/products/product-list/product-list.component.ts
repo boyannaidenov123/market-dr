@@ -26,10 +26,13 @@ export class ProductListComponent implements OnInit {
   private position: TooltipPosition = "above";
 
   isTrader_:boolean = false;
+  isAdmin: boolean = false;
   userIsAuthenticated = false;
   userId:string;
   private productsSub:Subscription;
   private isTraderSub: Subscription;
+  private isAdminSub: Subscription;
+
 
 
 
@@ -60,6 +63,12 @@ export class ProductListComponent implements OnInit {
       this.products = productsData.products;
       this.dataSource = new MatTableDataSource<Product>(this.products);  
     })
+
+    this.authService.getIsAdmin()
+    .subscribe(result =>{
+      this.isAdmin = result.isAdmin;
+    })
+
 
   }
   onChangePage(pageData: PageEvent){
@@ -94,6 +103,7 @@ export class ProductListComponent implements OnInit {
       if(text.length > 8){
         return text.substring(0,5) + "...";
       }
+      return text;
     }
 
   }

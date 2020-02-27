@@ -22,6 +22,7 @@ export class HistoryService {
     this.http.get<{message:string, flowers: any, maxFlowers:number}>("http://localhost:9000/history/buyerHistory" + queryParams)
     .pipe(
       map(flowersData => {
+        console.log(flowersData);
         return {
           flowers: flowersData.flowers.map(flower =>{
             return {

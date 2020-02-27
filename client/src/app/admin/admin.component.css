@@ -1,0 +1,12 @@
+.center {
+  padding: 2rem;
+  text-align: center;
+  max-width: 300px;
+  margin: 0 auto;
+  margin-top: 8rem;
+  font-size: 20px;
+  -webkit-box-shadow: 5px 5px 11px 12px rgba(0, 0, 0, 0.72);
+  box-shadow: 5px 5px 11px 12px rgba(0, 0, 0, 0.72);
+  border: 5px double #1c6ea4;
+  border-radius: 40px;
+}

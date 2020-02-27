@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { MarketService } from './market.service';
+import { MarketService } from '../markets/market.service';
 
 describe('MarketService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
