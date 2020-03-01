@@ -89,7 +89,7 @@ export class AuthService {
         console.log(this.token);
 
         this.saveAuthData(token, expiresDate, this.userId);
-        this.router.navigate(['/market']);
+        this.router.navigate(['/profile']);
       }
     })
       

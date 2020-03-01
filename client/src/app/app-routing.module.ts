@@ -21,7 +21,7 @@ const routes:Routes = [
     {path:'admin', component:AdminComponent, canActivate:[AuthGuard, AdminGuard]},
     {path:'market/Sofia', component:SofiaComponent, canActivate:[AuthGuard]},
     {path:'market/Plovdiv', component:PlovdivComponent, canActivate:[AuthGuard]},
-    {path:'market/Varna', component:VarnaComponent, canActivate:[AuthGuard]},
+    {path:'market/Varna', component:VarnaComponent, canActivate:[AuthGuard]}
 
 
 ];

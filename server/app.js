@@ -8,14 +8,10 @@ const startAuctions = require('./functions/startAuctions');
 const app = require('express')();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
-const sofia  = require('./socketIO/startSofiaClockIO');
-const plovdiv  = require('./socketIO/startPlovdivClockIO');
-const varna  = require('./socketIO/startVarnaClockIO');
+const connection = require('./functions/startConnection');
 
-sofia.startConnection(io);
-plovdiv.startConnection(io);
-varna.startConnection(io);
 
+connection(io);
 startAuctions(io);
 
 

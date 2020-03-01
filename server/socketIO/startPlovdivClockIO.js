@@ -9,7 +9,6 @@ let value; //blocks of the clock
 let lotForSellInfo; //all info for lot which is for selling
 let flowerForSaleInfo; //all info for flower which is for selling
 let auctionStart = false; //boolean => is Auction started
-let countUsers = 0; //count of connecting users
 let countOfNoSelling = 0; //count of no selling
 let waitBeforeStarting; //variable for setTimeout
 let canBuy = false;
@@ -50,19 +49,9 @@ function clockMovement(io, lotId, price) {
     }
   }, 150);
 }
-function start(io) {
-  io.on("connection", socket => {
-    console.log("----------------------Client Connected----------------------");
-    countUsers++;
-    io.emit("countUsers", { countUsers: countUsers });
-    socket.on("disconnect", function() {
-      console.log("User disconnected");
-      countUsers--;
-      io.emit("countUsers", { countUsers: countUsers });
-    });
+function start(io, socket) {
 
-
-    if (auctionStart) {
+  if (auctionStart) {
       io.emit("lotForSale", lotForSellInfo);
       io.emit("flowerForSale", flowerForSaleInfo);
     }
@@ -118,7 +107,6 @@ function start(io) {
 
       }
     });
-  });
 }
 
 function startClock(io) {
@@ -165,8 +153,8 @@ function getCountOfLots(io) {
 }
 
 module.exports = {
-  startConnection: function(io) {
-    start(io);
+  startConnection: function(io, socket) {
+    start(io, socket);
   },
   startClockIO: function(io) {
     Auction.findOne({name: "Plovdiv"})

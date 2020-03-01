@@ -48,7 +48,8 @@ router.put("/", checkAdmin, (req, res)=>{
     {
       name: req.body.auction
     },{
-      startDate: req.body.date
+      startDate: req.body.date,
+      active: false
     }
     
   ).then(result => {

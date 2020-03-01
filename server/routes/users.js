@@ -18,8 +18,7 @@ router.post('/signup', (req, res, next) => {
         email: req.body.email,
         name:name,
         password: hash,
-        isTrader: req.body.isTrader,
-        admin: true
+        isTrader: req.body.isTrader
       })
 
       user.save()
