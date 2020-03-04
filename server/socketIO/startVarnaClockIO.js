@@ -19,7 +19,7 @@ function clockMovement(io, lotId, price) {
 
   timer = setInterval(() => {
     console.log(value);
-    io.emit("clockValue", { value: value });
+    io.emit("clockValueVarna", { value: value });
     Lot.updateOne({ _id: lotId }, { currentPrice: value - 1 }).then(() => {});
 
     if (value >= 10 && countOfNoSelling < 3) {
@@ -52,21 +52,21 @@ function clockMovement(io, lotId, price) {
 function start(io, socket) {
 
     if (auctionStart) {
-      io.emit("lotForSale", lotForSellInfo);
-      io.emit("flowerForSale", flowerForSaleInfo);
+      io.emit("lotForSaleVarna", lotForSellInfo);
+      io.emit("flowerForSaleVarna", flowerForSaleInfo);
     }
 
-    socket.on("buyLot", function(data) {
+    socket.on("buyLotVarna", function(data) {
       if (canBuy) {
         console.log("buy----------");
         canBuy = false;
         clearInterval(timer);
-        socket.emit("bought", {});
+        socket.emit("boughtVarna", {});
 
         console.log(data); //_id na buyer; containers buying;
         countOfNoSelling = 0;
         flowerForSaleInfo.containers -= data.containers;
-        io.emit("flowerForSale", flowerForSaleInfo);
+        io.emit("flowerForSaleVarna", flowerForSaleInfo);
         if (flowerForSaleInfo.containers < 0) {
           data.containers += flowerForSaleInfo.containers;
           flowerForSaleInfo.containers = 0;
@@ -119,9 +119,9 @@ function startClock(io) {
   })
     .then(lot => {
       lotForSellInfo = lot;
-      io.emit("lotForSale", lot);
+      io.emit("lotForSaleVarna", lot);
       Flower.findById({ _id: lot.flowerId }).then(flower => {
-        io.emit("flowerForSale", flower);
+        io.emit("flowerForSaleVarna", flower);
         flowerForSaleInfo = flower;
       });
       setTimeout(() => {
@@ -166,7 +166,7 @@ module.exports = {
       && result.startDate.getMinutes() == new Date().getMinutes()){
         console.log("start");
         console.log(result.startDate, new Date())
-        //getCountOfLots(io);
+        getCountOfLots(io);
       }else{
         console.log("stop");
         return;

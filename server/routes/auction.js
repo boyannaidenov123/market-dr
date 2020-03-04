@@ -5,28 +5,6 @@ const checkAuth = require("../middleware/check-auth");
 const checkAdmin = require("../middleware/check-admin");
 const cron = require("../functions/cron");
 
-router.post("/", (req, res) => {
-  console.log("asdf");
-  const event = new Date("December 27, 2019 10:00:00");
-  const city = new Auction({
-    name: "Sofia",
-    active: false,
-    startDate: event
-  });
-  city
-    .save()
-    .then(() => {
-      res.status(201).json({
-        message: "User created"
-      });
-    })
-    .catch(err => {
-      res.status(500).json({
-        error: err
-      });
-    });
-});
-
 router.get("/", checkAuth, (req, res) => {
   Auction.findOne({
     name: req.query.auction

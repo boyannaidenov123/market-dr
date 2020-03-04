@@ -12,7 +12,7 @@ module.exports = (req, res, next) =>{
         }).then(user => {
             if(!user){
                 res.status(401).json({
-                    message:"Admin auth failed!"
+                    message:"You are not admin!"
                 })
             }
             if(user.admin){
@@ -26,7 +26,7 @@ module.exports = (req, res, next) =>{
         })
     }catch(error){
         res.status(401).json({
-            message:"Auth failed!"
+            message:"You are not admin!"
         })
     }
 }

@@ -30,7 +30,7 @@ import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 
 
 
-
+ 
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
@@ -40,7 +40,6 @@ import { SignupComponent } from './auth/signup/signup.component';
 import { AppRoutingModule } from './app-routing.module';
 import { IndexComponent } from './index/index.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { MarketComponent } from './market/market.component';
 import { AuthInterceptor } from './auth/auth.interceptor';
 import { ProfileComponent } from './profile/profile.component';
 import { ProductListCreateComponent } from './products/product-list-create/product-list-create.component';
@@ -55,6 +54,8 @@ import { AdminComponent } from './admin/admin.component';
 import { SofiaComponent } from './markets/sofia/sofia.component';
 import { PlovdivComponent } from './markets/plovdiv/plovdiv.component';
 import { VarnaComponent } from './markets/varna/varna.component';
+import { ErrorInterceptor } from "./error-interceptor";
+import { ErrorComponent } from "./error/error.component";
 
 @NgModule({
   declarations: [
@@ -63,7 +64,6 @@ import { VarnaComponent } from './markets/varna/varna.component';
     LoginComponent,
     SignupComponent,
     IndexComponent,
-    MarketComponent,
     ProfileComponent,
     ProductListCreateComponent,
     ProductListComponent,
@@ -75,7 +75,8 @@ import { VarnaComponent } from './markets/varna/varna.component';
     AdminComponent,
     SofiaComponent,
     PlovdivComponent,
-    VarnaComponent
+    VarnaComponent,
+    ErrorComponent
   ],
   imports: [
     BrowserModule,
@@ -109,8 +110,9 @@ import { VarnaComponent } from './markets/varna/varna.component';
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi:true
-  }, MatDatepickerModule],
+  }, {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
+  MatDatepickerModule],
   bootstrap: [AppComponent],
-  entryComponents: [LargerImage]
+  entryComponents: [LargerImage, ErrorComponent]
 })
 export class AppModule { }

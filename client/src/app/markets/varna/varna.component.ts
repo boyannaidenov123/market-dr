@@ -9,11 +9,12 @@ import { MarketService } from '../market.service';
 export class VarnaComponent implements OnInit {
 
   private activate = false;
+  auction: string = "Varna";
 
   constructor(private marketService: MarketService){}
 
   ngOnInit() {
-    this.marketService.getInfoForAuction('Varna')
+    this.marketService.getInfoForAuction(this.auction)
     .subscribe(response =>{
       console.log(response)
       this.activate = response.activate;

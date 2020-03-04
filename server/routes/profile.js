@@ -10,7 +10,7 @@ router.get("/info", checkAuth, (req, res, next) => {
   User.findById(req.userData.userId).then(user => {
     if (!user) {
       res.status(404).json({
-        message: "Not found"
+        message: "User does't exist"
       });
     }
     console.log(user);
@@ -49,7 +49,7 @@ router.put("/changePassword", checkAuth, (req, res, next) => {
     .then(user => {
       if (!user) {
         return res.status(401).json({
-          message: "Auth failed"
+          message: "Invalid authentication credentials!"
         });
       }
       return bcrypt.compare(req.body.password, user.password);
@@ -57,7 +57,7 @@ router.put("/changePassword", checkAuth, (req, res, next) => {
     .then(result => {
       if (!result) {
         return res.status(401).json({
-          message: "Auth failed"
+          message: "Invalid authentication credentials!"
         });
       }
       console.log("Suvpada");
@@ -77,7 +77,7 @@ router.put("/changePassword", checkAuth, (req, res, next) => {
             });
           } else {
             res.status(401).json({
-              message: "Not authorized"
+              message: "Password is not update"
             });
           }
         });

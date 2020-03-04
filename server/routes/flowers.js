@@ -80,7 +80,11 @@ router.post(
           id: createFlower._id
         }
       });
-    });
+    }).catch(err =>{
+      res.status(500).json({
+        message: 'Creating a flower failed!'
+      })
+    })
   }
 );
 
@@ -119,7 +123,11 @@ router.get("/", checkAuth, (req, res, next) => {
         products: fetchedProducts,
         maxProducts: count
       });
-    });
+    }).catch(()=>{
+      res.status(404).json({
+        message:"Fetching the flowers failed!"
+      })
+    })
 });
 
 router.delete("/:id", checkAuth, (req, res, next) => {
@@ -151,7 +159,9 @@ router.get("/:id", (req, res, next) => {
         product: product
       });
     } else {
-      res.status(404);
+      res.status(404).json({
+        message:"Flower doesn't exist"
+      })
     }
   });
 });
@@ -201,7 +211,9 @@ router.put(
         }
       })
       .catch(function(err) {
-        console.log(err);
+        res.status(500).json({
+          message:"Updating a flower failed!"
+        })
       });
   }
 );

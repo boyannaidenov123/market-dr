@@ -57,7 +57,21 @@ export class AuthService {
     .subscribe(response =>{
       console.log(response.message);
       if(response.signup){
-        this.router.navigate(['/market']);
+        return true;
+      }
+      return false;
+    })
+  }
+  getAccess(email: string, code: string){
+    const user = {
+      email: email,
+      code: code
+    }
+    this.http.post<{message:string, signup:boolean}>("http://localhost:9000/users/access", user)
+    .subscribe(response =>{
+      console.log(response.message);
+      if(response.signup){
+        this.router.navigate(['/profile']);
       }
     })
   }

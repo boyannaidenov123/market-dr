@@ -28,7 +28,9 @@ router.get("/buyerHistory", checkAuth, (req, res, next) => {
         maxFlowers: count
       });
     }).catch(err =>{
-      res.send(err);
+      res.status(404).json({
+        message: "You don't have a history"
+      })
     })
 });
 

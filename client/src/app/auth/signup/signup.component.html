@@ -19,6 +19,11 @@
             <mat-error *ngIf="repeatPasswordInput.invalid">Please enter a valid password.</mat-error>
         </mat-form-field>
 
+        <mat-form-field *ngIf="confirmationCode">
+            <input type="test" name="confirmationCode" ngModel matInput placeholder="Confirmation Code" #confirmationCodeInput="ngModel">
+            <mat-error *ngIf="confirmationCodeInput.invalid">Please enter the confirmation code.</mat-error>
+        </mat-form-field>
+
         <button mat-raised-button color="accent" type="submit">Sign up
         </button>
     </form>
