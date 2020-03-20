@@ -61,13 +61,19 @@ export class ProductsService {
       queryParams = `?pagesize=${productsPerPage}&page=${currentPage}&selected=${this.selected}`;
     }
     this.http
-      .get<{ message: string; products: any; maxProducts:any }>(
+      .get<{ message: string; products: any; maxProducts: any }>(
         "http://localhost:9000/flowers/" + queryParams
       )
       .pipe(
         map(productData => {
           return {
             products: productData.products.map(product => {
+              console.log(product.additionalInformation)
+              let additionalInformation = "";
+              if (product.additionalInformation != 'null') {
+                additionalInformation = product.additionalInformation;
+              }
+              console.log(additionalInformation)
               return {
                 seller: product.seller,
                 name: product.name,
@@ -80,7 +86,7 @@ export class ProductsService {
                 blockPrice: product.blockPrice,
                 auctionName: product.auctionName,
                 imagePath: product.imagePath,
-                additionalInformation: product.additionalInformation
+                additionalInformation: additionalInformation
               };
             }),
             maxProducts: productData.maxProducts
@@ -140,7 +146,7 @@ export class ProductsService {
         additionalInformation: additionalInformation
       };
     }
-    console.log(product)
+    console.log(product);
     this.http
       .put(`http://localhost:9000/flowers/${id}`, product)
       .subscribe(response => {

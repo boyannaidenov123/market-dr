@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { FormGroup, FormControl, Validators, NgForm } from "@angular/forms";
+import { FormGroup, FormControl, Validators, NgForm, FormGroupDirective } from "@angular/forms";
 import { ProductsService } from "../products.service";
 import { MatRadioChange } from "@angular/material";
 import { Subscription } from "rxjs";
@@ -109,7 +109,7 @@ export class ProductListCreateComponent implements OnInit {
     { value: "Plovdiv" }
   ];
 
-  onSaveProduct(): void {
+  onSaveProduct(formDirective: FormGroupDirective): void {
     if (this.form.invalid) {
       return;
     } else {
@@ -144,6 +144,7 @@ export class ProductListCreateComponent implements OnInit {
       }
     }
     //this.form.reset() //not work!!!
+    formDirective.resetForm();
     this.form.reset();
   }
 

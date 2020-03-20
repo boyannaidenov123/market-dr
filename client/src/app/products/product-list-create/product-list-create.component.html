@@ -4,7 +4,7 @@
             Add new order
         </mat-expansion-panel-header>
         <mat-card>
-            <form [formGroup]="form" (submit)="onSaveProduct()">
+            <form [formGroup]="form" #formDirective="ngForm" (submit)="onSaveProduct(formDirective)" >
                 <mat-form-field>
                     <mat-label>Select flower</mat-label>
                     <mat-select formControlName="name">
