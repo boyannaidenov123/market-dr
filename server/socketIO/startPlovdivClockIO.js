@@ -146,6 +146,8 @@ function getCountOfLots(io) {
       } else {
         auctionStart = false;
         canBuy = false;
+
+        socket.emit("endPlovdiv", {});
         console.log("krai--------------------------------");
       }
     }

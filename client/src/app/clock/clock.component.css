@@ -1,28 +1,35 @@
 table {
-    width: 100%;
-    max-width: 1000px;
-    margin: 0 auto;
-  }
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+}
 
-  td{
-    width: 100px
-  }
-#edit{
+td {
+  width: 100px;
+}
+#edit {
   font-size: 20px;
 }
 
-.clock{
+.clock {
   text-align: center;
 }
-input{
-  text-align: center
+input {
+  text-align: center;
 }
-.image{
+.image {
   text-align: center;
   margin-top: 1rem;
-  
 }
-img{
-  width:100%;
-  max-width:600px;
+img {
+  width: 100%;
+  max-width: 600px;
+}
+button#buy {
+  border: 1px outset black;
+  border-radius: 40px;
+  font-size: 20px;
+}
+input#containers{
+  font-size: 20px;
 }

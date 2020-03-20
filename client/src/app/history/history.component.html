@@ -1,84 +1,93 @@
+<div *ngIf="haveHistory">
 <mat-spinner [diameter]="200" *ngIf="!loading"></mat-spinner>
-<h2>History</h2>
-<div class="flowerTable" *ngIf="loading">
-  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-    <!-- name Column -->
-    <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef>name</th>
-      <td mat-cell *matCellDef="let element">{{ element.name }}</td>
-    </ng-container>
+<h2 id="history">History:</h2>
 
-    <ng-container matColumnDef="type">
-      <th mat-header-cell *matHeaderCellDef>type</th>
-      <td mat-cell *matCellDef="let element">{{ element.type }}</td>
-    </ng-container>
+  <div class="flowerTable" *ngIf="loading">
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+      <!-- name Column -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>name</th>
+        <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+      </ng-container>
 
-    <ng-container matColumnDef="containers">
-      <th mat-header-cell *matHeaderCellDef>containers</th>
-      <td mat-cell *matCellDef="let element">{{ element.containers }}</td>
-    </ng-container>
+      <ng-container matColumnDef="type">
+        <th mat-header-cell *matHeaderCellDef>type</th>
+        <td mat-cell *matCellDef="let element">{{ element.type }}</td>
+      </ng-container>
 
-    <ng-container matColumnDef="items">
-      <th mat-header-cell *matHeaderCellDef>items</th>
-      <td mat-cell *matCellDef="let element">{{ element.itemsInContainer }}</td>
-    </ng-container>
+      <ng-container matColumnDef="containers">
+        <th mat-header-cell *matHeaderCellDef>containers</th>
+        <td mat-cell *matCellDef="let element">{{ element.containers }}</td>
+      </ng-container>
 
-    <ng-container matColumnDef="height">
-      <th mat-header-cell *matHeaderCellDef>height</th>
-      <td mat-cell *matCellDef="let element">{{ element.height }}</td>
-    </ng-container>
+      <ng-container matColumnDef="items">
+        <th mat-header-cell *matHeaderCellDef>items</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.itemsInContainer }}
+        </td>
+      </ng-container>
 
-    <ng-container matColumnDef="weight">
-      <th mat-header-cell *matHeaderCellDef>weight</th>
-      <td mat-cell *matCellDef="let element">{{ element.weight }}</td>
-    </ng-container>
+      <ng-container matColumnDef="height">
+        <th mat-header-cell *matHeaderCellDef>height</th>
+        <td mat-cell *matCellDef="let element">{{ element.height }}</td>
+      </ng-container>
 
-    <ng-container matColumnDef="price">
-      <th mat-header-cell *matHeaderCellDef>price</th>
-      <td mat-cell *matCellDef="let element">{{ element.price / 100 }}€</td>
-    </ng-container>
+      <ng-container matColumnDef="weight">
+        <th mat-header-cell *matHeaderCellDef>weight</th>
+        <td mat-cell *matCellDef="let element">{{ element.weight }}</td>
+      </ng-container>
 
-    <ng-container matColumnDef="auctionName">
-      <th mat-header-cell *matHeaderCellDef>auctionName</th>
-      <td mat-cell *matCellDef="let element">{{ element.auctionName }}</td>
-    </ng-container>
+      <ng-container matColumnDef="price">
+        <th mat-header-cell *matHeaderCellDef>price</th>
+        <td mat-cell *matCellDef="let element">{{ element.price / 100 }}€</td>
+      </ng-container>
 
-    <ng-container matColumnDef="date">
-      <th mat-header-cell *matHeaderCellDef>date</th>
-      <td mat-cell *matCellDef="let element">{{ element.date }}</td>
-    </ng-container>
+      <ng-container matColumnDef="auctionName">
+        <th mat-header-cell *matHeaderCellDef>auctionName</th>
+        <td mat-cell *matCellDef="let element">{{ element.auctionName }}</td>
+      </ng-container>
 
-    <ng-container matColumnDef="seller">
-      <th mat-header-cell *matHeaderCellDef>seller</th>
-      <td mat-cell *matCellDef="let element">{{ element.seller }}</td>
-    </ng-container>
+      <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef>date</th>
+        <td mat-cell *matCellDef="let element">{{ element.date }}</td>
+      </ng-container>
 
-    <ng-container matColumnDef="asdf">
-      <th mat-header-cell *matHeaderCellDef>transaction</th>
-      <td mat-cell *matCellDef="let element">Yes</td>
-    </ng-container>
+      <ng-container matColumnDef="seller">
+        <th mat-header-cell *matHeaderCellDef>seller</th>
+        <td mat-cell *matCellDef="let element">{{ element.seller }}</td>
+      </ng-container>
 
-    <ng-container matColumnDef="imagePath">
-      <th mat-header-cell *matHeaderCellDef>image</th>
-      <td mat-cell *matCellDef="let element">
-        <img
-          src="{{ element.imagePath }}"
-          alt=""
-          height="20"
-          width="40"
-          (click)="openImage(element.imagePath)"
-        />
-      </td>
-    </ng-container>
+      <ng-container matColumnDef="asdf">
+        <th mat-header-cell *matHeaderCellDef>transaction</th>
+        <td mat-cell *matCellDef="let element">Yes</td>
+      </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-  </table>
+      <ng-container matColumnDef="imagePath">
+        <th mat-header-cell *matHeaderCellDef>image</th>
+        <td mat-cell *matCellDef="let element">
+          <img
+            src="{{ element.imagePath }}"
+            alt=""
+            height="20"
+            width="40"
+            (click)="openImage(element.imagePath)"
+          />
+        </td>
+      </ng-container>
 
-  <mat-paginator
-    [length]="totalProducts"
-    [pageSize]="productsPerPage"
-    [pageSizeOptions]="pageSizeOptions"
-    (page)="onChangePage($event)"
-  ></mat-paginator>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+
+    <mat-paginator
+      [length]="totalProducts"
+      [pageSize]="productsPerPage"
+      [pageSizeOptions]="pageSizeOptions"
+      (page)="onChangePage($event)"
+    ></mat-paginator>
+  </div>
+</div>
+
+<div class="noHistory" *ngIf="!haveHistory">
+  NO HISTORY
 </div>

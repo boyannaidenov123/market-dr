@@ -144,6 +144,7 @@ export class ProductListCreateComponent implements OnInit {
       }
     }
     //this.form.reset() //not work!!!
+    this.form.reset();
   }
 
   radioChange(event: MatRadioChange) {

@@ -146,6 +146,8 @@ function getCountOfLots(io) {
       } else {
         auctionStart = false;
         canBuy = false;
+
+        socket.emit("endVarna", {});
         console.log("krai--------------------------------");
       }
     }

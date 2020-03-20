@@ -7,6 +7,14 @@
   font-size: 20px;
   -webkit-box-shadow: 5px 5px 11px 12px rgba(0, 0, 0, 0.72);
   box-shadow: 5px 5px 11px 12px rgba(0, 0, 0, 0.72);
-  border: 5px double #1c6ea4;
+  border: 6px double #1c6ea4;
   border-radius: 40px;
+  background-color: white;
+  font-family: "Lucida Console", Monaco, monospace;
+  letter-spacing: -0.2px;
+  word-spacing: 2.4px;
+  color: #000000;
+}
+p{
+  font-size: 15px
 }

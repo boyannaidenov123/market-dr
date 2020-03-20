@@ -68,23 +68,26 @@ router.post(
       }
     });
 
-    flower.save().then(createFlower => {
-      lot.flowerId = createFlower._id;
-      lot.save().then(createLot => {
-        console.log(createLot);
-      });
-      res.status(201).json({
-        message: "Flower added successfully",
-        flower: {
-          ...createFlower,
-          id: createFlower._id
-        }
-      });
-    }).catch(err =>{
-      res.status(500).json({
-        message: 'Creating a flower failed!'
+    flower
+      .save()
+      .then(createFlower => {
+        lot.flowerId = createFlower._id;
+        lot.save().then(createLot => {
+          console.log(createLot);
+        });
+        res.status(201).json({
+          message: "Flower added successfully",
+          flower: {
+            ...createFlower,
+            id: createFlower._id
+          }
+        });
       })
-    })
+      .catch(err => {
+        res.status(500).json({
+          message: "Creating a flower failed!"
+        });
+      });
   }
 );
 
@@ -92,42 +95,40 @@ router.get("/", checkAuth, (req, res, next) => {
   const pageSize = +req.query.pagesize;
   const currentPage = +req.query.page;
   const selected = +req.query.selected;
-
-  const productQuery = Flower.find()
-    .where("containers")
-    .gte(1);
-  let fetchedProducts;
-
-  if (pageSize && currentPage) {
-    if (selected == 2) {
-      // If radio button option is "Yours" products
-      productQuery
-        .find({ seller: req.userData.userId })
-        .skip(pageSize * (currentPage - 1))
-        .limit(pageSize);
-    } else {
-      // If radio button option is "All" products
-      productQuery.skip(pageSize * (currentPage - 1)).limit(pageSize);
-    }
+  let seller = {
+    seller: req.userData.userId
+  };
+  if (selected == 1) {
+    // If radio button option is "All" products
+    seller = {};
   }
 
-  productQuery
-    .then(flowers => {
-      fetchedProducts = flowers;
+  const productQuery = Flower.find().where("containers").gte(0);
 
-      return productQuery.countDocuments();
-    })
-    .then(count => {
-      res.status(200).json({
-        message: "Products fetch successfully",
-        products: fetchedProducts,
-        maxProducts: count
-      });
-    }).catch(()=>{
-      res.status(404).json({
-        message:"Fetching the flowers failed!"
+  if (pageSize && currentPage) {
+    productQuery
+      .find(seller)
+      .skip(pageSize * (currentPage - 1))
+      .limit(pageSize);
+  }
+
+  Flower.find(seller).where("containers").gte(0).countDocuments(function(err, count) {
+    productQuery
+      .then(flowers => {
+        console.log(count, "-------======--------------");
+        res.status(200).json({
+          message: "Products fetch successfully",
+          products: flowers,
+          maxProducts: count
+        });
       })
-    })
+      .catch(err => {
+        console.log(err);
+        res.status(404).json({
+          message: "Fetching the flowers failed!"
+        });
+      });
+  });
 });
 
 router.delete("/:id", checkAuth, (req, res, next) => {
@@ -160,8 +161,8 @@ router.get("/:id", (req, res, next) => {
       });
     } else {
       res.status(404).json({
-        message:"Flower doesn't exist"
-      })
+        message: "Flower doesn't exist"
+      });
     }
   });
 });
@@ -199,7 +200,7 @@ router.put(
       product
     )
       .then(result => {
-        console.log(result)
+        console.log(result);
         if (result.nModified > 0) {
           res.status(200).json({
             message: "Update successful!"
@@ -212,8 +213,8 @@ router.put(
       })
       .catch(function(err) {
         res.status(500).json({
-          message:"Updating a flower failed!"
-        })
+          message: "Updating a flower failed!"
+        });
       });
   }
 );

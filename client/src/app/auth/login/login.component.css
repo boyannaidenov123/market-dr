@@ -1,8 +1,11 @@
-mat-form-field{
-    width: 100%;
+mat-form-field {
+  width: 100%;
 }
-mat-card{
-    margin-top: 1rem;
-    width: 50%;
-    margin: auto;
+mat-card {
+  width: 50%;
+  margin: 10rem auto;
+  -webkit-box-shadow: 5px 5px 11px 12px rgba(0, 0, 0, 0.72);
+  box-shadow: 5px 5px 11px 12px rgba(0, 0, 0, 0.72);
+  border: 6px double #1c6ea4;
+  border-radius: 40px;
 }

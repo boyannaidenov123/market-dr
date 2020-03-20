@@ -12,8 +12,13 @@ th {
 mat-spinner {
   margin: 0 auto;
 }
-h2 {
+h2#history{
   text-align: center;
+  text-decoration: none;
+  color:black;
+  font-size: 20px;
+  text-shadow: 4px 4px 8px white;
+  font-size: 50px;
 }
 .flowerTable {
   max-width: 1600px;
@@ -25,4 +30,11 @@ img {
   border-radius: 40px;
   -webkit-box-shadow: 6px 0px 8px -2px #000000;
   box-shadow: 6px 0px 8px -2px #000000;
+}
+
+.noHistory{
+  text-align: center;
+  color: black;
+  font-size: 30px;
+  text-shadow: 1px 1px 4px white;
 }

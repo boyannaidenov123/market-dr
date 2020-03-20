@@ -6,12 +6,15 @@
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>
+
+    <p>Choose a time</p>
+    
     <div class="ngx-timepicker-field-example">
       <ngx-timepicker-field [defaultTime]="'10:00 '" [format]="24" [(ngModel)]="startTime"></ngx-timepicker-field>
     </div>
 <br>
     <mat-form-field>
-      <mat-label>Choose Auction</mat-label>
+      <mat-label>Choose an Auction</mat-label>
       <mat-select [(ngModel)]="auction">
         <mat-option *ngFor="let auction of auctions" [value]="auction.value">
           {{auction.value}}

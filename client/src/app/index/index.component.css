@@ -1,6 +1,53 @@
-img{
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
+.body{
 
+    min-height: 100vh;
+}
+
+.content{
+    margin-left: 20%;
+    margin-right: 20%;
+    background-color: black;
+    border: 5px solid transparent;
+    border-radius: 40px;
+    min-height: 100vh;
+}
+img{
+    border-radius: 40px;
+    height: 100%;
+    width: 100%;
+}
+.image{
+    overflow:auto;
+    text-align: center;
+}
+
+.information{
+    color: white
+}
+.information p{
+    font-family: "Comic Sans MS", cursive, sans-serif;
+    font-size: 22px;
+    letter-spacing: 2px;
+    word-spacing: 0px;
+    color: white;
+    font-weight: normal;
+    text-decoration: none;
+    font-style: italic;
+    font-variant: normal;
+    text-transform: none;
+    margin-left: 3rem;
+    margin-right: 3rem;
+}
+.information h1{
+    text-align: center;
+    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+    font-size: 30px;
+    letter-spacing: 3px;
+    word-spacing: 2px;
+    color: white;
+    font-weight: 400;
+    text-decoration: none solid rgb(68, 68, 68);
+    font-style: italic;
+    font-variant: normal;
+    text-transform: uppercase;
 }

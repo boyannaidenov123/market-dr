@@ -29,7 +29,6 @@ import { CountdownModule } from 'ngx-countdown';
 import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 
 
-
  
 
 import { AppComponent } from './app.component';
@@ -56,6 +55,7 @@ import { PlovdivComponent } from './markets/plovdiv/plovdiv.component';
 import { VarnaComponent } from './markets/varna/varna.component';
 import { ErrorInterceptor } from "./error-interceptor";
 import { ErrorComponent } from "./error/error.component";
+import { BottomMenuComponent } from './bottom-menu/bottom-menu.component';
 
 @NgModule({
   declarations: [
@@ -76,7 +76,8 @@ import { ErrorComponent } from "./error/error.component";
     SofiaComponent,
     PlovdivComponent,
     VarnaComponent,
-    ErrorComponent
+    ErrorComponent,
+    BottomMenuComponent
   ],
   imports: [
     BrowserModule,

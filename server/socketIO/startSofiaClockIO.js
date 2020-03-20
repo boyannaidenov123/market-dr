@@ -147,6 +147,12 @@ function getCountOfLots(io) {
       } else {
         auctionStart = false;
         canBuy = false;
+
+        Auction.updateOne({name: "Sofia"}, {active: false, startDate: new Date()})
+        .then((result)=>{
+          
+        })
+        socket.emit("endSofia", {});
         console.log("krai--------------------------------");
       }
     }

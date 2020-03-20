@@ -20,9 +20,12 @@
   ></circle-progress>
 
   <div>
-    <button mat-raised-button color="primary" (click)="onBuyLot()">Buy</button>
+    <button id="buy" mat-raised-button color="primary" (click)="onBuyLot()">
+      Buy
+    </button>
     <mat-form-field>
       <input
+        id="containers"
         matInput
         type="number"
         min="1"
@@ -91,10 +94,7 @@
   </table>
 </div>
 <div class="image">
-  <img
-    src="{{ imagePath }}"
-    alt="image flower"
-  />
+  <img src="{{ imagePath }}" alt="image flower" />
 </div>
 
 <div class="clock">

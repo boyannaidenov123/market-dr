@@ -6,6 +6,10 @@
     width: 100%;
     text-align:center;
   }
+  mat-tab-group{
+    background-color: white;
+
+  }
   
 .userInfo{
     width: 400px;

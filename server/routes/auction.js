@@ -18,10 +18,11 @@ router.get("/", checkAuth, (req, res) => {
 
 router.put("/", checkAdmin, (req, res)=>{
   if(new Date(req.body.date).getTime() <= new Date().getTime()){
-    res.status(422).json({
+    return res.status(422).json({
       message: "Unprocessable Entity!"
     });
   }
+  console.log('change', '---------============-----------------=========')
   Auction.updateOne(
     {
       name: req.body.auction
