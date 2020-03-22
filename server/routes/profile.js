@@ -1,12 +1,10 @@
 var express = require("express");
 var router = express.Router();
 const User = require("../models/user");
-const History = require("../models/history");
-const Flower = require("../models/flower");
 const checkAuth = require("../middleware/check-auth");
 const bcrypt = require("bcrypt");
 
-router.get("/info", checkAuth, (req, res, next) => {
+router.get("/info", checkAuth, (req, res) => {
   User.findById(req.userData.userId).then(user => {
     if (!user) {
       res.status(404).json({
@@ -22,7 +20,7 @@ router.get("/info", checkAuth, (req, res, next) => {
   });
 });
 
-router.put("/changeName", checkAuth, (req, res, next) => {
+router.put("/changeName", checkAuth, (req, res) => {
   console.log(req.body);
   User.updateOne(
     {
@@ -44,7 +42,7 @@ router.put("/changeName", checkAuth, (req, res, next) => {
     }
   });
 });
-router.put("/changePassword", checkAuth, (req, res, next) => {
+router.put("/changePassword", checkAuth, (req, res) => {
   User.findById({ _id: req.userData.userId })
     .then(user => {
       if (!user) {

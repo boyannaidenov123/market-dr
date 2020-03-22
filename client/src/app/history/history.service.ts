@@ -34,7 +34,7 @@ export class HistoryService {
               itemsInContainer: flower.flowerId.itemsInContainer,
               height: flower.flowerId.height,
               weight: flower.flowerId.weight,
-              auctionName: flower.flowerId.auctionName,
+              auctionName: flower.auctionName,
               imagePath: flower.flowerId.imagePath,
               price: flower.price,
               date: this.formatDate(flower.date)

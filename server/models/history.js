@@ -27,6 +27,10 @@ const historyShema = mongoose.Schema({
     price:{
         type: Number,
         require: true
+    },
+    auctionName:{
+        type: String,
+        require: true
     }
 })
 

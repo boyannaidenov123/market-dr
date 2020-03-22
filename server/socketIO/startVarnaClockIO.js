@@ -6,7 +6,7 @@ const Auction = require("../models/auction");
 
 let timer; //variable for setInterval
 let value; //blocks of the clock
-let lotForSellInfo; //all info for lot which is for selling
+let lotForSaleInfo; //all info for lot which is for selling
 let flowerForSaleInfo; //all info for flower which is for selling
 let auctionStart = false; //boolean => is Auction started
 let countOfNoSelling = 0; //count of no selling
@@ -19,7 +19,8 @@ function clockMovement(io, lotId, price) {
 
   timer = setInterval(() => {
     console.log(value);
-    io.emit("clockValueVarna", { value: value });
+    //io.emit("clockValueVarna", { value: value });
+    sendLotInfo(io, lotForSaleInfo, flowerForSaleInfo);
     Lot.updateOne({ _id: lotId }, { currentPrice: value - 1 }).then(() => {});
 
     if (value >= 10 && countOfNoSelling < 3) {
@@ -31,7 +32,7 @@ function clockMovement(io, lotId, price) {
       clearInterval(timer);
       waitBeforeStarting = setTimeout(() => {
         console.log("tuk--------------------");
-        clockMovement(io, lotId, 90);
+        clockMovement(io, lotId, (value+40));
       }, 2000);
     }
     if (countOfNoSelling == 3) {
@@ -47,13 +48,12 @@ function clockMovement(io, lotId, price) {
       clearTimeout(waitBeforeStarting);
       console.log("sledva6t LOT , -------finished");
     }
-  }, 150);
+  }, 100);
 }
 function start(io, socket) {
-
+    console.log('start connection')
     if (auctionStart) {
-      io.emit("lotForSaleVarna", lotForSellInfo);
-      io.emit("flowerForSaleVarna", flowerForSaleInfo);
+      sendLotInfo(io, lotForSaleInfo, flowerForSaleInfo);
     }
 
     socket.on("buyLotVarna", function(data) {
@@ -65,12 +65,14 @@ function start(io, socket) {
 
         console.log(data); //_id na buyer; containers buying;
         countOfNoSelling = 0;
-        flowerForSaleInfo.containers -= data.containers;
-        io.emit("flowerForSaleVarna", flowerForSaleInfo);
-        if (flowerForSaleInfo.containers < 0) {
-          data.containers += flowerForSaleInfo.containers;
-          flowerForSaleInfo.containers = 0;
-          Lot.findByIdAndUpdate(lotForSellInfo._id, {
+        lotForSaleInfo.containers -= data.containers;
+        if (lotForSaleInfo.containers > 0) {
+          sendLotInfo(io, lotForSaleInfo, flowerForSaleInfo);
+        }
+        else{
+          data.containers += lotForSaleInfo.containers;
+          lotForSaleInfo.containers = 0;
+          Lot.findByIdAndUpdate(lotForSaleInfo._id, {
             "status.sold": true
           }).then(() => {
             setTimeout(() => {
@@ -78,8 +80,8 @@ function start(io, socket) {
             }, 2000);
           });
         }
-        Flower.findByIdAndUpdate(flowerForSaleInfo._id, {
-          containers: flowerForSaleInfo.containers
+        Lot.findByIdAndUpdate(lotForSaleInfo._id, {
+          containers: lotForSaleInfo.containers
         }).then(result => {
           const history = new History({
             flowerId: flowerForSaleInfo._id,
@@ -87,15 +89,16 @@ function start(io, socket) {
             seller: result.seller,
             date: new Date(),
             containers: data.containers,
-            price: (value + 1) * flowerForSaleInfo.blockPrice
+            price: (value) * flowerForSaleInfo.blockPrice,
+            auctionName: lotForSaleInfo.auctionName
           });
           history
             .save()
             .then(() => {
               console.log("history saved");
-              if (flowerForSaleInfo.containers > 0) {
+              if (lotForSaleInfo.containers > 0) {
                 setTimeout(() => {
-                  clockMovement(io, lotForSellInfo._id, 90);
+                  clockMovement(io, lotForSaleInfo._id, (value+40));
                 }, 2000);
               }
             })
@@ -107,7 +110,25 @@ function start(io, socket) {
 
       }
     });
+  };
+
+function sendLotInfo(io, lot, flower){
+  io.emit("lotForSaleVarna",{
+    name: flower.name,
+    type: flower.type,
+    itemsInContainer: flower.itemsInContainer,
+    height: flower.height,
+    weight: flower.weight,
+    blockPrice: flower.blockPrice,
+    auctionName: lot.auctionName,
+    additionalInformation: flower.additionalInformation,
+    currentPrice: value,
+    _id: lot._id,
+    containers: lot.containers,
+    imagePath: flower.imagePath
+  })
 }
+
 
 function startClock(io) {
   console.log("---------------New Lot--------------------");
@@ -118,11 +139,10 @@ function startClock(io) {
     "status.sold": false
   })
     .then(lot => {
-      lotForSellInfo = lot;
-      io.emit("lotForSaleVarna", lot);
+      lotForSaleInfo = lot;
       Flower.findById({ _id: lot.flowerId }).then(flower => {
-        io.emit("flowerForSaleVarna", flower);
         flowerForSaleInfo = flower;
+        sendLotInfo(io, lotForSaleInfo, flowerForSaleInfo);
       });
       setTimeout(() => {
         clockMovement(io, lot._id, lot.currentPrice); //start selling
@@ -146,8 +166,34 @@ function getCountOfLots(io) {
       } else {
         auctionStart = false;
         canBuy = false;
+        value = 100;
 
-        socket.emit("endVarna", {});
+        Auction.updateOne({name: "Varna"}, {active: false, startDate: new Date(new Date().setHours(new Date().getHours() + 24))})
+        .then((result)=>{
+          if(result.nModified > 0){
+            console.log("New date is set");
+          }
+          else{
+            console.log("Can't set new date");
+          }
+        });
+        Lot.updateMany({
+          auctionName: "Varna",
+          "status.scheduledState": true,
+          "status.sold": false
+        }, {
+          "status.scheduledState": false,
+          currentPrice: 100
+        }).then(result => {
+          if(result.nModified > 0){
+            console.log('status.scheduledState sa promeneni na false !!!');
+          }
+          else{
+            console.log('nqma neprodadeni !!!')
+          }
+        })
+
+        io.emit("endVarna", {});
         console.log("krai--------------------------------");
       }
     }

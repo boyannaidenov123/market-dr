@@ -8,27 +8,18 @@ import { AuthService } from '../auth.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  isTrader:boolean;
-  name:string;
 
   constructor(public authService: AuthService) { }
 
   ngOnInit() {
-    this.isTrader = false;
-    this.name = "User:";
+
   }
 
   onLogin(form:NgForm){
     if(form.invalid){
       return;
     }
-    this.authService.login(form.value.email, form.value.password, this.isTrader);
-  }
-  changeStatut(){
-    this.isTrader = !this.isTrader;
-    if(this.isTrader){this.name = "Trader:";}
-    else{this.name = "User:";}
-
+    this.authService.login(form.value.email, form.value.password);
   }
 
 }

@@ -1,6 +1,11 @@
 const mongoose = require('mongoose');
 
 const lotShema = mongoose.Schema({
+    seller:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref:"User",
+        require:true
+    },
     flowerId:{
         type:mongoose.Schema.Types.ObjectId,
         ref:"Flower",
@@ -15,6 +20,10 @@ const lotShema = mongoose.Schema({
         scheduledState: {type:Boolean, require: true},
         active:{type:Boolean, require: true},
         sold:{type:Boolean, require: true},
+    },
+    containers:{
+        type: Number,
+        require: true
     },
     auctionName: {
         type:String, 

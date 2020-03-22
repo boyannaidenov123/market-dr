@@ -78,10 +78,7 @@ export class ProductListComponent implements OnInit {
   }
 
   onDelete(id:string){
-    this.productsService.deleteProduct(id)
-    .subscribe(()=>{
-      this.productsService.getProducts(this.productsPerPage, this.currentPage);
-    })
+    this.productsService.deleteProduct(id);
   }
 
   onEdit(id:string){

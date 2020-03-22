@@ -3,6 +3,8 @@ import { HttpClient } from "@angular/common/http";
 import { Product } from "./product.model";
 import { Subject } from "rxjs";
 import { map } from "rxjs/operators";
+import { MatSnackBar } from "@angular/material/snack-bar";
+
 
 @Injectable({
   providedIn: "root"
@@ -17,7 +19,7 @@ export class ProductsService {
   product: Product;
   private editProduct = new Subject<{ product: Product | any }>();
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private snackBar: MatSnackBar) {}
 
   addNewProduct(
     name: string,
@@ -48,6 +50,7 @@ export class ProductsService {
         product
       )
       .subscribe(response => {
+        this.snackBar.open(response.message, "Close", { duration: 3000 });
         this.getProducts(5, 1);
       });
   }
@@ -68,24 +71,22 @@ export class ProductsService {
         map(productData => {
           return {
             products: productData.products.map(product => {
-              console.log(product.additionalInformation)
               let additionalInformation = "";
-              if (product.additionalInformation != 'null') {
-                additionalInformation = product.additionalInformation;
+              if (product.flowerId.additionalInformation != 'null') {
+                additionalInformation = product.flowerId.additionalInformation;
               }
-              console.log(additionalInformation)
               return {
                 seller: product.seller,
-                name: product.name,
-                type: product.type,
-                id: product._id,
+                name: product.flowerId.name,
+                type: product.flowerId.type,
+                id: product.flowerId._id,
                 containers: product.containers,
-                itemsInContainer: product.itemsInContainer,
-                height: product.height,
-                weight: product.weight,
-                blockPrice: product.blockPrice,
+                itemsInContainer: product.flowerId.itemsInContainer,
+                height: product.flowerId.height,
+                weight: product.flowerId.weight,
+                blockPrice: product.flowerId.blockPrice,
                 auctionName: product.auctionName,
-                imagePath: product.imagePath,
+                imagePath: product.flowerId.imagePath,
                 additionalInformation: additionalInformation
               };
             }),
@@ -148,8 +149,9 @@ export class ProductsService {
     }
     console.log(product);
     this.http
-      .put(`http://localhost:9000/flowers/${id}`, product)
+      .put<{ message: string}>(`http://localhost:9000/flowers/${id}`, product)
       .subscribe(response => {
+        this.snackBar.open(response.message, "Close", { duration: 3000 });
         this.getProducts(5, 1);
       });
   }
@@ -169,9 +171,12 @@ export class ProductsService {
   }
 
   deleteProduct(deleteId: string) {
-    return this.http.delete<{ message: string }>(
+    this.http.delete<{ message: string }>(
       `http://localhost:9000/flowers/${deleteId}`
-    );
+    ).subscribe(response=>{
+      this.snackBar.open(response.message, "Close", { duration: 3000 });
+      this.getProducts(5, 1);
+    })
   }
   getEditProductListener() {
     return this.editProduct.asObservable();

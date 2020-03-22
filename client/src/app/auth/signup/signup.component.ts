@@ -8,15 +8,12 @@ import { AuthService } from '../auth.service';
   styleUrls: ['./signup.component.css']
 })
 export class SignupComponent implements OnInit {
-  isTrader: boolean;
-  name: string;
+  isTrader = false;
   confirmationCode: boolean;
 
   constructor(public authService: AuthService) { }
 
   ngOnInit() {
-    this.isTrader = false;
-    this.name = "User:";
     this.confirmationCode = false;
   }
 
@@ -31,15 +28,13 @@ export class SignupComponent implements OnInit {
     if (this.confirmationCode) {
       this.authService.getAccess(form.value.email, form.value.confirmationCode);
     } else {
+      console.log(form.value.option);
+      if(form.value.option == 2){
+        this.isTrader = true;
+      }
       this.authService.signup(form.value.email, form.value.password, this.isTrader);
       this.confirmationCode = true;
     }
-
-  }
-  changeStatut() {
-    this.isTrader = !this.isTrader;
-    if (this.isTrader) { this.name = "Trader:"; }
-    else { this.name = "User:"; }
 
   }
 

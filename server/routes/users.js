@@ -68,7 +68,7 @@ router.post("/login", (req, res) => {
   let fetchedUser;
   User.findOne({
     email: req.body.email,
-    isTrader: req.body.isTrader,
+    //isTrader: req.body.isTrader,
     authenticated: true
   })
     .then(user => {

@@ -49,10 +49,11 @@ export class HistoryComponent implements OnInit {
       .getFlowersUpdatedListener()
       .subscribe((flowerData: { flowers: any; flowersCount: number }) => {
         this.loading = true;
-        console.log(flowerData.flowersCount)
+        console.log(flowerData)
         if (flowerData.flowersCount == 0) {
           this.haveHistory = false;
         } else {
+          this.haveHistory = true;
           this.totalProducts = flowerData.flowersCount;
           console.log(this.totalProducts);
           this.history = flowerData.flowers;

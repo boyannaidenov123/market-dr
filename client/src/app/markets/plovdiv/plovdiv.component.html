@@ -1,4 +1,4 @@
 <div class="clock">
-    <app-clock *ngIf="activate"></app-clock>
+    <app-clock *ngIf="activate" [auction]="auction"></app-clock>
     <app-timer *ngIf="!activate" [auction]="auction"></app-timer>
 </div>

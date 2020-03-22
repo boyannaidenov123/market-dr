@@ -23,7 +23,8 @@ input {
 }
 img {
   width: 100%;
-  max-width: 600px;
+  max-width: 400px;
+  max-height: 400px;
 }
 button#buy {
   border: 1px outset black;

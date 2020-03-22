@@ -4,7 +4,6 @@ const multer = require("multer");
 const Flower = require("../models/flower");
 const Lot = require("../models/lot");
 const checkAuth = require("../middleware/check-auth");
-const User = require("../models/user");
 
 const MIME_TYPE_MAP = {
   "image/png": "png",
@@ -36,18 +35,15 @@ router.post(
   "/newFlower",
   checkAuth,
   multer({ storage: storage }).single("image"),
-  (req, res, next) => {
+  (req, res) => {
     console.log(req.body);
     console.log("tuk");
     const url = req.protocol + "://" + req.get("host");
     console.log("tuk3");
 
     const flower = new Flower({
-      seller: req.userData.userId,
       name: req.body.name,
       type: req.body.type,
-      auctionName: req.body.auctionName,
-      containers: +req.body.containers,
       itemsInContainer: +req.body.itemsInContainer,
       height: req.body.height,
       weight: req.body.weight,
@@ -58,6 +54,7 @@ router.post(
     console.log(flower);
 
     let lot = new Lot({
+      seller: req.userData.userId,
       auctionName: req.body.auctionName,
       currentPrice: 100,
       status: {
@@ -65,25 +62,37 @@ router.post(
         scheduledState: false,
         active: false,
         sold: false
-      }
+      },
+      containers: +req.body.containers
     });
 
     flower
       .save()
       .then(createFlower => {
         lot.flowerId = createFlower._id;
-        lot.save().then(createLot => {
-          console.log(createLot);
-        });
-        res.status(201).json({
-          message: "Flower added successfully",
-          flower: {
-            ...createFlower,
-            id: createFlower._id
-          }
-        });
+        lot
+          .save()
+          .then(() => {
+            Lot.findById(createFlower._id)
+              .populate("flowerId")
+              .then(product => {
+                res.status(201).json({
+                  message: "Flower added successfully",
+                  flower: {
+                    ...product,
+                    id: createFlower._id
+                  }
+                });
+              });
+          })
+          .catch(err => {
+            console.log(err);
+            res.status(500).json({
+              message: "Sending a flower failed!"
+            });
+          });
       })
-      .catch(err => {
+      .catch(() => {
         res.status(500).json({
           message: "Creating a flower failed!"
         });
@@ -91,7 +100,7 @@ router.post(
   }
 );
 
-router.get("/", checkAuth, (req, res, next) => {
+router.get("/", checkAuth, (req, res) => {
   const pageSize = +req.query.pagesize;
   const currentPage = +req.query.page;
   const selected = +req.query.selected;
@@ -103,43 +112,52 @@ router.get("/", checkAuth, (req, res, next) => {
     seller = {};
   }
 
-  const productQuery = Flower.find().where("containers").gte(0);
+  const productQuery = Lot.find(seller)
+    .where("status.scheduledState")
+    .equals(false)
+    .where("status.sold")
+    .equals(false)
+    .where("status.active")
+    .equals(false);
 
   if (pageSize && currentPage) {
-    productQuery
-      .find(seller)
-      .skip(pageSize * (currentPage - 1))
-      .limit(pageSize);
+    productQuery.skip(pageSize * (currentPage - 1)).limit(pageSize);
   }
 
-  Flower.find(seller).where("containers").gte(0).countDocuments(function(err, count) {
-    productQuery
-      .then(flowers => {
-        console.log(count, "-------======--------------");
-        res.status(200).json({
-          message: "Products fetch successfully",
-          products: flowers,
-          maxProducts: count
+  Lot.find(seller)
+    .where("status.scheduledState")
+    .equals(false)
+    .where("status.sold")
+    .equals(false)
+    .where("status.active")
+    .equals(false)
+    .countDocuments(function(err, count) {
+      productQuery
+        .populate("flowerId")
+        .then(flowers => {
+          res.status(200).json({
+            message: "Products fetch successfully",
+            products: flowers,
+            maxProducts: count
+          });
+        })
+        .catch(err => {
+          console.log(err);
+          res.status(404).json({
+            message: "Fetching the flowers failed!"
+          });
         });
-      })
-      .catch(err => {
-        console.log(err);
-        res.status(404).json({
-          message: "Fetching the flowers failed!"
-        });
-      });
-  });
+    });
 });
 
-router.delete("/:id", checkAuth, (req, res, next) => {
+router.delete("/:id", checkAuth, (req, res) => {
   Lot.deleteOne({
     flowerId: req.params.id
-  }).then(result => {
+  }).then(() => {
     console.log("delete lot");
   });
   Flower.deleteOne({
-    _id: req.params.id,
-    seller: req.userData.userId
+    _id: req.params.id
   }).then(relult => {
     if (relult.n > 0) {
       res.status(200).json({
@@ -153,65 +171,63 @@ router.delete("/:id", checkAuth, (req, res, next) => {
   });
 });
 
-router.get("/:id", (req, res, next) => {
-  Flower.findById(req.params.id).then(product => {
-    if (product) {
-      res.status(200).json({
-        product: product
-      });
-    } else {
-      res.status(404).json({
-        message: "Flower doesn't exist"
-      });
-    }
-  });
+router.get("/:id", (req, res) => {
+  Lot.findOne({ flowerId: req.params.id })
+    .populate("flowerId")
+    .then(product => {
+      if (product) {
+        res.status(200).json({
+          product: product
+        });
+      } else {
+        res.status(404).json({
+          message: "Flower doesn't exist"
+        });
+      }
+    });
 });
 
 router.put(
   "/:id",
   checkAuth,
   multer({ storage: storage }).single("image"),
-  (req, res, next) => {
-    console.log("tuk");
+  (req, res) => {
     let imagePath = req.body.imagePath;
     if (req.file) {
       const url = req.protocol + "://" + req.get("host");
       imagePath = url + "/images/" + req.file.filename;
     }
-    const product = new Flower({
-      _id: req.body.id,
-      seller: req.userData.userId,
-      name: req.body.name,
-      type: req.body.type,
-      containers: +req.body.containers,
-      itemsInContainer: +req.body.itemsInContainer,
-      height: +req.body.height,
-      weight: +req.body.weight,
-      blockPrice: +req.body.blockPrice,
-      imagePath: imagePath,
-      additionalInformation: req.body.additionalInformation
-    });
-    console.log(req.body);
-    Flower.updateOne(
-      {
+
+    Lot.findOneAndUpdate(
+      { 
         _id: req.params.id,
         seller: req.userData.userId
       },
-      product
+      { containers: +req.body.containers, auctionName: req.body.auctionName }
     )
       .then(result => {
         console.log(result);
-        if (result.nModified > 0) {
-          res.status(200).json({
-            message: "Update successful!"
-          });
-        } else {
-          res.status(401).json({
-            message: "Not authorized!"
-          });
-        }
+        const product = new Flower({
+          _id: result.flowerId,
+          name: req.body.name,
+          type: req.body.type,
+          itemsInContainer: +req.body.itemsInContainer,
+          height: +req.body.height,
+          weight: +req.body.weight,
+          blockPrice: +req.body.blockPrice,
+          imagePath: imagePath,
+          additionalInformation: req.body.additionalInformation
+        });
+        Flower.updateOne({ _id: result.flowerId }, product).then(
+          () => {
+              res.status(200).json({
+                message: "Update successful!"
+              });
+          }
+        );
       })
       .catch(function(err) {
+        console.log(err);
         res.status(500).json({
           message: "Updating a flower failed!"
         });

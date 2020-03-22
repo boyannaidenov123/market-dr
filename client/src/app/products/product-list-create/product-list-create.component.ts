@@ -28,17 +28,17 @@ export class ProductListCreateComponent implements OnInit {
       .subscribe(result => {
         this.mode = "edit";
         this.id = result.product._id;
-        this.form.controls["name"].setValue(result.product.name);
-        this.form.controls["type"].setValue(result.product.type);
+        this.form.controls["name"].setValue(result.product.flowerId.name);
+        this.form.controls["type"].setValue(result.product.flowerId.type);
         this.form.controls["containers"].setValue(result.product.containers);
-        this.form.controls["items"].setValue(result.product.itemsInContainer);
-        this.form.controls["height"].setValue(result.product.height);
-        this.form.controls["weight"].setValue(result.product.weight);
-        this.form.controls["blockPrice"].setValue(result.product.blockPrice);
+        this.form.controls["items"].setValue(result.product.flowerId.itemsInContainer);
+        this.form.controls["height"].setValue(result.product.flowerId.height);
+        this.form.controls["weight"].setValue(result.product.flowerId.weight);
+        this.form.controls["blockPrice"].setValue(result.product.flowerId.blockPrice);
         this.form.controls["auctionName"].setValue(result.product.auctionName);
-        this.form.controls["image"].setValue(result.product.imagePath);
-        this.form.controls["additionalInformation"].setValue(result.product.additionalInformation);
-        this.imagePreview = result.product.imagePath;
+        this.form.controls["image"].setValue(result.product.flowerId.imagePath);
+        this.form.controls["additionalInformation"].setValue(result.product.flowerId.additionalInformation);
+        this.imagePreview = result.product.flowerId.imagePath;
       });
 
     this.form = new FormGroup({
@@ -89,25 +89,7 @@ export class ProductListCreateComponent implements OnInit {
     reader.readAsDataURL(file);
   }
 
-  flowers: Flower[] = [
-    { value: "Acacia" },
-    { value: "Acanthus" },
-    { value: "Aloe" },
-    { value: "Amaranth" },
-    { value: "American ash" },
-    { value: "Angelica" },
-    { value: "Anthericum" },
-    { value: "Arum" },
-    { value: "Arum, Fly-catching" },
-    { value: "Ash-leaved Trumpet-flower" },
-    { value: "Aspen" },
-    { value: "Aster, China" }
-  ];
-  auctionNames: Name[] = [
-    { value: "Sofia" },
-    { value: "Varna" },
-    { value: "Plovdiv" }
-  ];
+
 
   onSaveProduct(formDirective: FormGroupDirective): void {
     if (this.form.invalid) {
@@ -157,6 +139,62 @@ export class ProductListCreateComponent implements OnInit {
     //Add 'implements OnDestroy' to the class.
     this.editProductSub.unsubscribe();
   }
+  flowers: Flower[] = [
+    { value: "Acacia" },
+    { value: "Acanthus" },
+    { value: "Aloe" },
+    { value: "Amaranth" },
+    { value: "American ash" },
+    { value: "Angelica" },
+    { value: "Anthericum" },
+    { value: "Arum" },
+    { value: "Arum, Fly-catching" },
+    { value: "Ash-leaved Trumpet-flower" },
+    { value: "Aspen" },
+    { value: "Aster, China" },
+    { value: "Aconitum" },
+    { value: "African Daisy" },
+    { value: "Alyssum" },
+    { value: "Amaranthus" },
+    { value: "Amaryllis" },
+    { value: "Aquilegia" },
+    { value: "Astilbe" },
+    { value: "Astrantia" },
+    { value: "Begonia" },
+    { value: "Bergenia" },
+    { value: "Bluebell" },
+    { value: "Buttercup" },
+    { value: "Candytuft" },
+    { value: "Cape Primrose" },
+    { value: "Carnation" },
+    { value: "Chrysanthemum" },
+    { value: "Clematis" },
+    { value: "Cockscomb" },
+    { value: "Coneflower" },
+    { value: "Cyclamen" },
+    { value: "Delphinium" },
+    { value: "Dianella" },
+    { value: "Diascia" },
+    { value: "Dietes" },
+    { value: "Dietes" },
+    { value: "Echinacea" },
+    { value: "Erica" },
+    { value: "Eustoma" },
+    { value: "Erigeron" },
+    { value: "Forsythia" },
+    { value: "Frangipani" },
+    { value: "Gaillardia" },
+    { value: "Gardenia" },
+    { value: "Geranium" },
+    { value: "Gerbera" },
+    { value: "Gypsophila" },
+
+  ];
+  auctionNames: Name[] = [
+    { value: "Sofia" },
+    { value: "Varna" },
+    { value: "Plovdiv" }
+  ];
 }
 
 export interface Flower {

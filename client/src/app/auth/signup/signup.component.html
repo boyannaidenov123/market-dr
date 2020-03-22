@@ -1,33 +1,34 @@
 <mat-card>
-    <mat-card-header>
-        <div mat-card-avatar class="example-header-image"></div>
-        <mat-card-title>{{ name }}</mat-card-title>
-      </mat-card-header>
     <form (submit)="onSignup(signupForm)" #signupForm="ngForm">
         <mat-form-field>
-            <input matInput name="email" ngModel type="email" placeholder="E-Mail" #emailInput="ngModel" required email>
+            <input matInput name="email" ngModel type="email" placeholder="E-Mail" #emailInput="ngModel" required
+                email />
             <mat-error *ngIf="emailInput.invalid">Please enter a valid email.</mat-error>
         </mat-form-field>
 
         <mat-form-field>
-            <input type="password" name="password" ngModel matInput placeholder="Password" #passwordInput="ngModel" required>
+            <input type="password" name="password" ngModel matInput placeholder="Password" #passwordInput="ngModel"
+                required />
             <mat-error *ngIf="passwordInput.invalid">Please enter a valid password.</mat-error>
         </mat-form-field>
 
         <mat-form-field>
-            <input type="password" name="repeatPassword" ngModel matInput placeholder="Repeat Password" #repeatPasswordInput="ngModel" required>
+            <input type="password" name="repeatPassword" ngModel matInput placeholder="Repeat Password"
+                #repeatPasswordInput="ngModel" required />
             <mat-error *ngIf="repeatPasswordInput.invalid">Please enter a valid password.</mat-error>
         </mat-form-field>
+        <mat-radio-group matInput name="option" ngModel type="radio" #optionInput="ngModel" required>
+            <mat-radio-button value="1">Buyer</mat-radio-button>
+            <br />
+            <mat-radio-button value="2">Seller</mat-radio-button>
+        </mat-radio-group>
 
         <mat-form-field *ngIf="confirmationCode">
-            <input type="test" name="confirmationCode" ngModel matInput placeholder="Confirmation Code" #confirmationCodeInput="ngModel">
+            <input type="test" name="confirmationCode" ngModel matInput placeholder="Confirmation Code"
+                #confirmationCodeInput="ngModel" />
             <mat-error *ngIf="confirmationCodeInput.invalid">Please enter the confirmation code.</mat-error>
         </mat-form-field>
-
-        <button mat-raised-button color="accent" type="submit">Sign up
-        </button>
+        <br />
+        <button mat-raised-button color="accent" type="submit">Sign up</button>
     </form>
-    <button *ngIf="!isTrader" mat-raised-button (click)="changeStatut()">Sign up as trader</button>
-    <button *ngIf="isTrader" mat-raised-button (click)="changeStatut()">Sign up as user</button>
-
 </mat-card>

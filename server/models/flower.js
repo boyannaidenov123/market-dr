@@ -1,11 +1,6 @@
 const mongoose = require('mongoose');
 
 const flowerSchema = mongoose.Schema({
-    seller:{
-        type: mongoose.Schema.Types.ObjectId,
-        ref:"User",
-        require:true
-    },
     name:{
         type: String,
         require: true
@@ -13,10 +8,6 @@ const flowerSchema = mongoose.Schema({
     type:{
         type:String,
         require:true
-    },
-    containers:{
-        type: Number,
-        require: true
     },
     itemsInContainer:{
         type: Number,
@@ -37,10 +28,6 @@ const flowerSchema = mongoose.Schema({
     imagePath:{
         type:String,
         require:true
-    },
-    auctionName:{
-        type: String,
-        require: true
     },
     additionalInformation:{
         type: String
