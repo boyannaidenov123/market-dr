@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, Input } from "@angular/core";
 import { HistoryService } from "./history.service";
 import { MatTableDataSource, PageEvent } from "@angular/material";
 import { Subscription } from "rxjs/internal/Subscription";
@@ -18,6 +18,7 @@ export class HistoryComponent implements OnInit {
   pageSizeOptions = [5, 10, 20];
   private loading = false;
   haveHistory = false;
+  @Input() isTrader = false;
 
   private productsSub: Subscription;
 
@@ -32,8 +33,9 @@ export class HistoryComponent implements OnInit {
     "auctionName",
     "date",
     "seller",
+    "buyer",
     "imagePath",
-    "asdf"
+    "transaction"
   ];
   dataSource = new MatTableDataSource<any>(this.history);
 
@@ -44,7 +46,11 @@ export class HistoryComponent implements OnInit {
 
   ngOnInit() {
     this.loading = false;
-    this.historyService.getBuyerHistory(5, 1);
+    setTimeout(() => {
+      console.log(this.isTrader)
+      this.historyService.getBuyerHistory(5, 1, this.isTrader);
+    }, 1000)
+    
     this.productsSub = this.historyService
       .getFlowersUpdatedListener()
       .subscribe((flowerData: { flowers: any; flowersCount: number }) => {
@@ -73,6 +79,6 @@ export class HistoryComponent implements OnInit {
   onChangePage(pageData: PageEvent) {
     this.currentPage = pageData.pageIndex + 1;
     this.productsPerPage = pageData.pageSize;
-    this.historyService.getBuyerHistory(this.productsPerPage, this.currentPage);
+    this.historyService.getBuyerHistory(this.productsPerPage, this.currentPage, this.isTrader);
   }
 }

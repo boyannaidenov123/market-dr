@@ -31,6 +31,11 @@ const historyShema = mongoose.Schema({
     auctionName:{
         type: String,
         require: true
+    },
+    transaction:{
+        type: Boolean,
+        require: true,
+        default: false
     }
 })
 

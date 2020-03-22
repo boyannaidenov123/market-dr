@@ -16,17 +16,25 @@ export class HistoryService {
 
   constructor(private http: HttpClient) { }
 
-  getBuyerHistory(productsPerPage: number, currentPage: number) {
-    const queryParams = `?pagesize=${productsPerPage}&page=${currentPage}`;
-    
-    this.http.get<{message:string, flowers: any, maxFlowers:number}>("http://localhost:9000/history/buyerHistory" + queryParams)
+  getBuyerHistory(productsPerPage: number, currentPage: number, isTrader: boolean) {
+    const queryParams = `?pagesize=${productsPerPage}&page=${currentPage}&isTrader=${isTrader}`;
+    console.log(queryParams);
+    this.http.get<{message:string, flowers: any, maxFlowers:number}>("http://localhost:9000/history/" + queryParams)
     .pipe(
       map(flowersData => {
         console.log(flowersData);
         return {
           flowers: flowersData.flowers.map(flower =>{
+            let transaction = flower.transaction;
+            if(transaction){
+              transaction = "Yes"
+            }
+            else{
+              transaction = "No";
+            }
             return {
               seller: flower.seller.email,
+              buyer: flower.buyer.email,
               name: flower.flowerId.name,
               type: flower.flowerId.type,
               id: flower.flowerId._id,
@@ -37,7 +45,8 @@ export class HistoryService {
               auctionName: flower.auctionName,
               imagePath: flower.flowerId.imagePath,
               price: flower.price,
-              date: this.formatDate(flower.date)
+              date: this.formatDate(flower.date),
+              transaction: transaction
             };
           }),
           maxFlowers: flowersData.maxFlowers

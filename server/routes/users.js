@@ -68,7 +68,6 @@ router.post("/login", (req, res) => {
   let fetchedUser;
   User.findOne({
     email: req.body.email,
-    //isTrader: req.body.isTrader,
     authenticated: true
   })
     .then(user => {
@@ -130,13 +129,13 @@ router.get("/isAdmin", checkAuth, (req, res) => {
   console.log("asdfsadf-------------------------");
   User.findOne({
     _id: req.userData.userId,
-    email: req.userData.email, 
+    email: req.userData.email,
     admin: true
   })
     .then(user => {
-        res.status(200).json({
-          isAdmin: user.admin
-        });
+      res.status(200).json({
+        isAdmin: user.admin
+      });
     })
     .catch(error => {
       return res.status(200).json({

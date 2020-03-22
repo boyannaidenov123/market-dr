@@ -22,9 +22,8 @@ const routes:Routes = [
     {path:'market/Sofia', component:SofiaComponent, canActivate:[AuthGuard]},
     {path:'market/Plovdiv', component:PlovdivComponent, canActivate:[AuthGuard]},
     {path:'market/Varna', component:VarnaComponent, canActivate:[AuthGuard]}
-
-
 ];
+
 @NgModule({
     imports:[RouterModule.forRoot(routes)],
     exports:[RouterModule],

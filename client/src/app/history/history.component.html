@@ -56,10 +56,14 @@
         <th mat-header-cell *matHeaderCellDef>seller</th>
         <td mat-cell *matCellDef="let element">{{ element.seller }}</td>
       </ng-container>
+      <ng-container matColumnDef="buyer">
+        <th mat-header-cell *matHeaderCellDef>buyer</th>
+        <td mat-cell *matCellDef="let element">{{ element.buyer }}</td>
+      </ng-container>
 
-      <ng-container matColumnDef="asdf">
+      <ng-container matColumnDef="transaction">
         <th mat-header-cell *matHeaderCellDef>transaction</th>
-        <td mat-cell *matCellDef="let element">Yes</td>
+        <td mat-cell *matCellDef="let element">{{ element.transaction }}</td>
       </ng-container>
 
       <ng-container matColumnDef="imagePath">

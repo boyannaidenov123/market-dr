@@ -62,6 +62,7 @@ export class AuthService {
         return false;
       });
   }
+  
   getAccess(email: string, code: string) {
     const user = {
       email: email,

@@ -3,24 +3,22 @@ var router = express.Router();
 const History = require("../models/history");
 const checkAuth = require("../middleware/check-auth");
 
-router.get("/buyerHistory", checkAuth, (req, res, next) => {
+router.get("/", checkAuth, (req, res, next) => {
   const pageSize = +req.query.pagesize;
   const currentPage = +req.query.page;
   let fetchFlowers;
-
-  if (pageSize && currentPage) {
-    History.find()
-      .skip(pageSize * (currentPage - 1))
-      .limit(pageSize);
+  let user = {buyer: req.userData.userId};
+  if(req.query.isTrader){
+    user = {seller: req.userData.userId};
   }
-  History.find({ buyer: req.userData.userId })
+
+  History.find(user)
     .skip(pageSize * (currentPage - 1))
     .limit(pageSize)
-    .populate("flowerId")
-    .populate("seller", "email")
+    .populate("flowerId seller buyer")
     .then(flowers => {
       fetchFlowers = flowers;
-      return History.find({ buyer: req.userData.userId }).countDocuments();
+      return History.find(user).countDocuments();
     })
     .then(count => {
       res.status(200).json({
