@@ -3,7 +3,6 @@ const Flower = require("../models/flower");
 const History = require("../models/history");
 const Auction = require("../models/auction");
 
-
 let timer; //variable for setInterval
 let value; //blocks of the clock
 let lotForSaleInfo; //all info for lot which is for selling
@@ -19,7 +18,6 @@ function clockMovement(io, lotId, price) {
 
   timer = setInterval(() => {
     console.log(value);
-    //io.emit("clockValueSofia", { value: value });
     sendLotInfo(io, lotForSaleInfo, flowerForSaleInfo);
     Lot.updateOne({ _id: lotId }, { currentPrice: value - 1 }).then(() => {});
 
@@ -32,7 +30,7 @@ function clockMovement(io, lotId, price) {
       clearInterval(timer);
       waitBeforeStarting = setTimeout(() => {
         console.log("tuk--------------------");
-        clockMovement(io, lotId, (value+40));
+        clockMovement(io, lotId, value + 40);
       }, 2000);
     }
     if (countOfNoSelling == 3) {
@@ -51,69 +49,66 @@ function clockMovement(io, lotId, price) {
   }, 100);
 }
 function start(io, socket) {
-    console.log('start connection')
-    if (auctionStart) {
-      sendLotInfo(io, lotForSaleInfo, flowerForSaleInfo);
-    }
+  console.log("start connection");
+  if (auctionStart) {
+    sendLotInfo(io, lotForSaleInfo, flowerForSaleInfo);
+  }
 
-    socket.on("buyLotSofia", function(data) {
-      if (canBuy) {
-        console.log("buy----------");
-        canBuy = false;
-        clearInterval(timer);
-        socket.emit("boughtSofia", {});
+  socket.on("buyLotSofia", function(data) {
+    if (canBuy) {
+      console.log("buy----------");
+      canBuy = false;
+      clearInterval(timer);
+      socket.emit("boughtSofia", {});
 
-        console.log(data); //_id na buyer; containers buying;
-        countOfNoSelling = 0;
-        lotForSaleInfo.containers -= data.containers;
-        if (lotForSaleInfo.containers > 0) {
-          sendLotInfo(io, lotForSaleInfo, flowerForSaleInfo);
-        }
-        else{
-          data.containers += lotForSaleInfo.containers;
-          lotForSaleInfo.containers = 0;
-          Lot.findByIdAndUpdate(lotForSaleInfo._id, {
-            "status.sold": true
-          }).then(() => {
-            setTimeout(() => {
-              getCountOfLots(io);
-            }, 2000);
-          });
-        }
+      console.log(data); //_id na buyer; containers buying;
+      countOfNoSelling = 0;
+      lotForSaleInfo.containers -= data.containers;
+      if (lotForSaleInfo.containers > 0) {
+        sendLotInfo(io, lotForSaleInfo, flowerForSaleInfo);
+      } else {
+        data.containers += lotForSaleInfo.containers;
+        lotForSaleInfo.containers = 0;
         Lot.findByIdAndUpdate(lotForSaleInfo._id, {
-          containers: lotForSaleInfo.containers
-        }).then(result => {
-          const history = new History({
-            flowerId: flowerForSaleInfo._id,
-            buyer: data.userId,
-            seller: result.seller,
-            date: new Date(),
-            containers: data.containers,
-            price: (value) * flowerForSaleInfo.blockPrice,
-            auctionName: lotForSaleInfo.auctionName
-          });
-          history
-            .save()
-            .then(() => {
-              console.log("history saved");
-              if (lotForSaleInfo.containers > 0) {
-                setTimeout(() => {
-                  clockMovement(io, lotForSaleInfo._id, (value+40));
-                }, 2000);
-              }
-            })
-            .catch(err => {
-              console.log(err);
-            });
+          "status.sold": true
+        }).then(() => {
+          setTimeout(() => {
+            getCountOfLots(io);
+          }, 2000);
         });
-
-
       }
-    });
-  };
+      Lot.findByIdAndUpdate(lotForSaleInfo._id, {
+        containers: lotForSaleInfo.containers
+      }).then(result => {
+        const history = new History({
+          flowerId: flowerForSaleInfo._id,
+          buyer: data.userId,
+          seller: result.seller,
+          date: new Date(),
+          containers: data.containers,
+          price: value * flowerForSaleInfo.blockPrice,
+          auctionName: lotForSaleInfo.auctionName
+        });
+        history
+          .save()
+          .then(() => {
+            console.log("history saved");
+            if (lotForSaleInfo.containers > 0) {
+              setTimeout(() => {
+                clockMovement(io, lotForSaleInfo._id, value + 40);
+              }, 2000);
+            }
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      });
+    }
+  });
+}
 
-function sendLotInfo(io, lot, flower){
-  io.emit("lotForSaleSofia",{
+function sendLotInfo(io, lot, flower) {
+  io.emit("lotForSaleSofia", {
     name: flower.name,
     type: flower.type,
     itemsInContainer: flower.itemsInContainer,
@@ -126,9 +121,8 @@ function sendLotInfo(io, lot, flower){
     _id: lot._id,
     containers: lot.containers,
     imagePath: flower.imagePath
-  })
+  });
 }
-
 
 function startClock(io) {
   console.log("---------------New Lot--------------------");
@@ -168,30 +162,36 @@ function getCountOfLots(io) {
         canBuy = false;
         value = 100;
 
-        Auction.updateOne({name: "Sofia"}, {active: false, startDate: new Date(new Date().setHours(new Date().getHours() + 24))})
-        .then((result)=>{
-          if(result.nModified > 0){
-            console.log("New date is set");
+        Auction.updateOne(
+          { name: "Sofia" },
+          {
+            active: false,
+            startDate: new Date(new Date().setHours(new Date().getHours() + 24))
           }
-          else{
+        ).then(result => {
+          if (result.nModified > 0) {
+            console.log("New date is set");
+          } else {
             console.log("Can't set new date");
           }
         });
-        Lot.updateMany({
-          auctionName: "Sofia",
-          "status.scheduledState": true,
-          "status.sold": false
-        }, {
-          "status.scheduledState": false,
-          currentPrice: 100
-        }).then(result => {
-          if(result.nModified > 0){
-            console.log('status.scheduledState sa promeneni na false !!!');
+        Lot.updateMany(
+          {
+            auctionName: "Sofia",
+            "status.scheduledState": true,
+            "status.sold": false
+          },
+          {
+            "status.scheduledState": false,
+            currentPrice: 100
           }
-          else{
-            console.log('nqma neprodadeni !!!')
+        ).then(result => {
+          if (result.nModified > 0) {
+            console.log("status.scheduledState sa promeneni na false !!!");
+          } else {
+            console.log("nqma neprodadeni !!!");
           }
-        })
+        });
 
         io.emit("endSofia", {});
         console.log("krai--------------------------------");
@@ -205,21 +205,21 @@ module.exports = {
     start(io, socket);
   },
   startClockIO: function(io) {
-    Auction.findOne({name: "Sofia"})
-    .then(result => {
-      if(result.startDate.getFullYear() == new Date().getFullYear() 
-      && result.startDate.getMonth() == new Date().getMonth()
-      && result.startDate.getDate() == new Date().getDate()
-      && result.startDate.getHours() == new Date().getHours()
-      && result.startDate.getMinutes() == new Date().getMinutes()){
+    Auction.findOne({ name: "Sofia" }).then(result => {
+      if (
+        result.startDate.getFullYear() == new Date().getFullYear() &&
+        result.startDate.getMonth() == new Date().getMonth() &&
+        result.startDate.getDate() == new Date().getDate() &&
+        result.startDate.getHours() == new Date().getHours() &&
+        result.startDate.getMinutes() == new Date().getMinutes()
+      ) {
         console.log("start");
-        console.log(result.startDate, new Date())
+        console.log(result.startDate, new Date());
         getCountOfLots(io);
-      }else{
+      } else {
         console.log("stop");
         return;
       }
     });
-    
   }
 };

@@ -9,12 +9,12 @@ import { AuthService } from '../auth.service';
 })
 export class SignupComponent implements OnInit {
   isTrader = false;
-  confirmationCode: boolean;
+  
 
   constructor(public authService: AuthService) { }
 
   ngOnInit() {
-    this.confirmationCode = false;
+    
   }
 
   onSignup(form: NgForm) {
@@ -25,17 +25,10 @@ export class SignupComponent implements OnInit {
       console.log("!=");
       return;
     }
-    if (this.confirmationCode) {
-      this.authService.getAccess(form.value.email, form.value.confirmationCode);
-    } else {
       console.log(form.value.option);
       if(form.value.option == 2){
         this.isTrader = true;
       }
       this.authService.signup(form.value.email, form.value.password, this.isTrader);
-      this.confirmationCode = true;
     }
-
   }
-
-}

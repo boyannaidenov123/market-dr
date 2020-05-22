@@ -22,7 +22,6 @@ router.put("/", checkAdmin, (req, res)=>{
       message: "Unprocessable Entity!"
     });
   }
-  console.log('change', '---------============-----------------=========')
   Auction.updateOne(
     {
       name: req.body.auction

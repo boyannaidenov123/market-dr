@@ -1,6 +1,6 @@
 <div *ngIf="haveHistory">
-<mat-spinner [diameter]="200" *ngIf="!loading"></mat-spinner>
-<h2 id="history">History:</h2>
+  <mat-spinner [diameter]="200" *ngIf="!loading"></mat-spinner>
+  <h2 id="history">History:</h2>
 
   <div class="flowerTable" *ngIf="loading">
     <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
@@ -63,19 +63,19 @@
 
       <ng-container matColumnDef="transaction">
         <th mat-header-cell *matHeaderCellDef>transaction</th>
-        <td mat-cell *matCellDef="let element">{{ element.transaction }}</td>
+        <td mat-cell *matCellDef="let element">
+          <div *ngIf="!element.transaction" (mouseenter) ="setHistoyID(element.historyID)">
+            <div *ngIf="!isTrader" id="paypal-button"></div>
+            <div *ngIf="isTrader">No</div>
+          </div>
+          <div *ngIf="element.transaction">Yes</div>
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="imagePath">
         <th mat-header-cell *matHeaderCellDef>image</th>
         <td mat-cell *matCellDef="let element">
-          <img
-            src="{{ element.imagePath }}"
-            alt=""
-            height="20"
-            width="40"
-            (click)="openImage(element.imagePath)"
-          />
+          <img src="{{ element.imagePath }}" alt="" height="20" width="40" (click)="openImage(element.imagePath)" />
         </td>
       </ng-container>
 
@@ -83,12 +83,8 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
 
-    <mat-paginator
-      [length]="totalProducts"
-      [pageSize]="productsPerPage"
-      [pageSizeOptions]="pageSizeOptions"
-      (page)="onChangePage($event)"
-    ></mat-paginator>
+    <mat-paginator [length]="totalProducts" [pageSize]="productsPerPage" [pageSizeOptions]="pageSizeOptions"
+      (page)="onChangePage($event)"></mat-paginator>
   </div>
 </div>
 

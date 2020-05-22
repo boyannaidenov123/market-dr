@@ -108,8 +108,7 @@ router.get("/", checkAuth, (req, res) => {
     seller: req.userData.userId
   };
   if (selected == 1) {
-    // If radio button option is "All" products
-    seller = {};
+    seller = {}; // If radio button option is "All" products
   }
 
   const productQuery = Lot.find(seller)
@@ -119,11 +118,9 @@ router.get("/", checkAuth, (req, res) => {
     .equals(false)
     .where("status.active")
     .equals(false);
-
   if (pageSize && currentPage) {
     productQuery.skip(pageSize * (currentPage - 1)).limit(pageSize);
   }
-
   Lot.find(seller)
     .where("status.scheduledState")
     .equals(false)
@@ -151,25 +148,22 @@ router.get("/", checkAuth, (req, res) => {
 });
 
 router.delete("/:id", checkAuth, (req, res) => {
+  console.log(req.params.id, req.userData.userId);
   Lot.deleteOne({
-    flowerId: req.params.id
-  }).then(() => {
-    console.log("delete lot");
-  });
-  Flower.deleteOne({
-    _id: req.params.id
+    flowerId: req.params.id,
+    seller: req.userData.userId
   }).then(relult => {
-    if (relult.n > 0) {
-      res.status(200).json({
-        message: "Delition successful!"
-      });
-    } else {
-      res.status(401).json({
-        message: "Not authorized!"
-      });
-    }
+      if (relult.n > 0) {
+        res.status(200).json({
+          message: "Delition successful!"
+        });
+      } else {
+        res.status(401).json({
+          message: "Not authorized!"
+        });
+      }
+    });
   });
-});
 
 router.get("/:id", (req, res) => {
   Lot.findOne({ flowerId: req.params.id })
@@ -197,7 +191,6 @@ router.put(
       const url = req.protocol + "://" + req.get("host");
       imagePath = url + "/images/" + req.file.filename;
     }
-
     Lot.findOneAndUpdate(
       { 
         _id: req.params.id,

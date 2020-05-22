@@ -10,12 +10,9 @@ module.exports = function (io, auction, date) {
     if (io != null) {
       IO = io;
     }
-    //new Date().getHours
-    console.log('nova data', date , auction)
     const cron = new CronJob(new Date(date), function () {
       const d = new Date();
       console.log("Date: " + d + "--------------------cron.js");
-
       Auction.updateOne({ name: auction }, { active: true })
         .then(() => {
           if (auction === "Sofia") {
@@ -36,6 +33,6 @@ module.exports = function (io, auction, date) {
     }, null, true, 'Europe/Sofia');
     cron.start();
   } catch (err) {
-    console.log("bozaaaaaaaaa");
+    console.log("don't starting cron");
   }
 };

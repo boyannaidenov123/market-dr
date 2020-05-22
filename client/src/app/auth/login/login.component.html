@@ -9,6 +9,11 @@
             <input type="password" name="password" ngModel matInput placeholder="Password" #passwordInput="ngModel" required>
             <mat-error *ngIf="passwordInput.invalid">Please enter a valid password.</mat-error>
         </mat-form-field>
+        <mat-form-field *ngIf="!isAuthenticated">
+            <input type="test" name="confirmationCode" ngModel matInput placeholder="Confirmation Code"
+                #confirmationCodeInput="ngModel" />
+            <mat-error *ngIf="confirmationCodeInput.invalid">Please enter the confirmation code.</mat-error>
+        </mat-form-field>
         <button mat-raised-button color="accent" type="submit">Log in
         </button>
     </form>

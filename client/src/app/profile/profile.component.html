@@ -73,12 +73,49 @@
             >
           </mat-form-field>
           <br />
-          <button mat-raised-button color="primary" type="submit">
+          <button class="change" mat-raised-button color="primary" type="submit">
             Change password
           </button>
         </form>
       </mat-tab>
-      <mat-tab label="Payment"> Money: 1 000 000$ </mat-tab>
+      <mat-tab *ngIf="user.isTrader" label="Payment">
+        <h3>Change PayPal :</h3>
+        <form (submit)="changePayPalAccount(PayPalForm)" #PayPalForm="ngForm">
+          <mat-form-field>
+            <input
+              matInput
+              name="clientID"
+              ngModel
+              type="name"
+              placeholder="clientID"
+              #clientIDInput="ngModel"
+              required
+            />
+            <mat-error *ngIf="clientIDInput.invalid"
+              >Please enter a valid clientID.</mat-error
+            >
+          </mat-form-field>
+          <br />
+          <mat-form-field>
+            <input
+              matInput
+              name="secret"
+              ngModel
+              type="name"
+              placeholder="secret"
+              #secretInput="ngModel"
+              required
+            />
+            <mat-error *ngIf="secretInput.invalid"
+              >Please enter a valid secret.</mat-error
+            >
+          </mat-form-field>
+          <br />
+          <button class="change" mat-raised-button color="primary" type="submit">
+            Save Information
+          </button>
+        </form>
+      </mat-tab>
     </mat-tab-group>
 
 

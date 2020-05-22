@@ -33,7 +33,8 @@ export class ClockComponent implements OnInit {
     "price",
     "minPrice",
     "blockPrice",
-    "auctionName"
+    "auctionName",
+    "additionalInformation"
   ];
   dataSource = new MatTableDataSource<Product>([]);
   private isTrader_: boolean = false;

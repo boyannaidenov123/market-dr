@@ -22,12 +22,6 @@
             <br />
             <mat-radio-button value="2">Seller</mat-radio-button>
         </mat-radio-group>
-
-        <mat-form-field *ngIf="confirmationCode">
-            <input type="test" name="confirmationCode" ngModel matInput placeholder="Confirmation Code"
-                #confirmationCodeInput="ngModel" />
-            <mat-error *ngIf="confirmationCodeInput.invalid">Please enter the confirmation code.</mat-error>
-        </mat-form-field>
         <br />
         <button mat-raised-button color="accent" type="submit">Sign up</button>
     </form>

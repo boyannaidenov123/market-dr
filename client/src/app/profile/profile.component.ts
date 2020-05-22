@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { ProfileService } from './profile.service';
 import { User } from '../auth/user.model';
 import { NgForm } from '@angular/forms';
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 
 
@@ -11,7 +12,6 @@ import { NgForm } from '@angular/forms';
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
-  
   user:User = {
     email:'',
     name:'',
@@ -19,7 +19,7 @@ export class ProfileComponent implements OnInit {
   }
 
   
-  constructor(private profileService: ProfileService) { }
+  constructor(private profileService: ProfileService, private snackBar: MatSnackBar) { }
 
   ngOnInit() {
     this.profileService.getUserInfo()
@@ -29,7 +29,6 @@ export class ProfileComponent implements OnInit {
         this.user.email = user.email;
         this.user.isTrader = user.isTrader;
     })
-
   }
 
   changeName(form:NgForm){
@@ -41,6 +40,7 @@ export class ProfileComponent implements OnInit {
     .subscribe(result=>{
       this.user.name = result.name;
       form.reset();
+      this.snackBar.open(result.message, "Close", { duration: 3000 });
     })
   }
 
@@ -52,7 +52,18 @@ export class ProfileComponent implements OnInit {
     this.profileService.changePassword(form.value.password, form.value.newPassword)
     .subscribe(result=>{
       console.log(result.message);
+      this.snackBar.open(result.message, "Close", { duration: 3000 });
     })
   }
+  changePayPalAccount(form:NgForm){
+    if(form.invalid){
+      return;
+    }
+    this.profileService.setPayPalAccount(form.value.clientID, form.value.secret)
+    .subscribe(result=>{
+      this.snackBar.open(result.message, "Close", { duration: 3000 });
+    })
+  }
+
 
 }

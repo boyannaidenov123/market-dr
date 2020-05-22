@@ -19,20 +19,15 @@ export class HistoryService {
   getBuyerHistory(productsPerPage: number, currentPage: number, isTrader: boolean) {
     const queryParams = `?pagesize=${productsPerPage}&page=${currentPage}&isTrader=${isTrader}`;
     console.log(queryParams);
-    this.http.get<{message:string, flowers: any, maxFlowers:number}>("http://localhost:9000/history/" + queryParams)
+    this.http.get<{message:string, flowers: any, maxFlowers:number, isTrader:boolean}>("http://localhost:9000/history/" + queryParams)
     .pipe(
       map(flowersData => {
         console.log(flowersData);
         return {
           flowers: flowersData.flowers.map(flower =>{
-            let transaction = flower.transaction;
-            if(transaction){
-              transaction = "Yes"
-            }
-            else{
-              transaction = "No";
-            }
+
             return {
+              historyID: flower._id,
               seller: flower.seller.email,
               buyer: flower.buyer.email,
               name: flower.flowerId.name,
@@ -44,9 +39,9 @@ export class HistoryService {
               weight: flower.flowerId.weight,
               auctionName: flower.auctionName,
               imagePath: flower.flowerId.imagePath,
-              price: flower.price,
+              price: flower.price * flower.containers,
               date: this.formatDate(flower.date),
-              transaction: transaction
+              transaction: flower.transaction
             };
           }),
           maxFlowers: flowersData.maxFlowers
@@ -54,7 +49,7 @@ export class HistoryService {
       })
     )
     .subscribe(transformedFlowers =>{
-      console.log(transformedFlowers.maxFlowers)
+      console.log(transformedFlowers.flowers)
       this.flowers = transformedFlowers.flowers;
       this.flowersUpdated.next({
         flowers: [...this.flowers],
@@ -71,6 +66,11 @@ export class HistoryService {
     var year = new Date(date).getFullYear();
   
     return day + '/' + monthIndex + '/' + year;
+  }
+
+
+  createPayment(historyId: string){
+    return this.http.post<{id: string}>("http://localhost:9000/history/createPayment", {historyId: historyId});
   }
 
 }

@@ -72,6 +72,7 @@ export class ProductsService {
           return {
             products: productData.products.map(product => {
               let additionalInformation = "";
+              console.log(product)
               if (product.flowerId.additionalInformation != 'null') {
                 additionalInformation = product.flowerId.additionalInformation;
               }

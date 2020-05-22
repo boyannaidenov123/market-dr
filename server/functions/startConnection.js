@@ -6,7 +6,6 @@ let countUsers = 0; //count of connecting users
 module.exports = function (io) {
     io.on("connection", socket => {
         countUsers++;
-
         console.log(`----------------------Client Connected${countUsers}----------------------`);
         sofia.startConnection(io, socket);
         plovdiv.startConnection(io, socket);

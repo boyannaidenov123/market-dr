@@ -57,10 +57,14 @@ export class AuthService {
       .subscribe(response => {
         console.log(response.message);
         if (response.signup) {
-          return true;
+          this.router.navigate(["/login"]);
         }
-        return false;
       });
+  }
+  isProfileAuthenticated(email: string, password: string){
+    const queryParams = `?email=${email}&password=${password}`;
+    console.log(queryParams)
+    return this.http.get<{isPofileAuth:boolean}>("http://localhost:9000/users/isAuthenticated/" + queryParams);
   }
   
   getAccess(email: string, code: string) {
@@ -68,17 +72,11 @@ export class AuthService {
       email: email,
       code: code
     };
-    this.http
+    return this.http
       .post<{ message: string; signup: boolean }>(
         "http://localhost:9000/users/access",
         user
-      )
-      .subscribe(response => {
-        console.log(response.message);
-        if (response.signup) {
-          this.router.navigate(["/profile"]);
-        }
-      });
+      );
   }
 
   login(email: string, password: string) {

@@ -1,6 +1,7 @@
 var express = require("express");
 var router = express.Router();
 const User = require("../models/user");
+const Transaction = require("../models/transactionData");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const checkAuth = require("../middleware/check-auth");
@@ -8,35 +9,42 @@ const configName = require("../functions/configName");
 
 /*Sign up*/
 router.post("/signup", (req, res) => {
-  let user;
+  let user, transaction;
 
   let name = configName(req.body.isTrader);
   bcrypt
     .hash(req.body.password, 10)
     .then(hash => {
-      user = new User({
-        email: req.body.email,
-        name: name,
-        password: hash,
-        isTrader: req.body.isTrader,
-        authenticated: false
+      transaction = new Transaction({
+        clientID: "",
+        secret: ""
       });
-
-      user
-        .save()
-        .then(result => {
-          result.sendConfirmationCode();
-          res.status(201).json({
-            message: "User created",
-            user: result,
-            signup: true
-          });
-        })
-        .catch(err => {
-          res.status(500).json({
-            error: err
-          });
+      transaction.save().then(transactionData => {
+        user = new User({
+          email: req.body.email,
+          name: name,
+          password: hash,
+          isTrader: req.body.isTrader,
+          authenticated: false,
+          transactionDataId: transactionData._id
         });
+
+        user
+          .save()
+          .then(result => {
+            result.sendConfirmationCode();
+            res.status(201).json({
+              message: "User created",
+              user: result,
+              signup: true
+            });
+          })
+          .catch(err => {
+            res.status(500).json({
+              error: err
+            });
+          });
+      });
     })
     .catch(error => {
       res.status(500).json({
@@ -47,6 +55,8 @@ router.post("/signup", (req, res) => {
 
 router.post("/access", (req, res) => {
   let code = req.body.code;
+  console.log('---------------' + code);
+  console.log(req.body.email);
   User.findOne({ email: req.body.email }).then(user => {
     user.getAccess(code, function(callback) {
       if (callback) {
@@ -106,6 +116,34 @@ router.post("/login", (req, res) => {
       });
     });
 });
+router.get('/isAuthenticated', (req, res)=>{
+  let fetchedUser;
+  User.findOne({
+    email: req.query.email,
+  }).then(user => {
+    console.log("Tursq")
+        if (!user) {
+          console.log("nqma")
+          return res.status(401).json({
+            message: "Invalid authentication credentials"
+          });
+        }
+        fetchedUser = user;
+        console.log(fetchedUser);
+        console.log("Tursq user");
+        return bcrypt.compare(req.query.password, user.password);
+      })
+      .then(result => {
+        if (!result) {
+          return res.status(401).json({
+            message: "Invalid authentication credentials"
+          });
+        }
+        return res.status(200).json({
+          isPofileAuth: fetchedUser.authenticated
+        })
+  })
+})
 
 router.get("/isTrader", checkAuth, (req, res) => {
   console.log("tuk");

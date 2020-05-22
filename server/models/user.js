@@ -32,6 +32,10 @@ const userSchema = mongoose.Schema({
     authenticated: {
         type: Boolean,
         required: true
+    },
+    transactionDataId:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref:"TransactionData",
     }
 });
 
