@@ -65,7 +65,7 @@
         <th mat-header-cell *matHeaderCellDef>transaction</th>
         <td mat-cell *matCellDef="let element">
           <div *ngIf="!element.transaction" (mouseenter) ="setHistoyID(element.historyID)">
-            <div *ngIf="!isTrader" id="paypal-button"></div>
+            <div *ngIf="!isTrader && element.price" id="paypal-button"></div>
             <div *ngIf="isTrader">No</div>
           </div>
           <div *ngIf="element.transaction">Yes</div>

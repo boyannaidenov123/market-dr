@@ -7,6 +7,9 @@ import { LargerImage } from "../products/product-list/LargerImage";
 import * as $ from "jquery";
 declare var paypal;
 var historyID: string;
+function asdf(){
+  
+}
 
 @Component({
   selector: "app-history",
@@ -75,11 +78,6 @@ export class HistoryComponent implements OnInit {
                 paypal.Button.render(
                   {
                     env: "sandbox",
-                    /*payment: function (data, actions){this.historyService
-                    .createPayment("asdf")
-                    .subscribe(response => {
-                      return response.id;
-                    })},*/
                     payment: function(data, actions) {
                       // 2. Make a request to your server
                       return actions.request
@@ -89,6 +87,7 @@ export class HistoryComponent implements OnInit {
                         })
                         .then(function(res) {
                           // 3. Return res.id from the response
+                          console.log(res);
                           return res.id;
                         });
                     },
@@ -96,13 +95,17 @@ export class HistoryComponent implements OnInit {
                     // 1. Add an onAuthorize callback
                     onAuthorize: function(data, actions) {
                       // 2. Make a request to your server
+                      console.log(data);
                       return actions.request
                         .post("http://localhost:9000/history/executePayment", {
                           paymentID: data.paymentID,
-                          payerID: data.payerID
+                          payerID: data.payerID,
+                          jwt: `Bearer ${localStorage.getItem("token")}`,
+                          historyId: historyID
                         })
                         .then(function(res) {
                           // 3. Show the buyer a confirmation message.
+                          
                         });
                     }
                   },

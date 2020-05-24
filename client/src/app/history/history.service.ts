@@ -25,7 +25,6 @@ export class HistoryService {
         console.log(flowersData);
         return {
           flowers: flowersData.flowers.map(flower =>{
-
             return {
               historyID: flower._id,
               seller: flower.seller.email,
