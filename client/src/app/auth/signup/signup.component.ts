@@ -22,7 +22,6 @@ export class SignupComponent implements OnInit {
       return;
     }
     if (form.value.password != form.value.repeatPassword) {
-      console.log("!=");
       return;
     }
       console.log(form.value.option);

@@ -121,6 +121,6 @@
 
   </div>
 </div>
-<div class="history">
+<div *ngIf="loadHistoryComponent" class="history">
   <app-history [isTrader]="user.isTrader"></app-history>
 </div>

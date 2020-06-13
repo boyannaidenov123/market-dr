@@ -8,15 +8,14 @@ module.exports = (req, res, next) => {
     req.userData = { email: decodedToken.email, userId: decodedToken.userId };
     User.findOne({
       email: decodedToken.email,
-      _id: decodedToken.userId
-    }).then(user => {
+      _id: decodedToken.userId,
+    }).then((user) => {
       if (!user) {
         res.status(401).json({
-          message: "You are not admin!"
+          message: "You are not admin!",
         });
       }
       if (user.admin) {
-        console.log("-------------admin-------------");
         next();
       } else {
         throw new Error("User is not admin");
@@ -24,7 +23,7 @@ module.exports = (req, res, next) => {
     });
   } catch (error) {
     res.status(401).json({
-      message: "You are not admin!"
+      message: "You are not admin!",
     });
   }
 };

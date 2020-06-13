@@ -1,14 +1,20 @@
 import { Component, OnInit } from "@angular/core";
-import { FormGroup, FormControl, Validators, NgForm, FormGroupDirective } from "@angular/forms";
+import {
+  FormGroup,
+  FormControl,
+  Validators,
+  NgForm,
+  FormGroupDirective,
+} from "@angular/forms";
 import { ProductsService } from "../products.service";
 import { MatRadioChange } from "@angular/material";
 import { Subscription } from "rxjs";
-import { mimeType } from './mime-type.validator';
+import { mimeType } from "./mime-type.validator";
 
 @Component({
   selector: "app-product-list-create",
   templateUrl: "./product-list-create.component.html",
-  styleUrls: ["./product-list-create.component.css"]
+  styleUrls: ["./product-list-create.component.css"],
 })
 export class ProductListCreateComponent implements OnInit {
   selected;
@@ -25,56 +31,62 @@ export class ProductListCreateComponent implements OnInit {
   ngOnInit() {
     this.editProductSub = this.productService
       .getEditProductListener()
-      .subscribe(result => {
+      .subscribe((result) => {
         this.mode = "edit";
         this.id = result.product._id;
         this.form.controls["name"].setValue(result.product.flowerId.name);
         this.form.controls["type"].setValue(result.product.flowerId.type);
         this.form.controls["containers"].setValue(result.product.containers);
-        this.form.controls["items"].setValue(result.product.flowerId.itemsInContainer);
+        this.form.controls["items"].setValue(
+          result.product.flowerId.itemsInContainer
+        );
         this.form.controls["height"].setValue(result.product.flowerId.height);
         this.form.controls["weight"].setValue(result.product.flowerId.weight);
-        this.form.controls["blockPrice"].setValue(result.product.flowerId.blockPrice);
+        this.form.controls["blockPrice"].setValue(
+          result.product.flowerId.blockPrice
+        );
         this.form.controls["auctionName"].setValue(result.product.auctionName);
         this.form.controls["image"].setValue(result.product.flowerId.imagePath);
-        this.form.controls["additionalInformation"].setValue(result.product.flowerId.additionalInformation);
+        this.form.controls["additionalInformation"].setValue(
+          result.product.flowerId.additionalInformation
+        );
         this.imagePreview = result.product.flowerId.imagePath;
       });
 
     this.form = new FormGroup({
       name: new FormControl(null, {
-        validators: []
+        validators: [],
       }),
       type: new FormControl(null, {
         validators: [
           Validators.required,
           Validators.minLength(3),
-          Validators.maxLength(15)
-        ]
+          Validators.maxLength(15),
+        ],
       }),
       containers: new FormControl(null, {
-        validators: [Validators.required]
+        validators: [Validators.required],
       }),
       items: new FormControl(null, {
-        validators: [Validators.required]
+        validators: [Validators.required],
       }),
       height: new FormControl(null, {
-        validators: [Validators.required]
+        validators: [Validators.required],
       }),
       weight: new FormControl(null, {
-        validators: [Validators.required]
+        validators: [Validators.required],
       }),
       blockPrice: new FormControl(null, {
-        validators: [Validators.required]
+        validators: [Validators.required],
       }),
       auctionName: new FormControl(null, {
-        validators: [Validators.required]
+        validators: [Validators.required],
       }),
       image: new FormControl(null, {
         validators: [Validators.required],
-        asyncValidators: [mimeType]
+        asyncValidators: [mimeType],
       }),
-      additionalInformation: new FormControl(null, {})
+      additionalInformation: new FormControl(null, {}),
     });
   }
 
@@ -88,8 +100,6 @@ export class ProductListCreateComponent implements OnInit {
     };
     reader.readAsDataURL(file);
   }
-
-
 
   onSaveProduct(formDirective: FormGroupDirective): void {
     if (this.form.invalid) {
@@ -188,12 +198,11 @@ export class ProductListCreateComponent implements OnInit {
     { value: "Geranium" },
     { value: "Gerbera" },
     { value: "Gypsophila" },
-
   ];
   auctionNames: Name[] = [
     { value: "Sofia" },
     { value: "Varna" },
-    { value: "Plovdiv" }
+    { value: "Plovdiv" },
   ];
 }
 

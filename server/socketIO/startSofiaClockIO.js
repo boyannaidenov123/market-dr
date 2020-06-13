@@ -54,7 +54,7 @@ function start(io, socket) {
     sendLotInfo(io, lotForSaleInfo, flowerForSaleInfo);
   }
 
-  socket.on("buyLotSofia", function(data) {
+  socket.on("buyLotSofia", function (data) {
     if (canBuy) {
       console.log("buy----------");
       canBuy = false;
@@ -70,7 +70,7 @@ function start(io, socket) {
         data.containers += lotForSaleInfo.containers;
         lotForSaleInfo.containers = 0;
         Lot.findByIdAndUpdate(lotForSaleInfo._id, {
-          "status.sold": true
+          "status.sold": true,
         }).then(() => {
           setTimeout(() => {
             getCountOfLots(io);
@@ -78,8 +78,8 @@ function start(io, socket) {
         });
       }
       Lot.findByIdAndUpdate(lotForSaleInfo._id, {
-        containers: lotForSaleInfo.containers
-      }).then(result => {
+        containers: lotForSaleInfo.containers,
+      }).then((result) => {
         const history = new History({
           flowerId: flowerForSaleInfo._id,
           buyer: data.userId,
@@ -87,7 +87,7 @@ function start(io, socket) {
           date: new Date(),
           containers: data.containers,
           price: value * flowerForSaleInfo.blockPrice,
-          auctionName: lotForSaleInfo.auctionName
+          auctionName: lotForSaleInfo.auctionName,
         });
         history
           .save()
@@ -99,7 +99,7 @@ function start(io, socket) {
               }, 2000);
             }
           })
-          .catch(err => {
+          .catch((err) => {
             console.log(err);
           });
       });
@@ -120,7 +120,7 @@ function sendLotInfo(io, lot, flower) {
     currentPrice: value,
     _id: lot._id,
     containers: lot.containers,
-    imagePath: flower.imagePath
+    imagePath: flower.imagePath,
   });
 }
 
@@ -130,11 +130,11 @@ function startClock(io) {
     //get lot for selling
     auctionName: "Sofia",
     "status.scheduledState": false,
-    "status.sold": false
+    "status.sold": false,
   })
-    .then(lot => {
+    .then((lot) => {
       lotForSaleInfo = lot;
-      Flower.findById({ _id: lot.flowerId }).then(flower => {
+      Flower.findById({ _id: lot.flowerId }).then((flower) => {
         flowerForSaleInfo = flower;
         sendLotInfo(io, lotForSaleInfo, flowerForSaleInfo);
       });
@@ -150,8 +150,8 @@ function getCountOfLots(io) {
   Lot.countDocuments({
     auctionName: "Sofia",
     "status.scheduledState": false,
-    "status.sold": false
-  }).then(count => {
+    "status.sold": false,
+  }).then((count) => {
     {
       console.log("Lots for sale: " + count);
       if (count > 0) {
@@ -166,9 +166,11 @@ function getCountOfLots(io) {
           { name: "Sofia" },
           {
             active: false,
-            startDate: new Date(new Date().setHours(new Date().getHours() + 24))
+            startDate: new Date(
+              new Date().setHours(new Date().getHours() + 24)
+            ),
           }
-        ).then(result => {
+        ).then((result) => {
           if (result.nModified > 0) {
             console.log("New date is set");
           } else {
@@ -179,13 +181,13 @@ function getCountOfLots(io) {
           {
             auctionName: "Sofia",
             "status.scheduledState": true,
-            "status.sold": false
+            "status.sold": false,
           },
           {
             "status.scheduledState": false,
-            currentPrice: 100
+            currentPrice: 100,
           }
-        ).then(result => {
+        ).then((result) => {
           if (result.nModified > 0) {
             console.log("status.scheduledState sa promeneni na false !!!");
           } else {
@@ -201,11 +203,11 @@ function getCountOfLots(io) {
 }
 
 module.exports = {
-  startConnection: function(io, socket) {
+  startConnection: function (io, socket) {
     start(io, socket);
   },
-  startClockIO: function(io) {
-    Auction.findOne({ name: "Sofia" }).then(result => {
+  startClockIO: function (io) {
+    Auction.findOne({ name: "Sofia" }).then((result) => {
       if (
         result.startDate.getFullYear() == new Date().getFullYear() &&
         result.startDate.getMonth() == new Date().getMonth() &&
@@ -221,5 +223,5 @@ module.exports = {
         return;
       }
     });
-  }
+  },
 };

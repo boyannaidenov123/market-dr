@@ -14,60 +14,59 @@ router.post("/signup", (req, res) => {
   let name = configName(req.body.isTrader);
   bcrypt
     .hash(req.body.password, 10)
-    .then(hash => {
+    .then((hash) => {
       transaction = new Transaction({
         clientID: "",
-        secret: ""
+        secret: "",
       });
-      transaction.save().then(transactionData => {
+      transaction.save().then((transactionData) => {
         user = new User({
           email: req.body.email,
           name: name,
           password: hash,
           isTrader: req.body.isTrader,
           authenticated: false,
-          transactionDataId: transactionData._id
+          transactionDataId: transactionData._id,
         });
 
         user
           .save()
-          .then(result => {
+          .then((result) => {
             result.sendConfirmationCode();
             res.status(201).json({
               message: "User created",
               user: result,
-              signup: true
+              signup: true,
             });
           })
-          .catch(err => {
+          .catch((err) => {
             res.status(500).json({
-              error: err
+              error: err,
             });
           });
       });
     })
-    .catch(error => {
+    .catch((error) => {
       res.status(500).json({
-        error: "Invalid authentication credentials!"
+        error: "Invalid authentication credentials!",
       });
     });
 });
 
 router.post("/access", (req, res) => {
   let code = req.body.code;
-  console.log('---------------' + code);
-  console.log(req.body.email);
-  User.findOne({ email: req.body.email }).then(user => {
-    user.getAccess(code, function(callback) {
+
+  User.findOne({ email: req.body.email }).then((user) => {
+    user.getAccess(code, function (callback) {
       if (callback) {
         res.status(200).json({
           message: "Profile created",
-          signup: true
+          signup: true,
         });
       } else {
         res.status(404).json({
           message: "Invalid confirmation code",
-          signup: false
+          signup: false,
         });
       }
     });
@@ -78,25 +77,23 @@ router.post("/login", (req, res) => {
   let fetchedUser;
   User.findOne({
     email: req.body.email,
-    authenticated: true
+    authenticated: true,
   })
-    .then(user => {
+    .then((user) => {
       if (!user) {
         return res.status(401).json({
-          message: "Invalid authentication credentials"
+          message: "Invalid authentication credentials",
         });
       }
       fetchedUser = user;
-      console.log("Tursq user");
       return bcrypt.compare(req.body.password, user.password);
     })
-    .then(result => {
+    .then((result) => {
       if (!result) {
         return res.status(401).json({
-          message: "Invalid authentication credentials"
+          message: "Invalid authentication credentials",
         });
       }
-      console.log("Ima user");
       const token = jwt.sign(
         { email: fetchedUser.email, userId: fetchedUser._id },
         "secret_this_should_be_longer",
@@ -107,77 +104,72 @@ router.post("/login", (req, res) => {
         token: token,
         expiresIn: 86400,
         userId: fetchedUser._id,
-        isAdmin: fetchedUser.admin
+        isAdmin: fetchedUser.admin,
       });
     })
     .catch(() => {
       return res.status(401).json({
-        message: "Invalid authentication credentials!"
+        message: "Invalid authentication credentials!",
       });
     });
 });
-router.get('/isAuthenticated', (req, res)=>{
+router.get("/isAuthenticated", (req, res) => {
   let fetchedUser;
   User.findOne({
     email: req.query.email,
-  }).then(user => {
-    console.log("Tursq")
-        if (!user) {
-          console.log("nqma")
-          return res.status(401).json({
-            message: "Invalid authentication credentials"
-          });
-        }
-        fetchedUser = user;
-        console.log(fetchedUser);
-        console.log("Tursq user");
-        return bcrypt.compare(req.query.password, user.password);
-      })
-      .then(result => {
-        if (!result) {
-          return res.status(401).json({
-            message: "Invalid authentication credentials"
-          });
-        }
-        return res.status(200).json({
-          isPofileAuth: fetchedUser.authenticated
-        })
   })
-})
+    .then((user) => {
+      if (!user) {
+        return res.status(401).json({
+          message: "Invalid authentication credentials",
+        });
+      }
+      fetchedUser = user;
+
+      return bcrypt.compare(req.query.password, user.password);
+    })
+    .then((result) => {
+      if (!result) {
+        return res.status(401).json({
+          message: "Invalid authentication credentials",
+        });
+      }
+      return res.status(200).json({
+        isPofileAuth: fetchedUser.authenticated,
+      });
+    });
+});
 
 router.get("/isTrader", checkAuth, (req, res) => {
-  console.log("tuk");
   User.findOne({
     _id: req.userData.userId,
-    email: req.userData.email
-  }).then(user => {
+    email: req.userData.email,
+  }).then((user) => {
     if (!user) {
       return res.status(404).json({
-        message: "User not found"
+        message: "User not found",
       });
     }
-    console.log(user);
     res.status(200).json({
-      isTrader: user.isTrader
+      isTrader: user.isTrader,
     });
   });
 });
 
 router.get("/isAdmin", checkAuth, (req, res) => {
-  console.log("asdfsadf-------------------------");
   User.findOne({
     _id: req.userData.userId,
     email: req.userData.email,
-    admin: true
+    admin: true,
   })
-    .then(user => {
+    .then((user) => {
       res.status(200).json({
-        isAdmin: user.admin
+        isAdmin: user.admin,
       });
     })
-    .catch(error => {
+    .catch((error) => {
       return res.status(200).json({
-        message: "User not found"
+        message: "User not found",
       });
     });
 });

@@ -6,39 +6,37 @@ const checkAuth = require("../middleware/check-auth");
 const bcrypt = require("bcrypt");
 
 router.get("/info", checkAuth, (req, res) => {
-  User.findById(req.userData.userId).then(user => {
+  User.findById(req.userData.userId).then((user) => {
     if (!user) {
       res.status(404).json({
-        message: "User does't exist"
+        message: "User does't exist",
       });
     }
-    console.log(user);
     res.status(200).json({
       email: user.email,
       name: user.name,
-      isTrader: user.isTrader
+      isTrader: user.isTrader,
     });
   });
 });
 
 router.put("/changeName", checkAuth, (req, res) => {
-  console.log(req.body);
   User.updateOne(
     {
-      _id: req.userData.userId
+      _id: req.userData.userId,
     },
     {
-      name: req.body.name
+      name: req.body.name,
     }
-  ).then(result => {
+  ).then((result) => {
     if (result.nModified > 0) {
       res.status(200).json({
         message: "Update successful",
-        name: req.body.name
+        name: req.body.name,
       });
     } else {
       res.status(401).json({
-        message: "Not authorized"
+        message: "Not authorized",
       });
     }
   });
@@ -46,38 +44,36 @@ router.put("/changeName", checkAuth, (req, res) => {
 
 router.put("/changePassword", checkAuth, (req, res) => {
   User.findById({ _id: req.userData.userId })
-    .then(user => {
+    .then((user) => {
       if (!user) {
         return res.status(401).json({
-          message: "Invalid authentication credentials!"
+          message: "Invalid authentication credentials!",
         });
       }
       return bcrypt.compare(req.body.password, user.password);
     })
-    .then(result => {
+    .then((result) => {
       if (!result) {
         return res.status(401).json({
-          message: "Invalid authentication credentials!"
+          message: "Invalid authentication credentials!",
         });
       }
-      console.log("Suvpada");
-      console.log(req.body.newPassword);
-      bcrypt.hash(req.body.newPassword, 10).then(hash => {
+      bcrypt.hash(req.body.newPassword, 10).then((hash) => {
         User.updateOne(
           {
-            _id: req.userData.userId
+            _id: req.userData.userId,
           },
           {
-            password: hash
+            password: hash,
           }
-        ).then(result => {
+        ).then((result) => {
           if (result.nModified > 0) {
             res.status(200).json({
-              message: "Update successful"
+              message: "Update successful",
             });
           } else {
             res.status(401).json({
-              message: "Password is not update"
+              message: "Password is not update",
             });
           }
         });
@@ -87,31 +83,31 @@ router.put("/changePassword", checkAuth, (req, res) => {
 
 router.put("/paypalAccount", checkAuth, (req, res, next) => {
   User.findById(req.userData.userId)
-    .then(user => {
+    .then((user) => {
       if (!user) {
         return res.status(404).json({
-          message: "Invalid authentication credentials!"
+          message: "Invalid authentication credentials!",
         });
       }
       if (user.isTrader) {
         Transaction.updateOne(
           { _id: user.transactionDataId },
           { clientID: req.body.clientID, secret: req.body.secret }
-        ).then(result => {
+        ).then((result) => {
           if (result.nModified > 0) {
             return res.status(200).json({
-              message: "PayPay information is saved successfully"
+              message: "PayPay information is saved successfully",
             });
           }
           return res.status(401).json({
-            message: "Updating the PayPay information has failed!"
+            message: "Updating the PayPay information has failed!",
           });
         });
       }
     })
-    .catch(err => {
+    .catch((err) => {
       return res.status(500).json({
-        message: err.message
+        message: err.message,
       });
     });
 });

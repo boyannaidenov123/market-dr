@@ -43,7 +43,6 @@ export class AuthService {
   }
 
   signup(email: string, password: string, isTrader: boolean) {
-    console.log("signup");
     const newUser: User = {
       email: email,
       password: password,
@@ -63,7 +62,6 @@ export class AuthService {
   }
   isProfileAuthenticated(email: string, password: string){
     const queryParams = `?email=${email}&password=${password}`;
-    console.log(queryParams)
     return this.http.get<{isPofileAuth:boolean}>("http://localhost:9000/users/isAuthenticated/" + queryParams);
   }
   
@@ -80,7 +78,6 @@ export class AuthService {
   }
 
   login(email: string, password: string) {
-    console.log("login");
     const user: User = {
       email: email,
       password: password
@@ -93,7 +90,6 @@ export class AuthService {
         isAdmin: boolean;
       }>("http://localhost:9000/users/login", user)
       .subscribe(response => {
-        console.log(response);
         const token = response.token;
         this.token = token;
 
@@ -110,7 +106,6 @@ export class AuthService {
           const expiresDate = new Date(
             now.getTime() + expiresInDuration * 1000
           );
-          console.log(this.token);
 
           this.saveAuthData(token, expiresDate, this.userId);
           this.router.navigate(["/profile"]);
@@ -150,7 +145,6 @@ export class AuthService {
       this.getIsAdmin().subscribe(result => {
         this.isAdmin = result.isAdmin;
         this.isAdminListener.next(result.isAdmin);
-        console.log(this.isAdmin);
       });
     }
   }

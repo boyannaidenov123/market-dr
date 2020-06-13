@@ -2,7 +2,10 @@
   <mat-spinner [diameter]="200" *ngIf="!loading"></mat-spinner>
   <h2 id="history">History:</h2>
 
+  
+  
   <div class="flowerTable" *ngIf="loading">
+    <button (click)="refresh()">Refresh</button>
     <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
       <!-- name Column -->
       <ng-container matColumnDef="name">
@@ -68,7 +71,7 @@
             <div *ngIf="!isTrader && element.price" id="paypal-button"></div>
             <div *ngIf="isTrader">No</div>
           </div>
-          <div *ngIf="element.transaction">Yes</div>
+          <div *ngIf="element.transaction">Yes</div>          
         </td>
       </ng-container>
 

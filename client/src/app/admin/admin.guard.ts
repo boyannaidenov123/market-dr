@@ -19,7 +19,6 @@ export class AdminGuard implements CanActivate{
             if(!isAdmin){
                 this.router.navigate(['/market/Sofia']);
             }
-            console.log(isAdmin)
             return isAdmin;
 
     }

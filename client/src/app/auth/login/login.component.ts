@@ -23,10 +23,8 @@ export class LoginComponent implements OnInit {
       return;
     }
     if (this.userWriteCode) {
-      console.log(form.value)
       this.authService.getAccess(form.value.email, form.value.confirmationCode)
       .subscribe(response => {
-        console.log(response.message);
         if (response.signup) {
           this.authService.login(form.value.email, form.value.password);
         }

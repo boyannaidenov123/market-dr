@@ -9,7 +9,7 @@ import { Subscription } from "rxjs";
 @Component({
   selector: "app-clock",
   templateUrl: "./clock.component.html",
-  styleUrls: ["./clock.component.css"]
+  styleUrls: ["./clock.component.css"],
 })
 export class ClockComponent implements OnInit {
   progress;
@@ -34,7 +34,7 @@ export class ClockComponent implements OnInit {
     "minPrice",
     "blockPrice",
     "auctionName",
-    "additionalInformation"
+    "additionalInformation",
   ];
   dataSource = new MatTableDataSource<Product>([]);
   private isTrader_: boolean = false;
@@ -47,13 +47,10 @@ export class ClockComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    console.log(Date());
     //Connect socket
-    this.SocketService.listen("connection" + this.auction).subscribe(
-      (res: any) => {
-        console.log(res);
-      }
-    );
+    this.SocketService.listen(
+      "connection" + this.auction
+    ).subscribe((res: any) => {});
 
     //Get clock value
     /*this.SocketService.listen("clockValue" + this.auction).subscribe(
@@ -67,7 +64,6 @@ export class ClockComponent implements OnInit {
     //Get which Lot is for sale
     this.SocketService.listen("lotForSale" + this.auction).subscribe(
       (res: any) => {
-        console.log(res);
         this.progress = res.currentPrice;
         this.lotId = res._id;
         this.imagePath = res.imagePath;
@@ -82,7 +78,7 @@ export class ClockComponent implements OnInit {
           blockPrice: res.blockPrice,
           auctionName: res.auctionName,
           additionalInformation: res.additionalInformation,
-          price: (res.currentPrice * res.blockPrice)/100
+          price: (res.currentPrice * res.blockPrice) / 100,
         };
         this.dataSource = new MatTableDataSource<Product>([this.product]);
         //trqbva da ocvetq dadeniq Flower v tablicata
@@ -91,7 +87,6 @@ export class ClockComponent implements OnInit {
 
     this.SocketService.listen("countUsers").subscribe((res: any) => {
       this.countUsers = res.countUsers;
-      console.log(this.countUsers);
     });
 
     this.SocketService.listen("bought" + this.auction).subscribe(() => {
@@ -99,13 +94,15 @@ export class ClockComponent implements OnInit {
     });
 
     this.SocketService.listen("end" + this.auction).subscribe(() => {
-      this.snackBar.open(`End ${this.auction}! Refresh page `, "Close", { duration: 3000 });
+      this.snackBar.open(`End ${this.auction}! Refresh page `, "Close", {
+        duration: 3000,
+      });
     });
 
     this.authService.getIsTrader();
     this.isTraderSub = this.authService
       .getIsTraderListener()
-      .subscribe(isTrader => {
+      .subscribe((isTrader) => {
         this.isTrader_ = isTrader;
       });
   }
@@ -122,11 +119,10 @@ export class ClockComponent implements OnInit {
     if (!this.containers || this.containers <= 0) {
       this.containers = 1;
     }
-    console.log(this.containers);
     //Buy lot
     this.SocketService.sent("buyLot" + this.auction, {
       userId: this.userId,
-      containers: this.containers
+      containers: this.containers,
     });
   }
 

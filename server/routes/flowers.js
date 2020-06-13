@@ -8,7 +8,7 @@ const checkAuth = require("../middleware/check-auth");
 const MIME_TYPE_MAP = {
   "image/png": "png",
   "image/jpeg": "jpg",
-  "image/jpg": "jpg"
+  "image/jpg": "jpg",
 };
 
 const storage = multer.diskStorage({
@@ -21,14 +21,10 @@ const storage = multer.diskStorage({
     cb(error, "./public/images");
   },
   filename: (req, file, cb) => {
-    console.log("tuk2");
-    const name = file.originalname
-      .toLowerCase()
-      .split(" ")
-      .join("-");
+    const name = file.originalname.toLowerCase().split(" ").join("-");
     const ext = MIME_TYPE_MAP[file.mimetype];
     cb(null, name + "-" + Date.now() + "." + ext);
-  }
+  },
 });
 
 router.post(
@@ -36,10 +32,7 @@ router.post(
   checkAuth,
   multer({ storage: storage }).single("image"),
   (req, res) => {
-    console.log(req.body);
-    console.log("tuk");
     const url = req.protocol + "://" + req.get("host");
-    console.log("tuk3");
 
     const flower = new Flower({
       name: req.body.name,
@@ -49,9 +42,8 @@ router.post(
       weight: req.body.weight,
       blockPrice: +req.body.blockPrice,
       imagePath: url + "/images/" + req.file.filename,
-      additionalInformation: req.body.additionalInformation
+      additionalInformation: req.body.additionalInformation,
     });
-    console.log(flower);
 
     let lot = new Lot({
       seller: req.userData.userId,
@@ -61,40 +53,40 @@ router.post(
         registered: true,
         scheduledState: false,
         active: false,
-        sold: false
+        sold: false,
       },
-      containers: +req.body.containers
+      containers: +req.body.containers,
     });
 
     flower
       .save()
-      .then(createFlower => {
+      .then((createFlower) => {
         lot.flowerId = createFlower._id;
         lot
           .save()
           .then(() => {
             Lot.findById(createFlower._id)
               .populate("flowerId")
-              .then(product => {
+              .then((product) => {
                 res.status(201).json({
                   message: "Flower added successfully",
                   flower: {
                     ...product,
-                    id: createFlower._id
-                  }
+                    id: createFlower._id,
+                  },
                 });
               });
           })
-          .catch(err => {
+          .catch((err) => {
             console.log(err);
             res.status(500).json({
-              message: "Sending a flower failed!"
+              message: "Sending a flower failed!",
             });
           });
       })
       .catch(() => {
         res.status(500).json({
-          message: "Creating a flower failed!"
+          message: "Creating a flower failed!",
         });
       });
   }
@@ -105,7 +97,7 @@ router.get("/", checkAuth, (req, res) => {
   const currentPage = +req.query.page;
   const selected = +req.query.selected;
   let seller = {
-    seller: req.userData.userId
+    seller: req.userData.userId,
   };
   if (selected == 1) {
     seller = {}; // If radio button option is "All" products
@@ -128,54 +120,53 @@ router.get("/", checkAuth, (req, res) => {
     .equals(false)
     .where("status.active")
     .equals(false)
-    .countDocuments(function(err, count) {
+    .countDocuments(function (err, count) {
       productQuery
         .populate("flowerId")
-        .then(flowers => {
+        .then((flowers) => {
           res.status(200).json({
             message: "Products fetch successfully",
             products: flowers,
-            maxProducts: count
+            maxProducts: count,
           });
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
           res.status(404).json({
-            message: "Fetching the flowers failed!"
+            message: "Fetching the flowers failed!",
           });
         });
     });
 });
 
 router.delete("/:id", checkAuth, (req, res) => {
-  console.log(req.params.id, req.userData.userId);
   Lot.deleteOne({
     flowerId: req.params.id,
-    seller: req.userData.userId
-  }).then(relult => {
-      if (relult.n > 0) {
-        res.status(200).json({
-          message: "Delition successful!"
-        });
-      } else {
-        res.status(401).json({
-          message: "Not authorized!"
-        });
-      }
-    });
+    seller: req.userData.userId,
+  }).then((relult) => {
+    if (relult.n > 0) {
+      res.status(200).json({
+        message: "Delition successful!",
+      });
+    } else {
+      res.status(401).json({
+        message: "Not authorized!",
+      });
+    }
   });
+});
 
 router.get("/:id", (req, res) => {
   Lot.findOne({ flowerId: req.params.id })
     .populate("flowerId")
-    .then(product => {
+    .then((product) => {
       if (product) {
         res.status(200).json({
-          product: product
+          product: product,
         });
       } else {
         res.status(404).json({
-          message: "Flower doesn't exist"
+          message: "Flower doesn't exist",
         });
       }
     });
@@ -192,14 +183,13 @@ router.put(
       imagePath = url + "/images/" + req.file.filename;
     }
     Lot.findOneAndUpdate(
-      { 
+      {
         _id: req.params.id,
-        seller: req.userData.userId
+        seller: req.userData.userId,
       },
       { containers: +req.body.containers, auctionName: req.body.auctionName }
     )
-      .then(result => {
-        console.log(result);
+      .then((result) => {
         const product = new Flower({
           _id: result.flowerId,
           name: req.body.name,
@@ -209,20 +199,17 @@ router.put(
           weight: +req.body.weight,
           blockPrice: +req.body.blockPrice,
           imagePath: imagePath,
-          additionalInformation: req.body.additionalInformation
+          additionalInformation: req.body.additionalInformation,
         });
-        Flower.updateOne({ _id: result.flowerId }, product).then(
-          () => {
-              res.status(200).json({
-                message: "Update successful!"
-              });
-          }
-        );
+        Flower.updateOne({ _id: result.flowerId }, product).then(() => {
+          res.status(200).json({
+            message: "Update successful!",
+          });
+        });
       })
-      .catch(function(err) {
-        console.log(err);
+      .catch(function (err) {
         res.status(500).json({
-          message: "Updating a flower failed!"
+          message: "Updating a flower failed!",
         });
       });
   }

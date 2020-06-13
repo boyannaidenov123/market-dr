@@ -25,13 +25,11 @@ export class AdminComponent implements OnInit {
     const hour = this.startTime.replace(":", " ").split(" ")[0];
     const minute = this.startTime.replace(":", " ").split(" ")[1];
     const date = new Date(this.startDate.setHours(hour, minute, 0, 0));
-    console.log(date);
     const time: Time = {
       date: date,
       auction: this.auction
     };
     this.adminService.changeStartTimeAuctions(time).subscribe(res => {
-      console.log(res);
       this.snackBar.open(`Change starting time for ${this.auction}!`, "Close", { duration: 3000 });
     });
   }

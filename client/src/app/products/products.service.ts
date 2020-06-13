@@ -5,9 +5,8 @@ import { Subject } from "rxjs";
 import { map } from "rxjs/operators";
 import { MatSnackBar } from "@angular/material/snack-bar";
 
-
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class ProductsService {
   private products: Product[] = [];
@@ -49,7 +48,7 @@ export class ProductsService {
         "http://localhost:9000/flowers/newFlower",
         product
       )
-      .subscribe(response => {
+      .subscribe((response) => {
         this.snackBar.open(response.message, "Close", { duration: 3000 });
         this.getProducts(5, 1);
       });
@@ -68,12 +67,11 @@ export class ProductsService {
         "http://localhost:9000/flowers/" + queryParams
       )
       .pipe(
-        map(productData => {
+        map((productData) => {
           return {
-            products: productData.products.map(product => {
+            products: productData.products.map((product) => {
               let additionalInformation = "";
-              console.log(product)
-              if (product.flowerId.additionalInformation != 'null') {
+              if (product.flowerId.additionalInformation != "null") {
                 additionalInformation = product.flowerId.additionalInformation;
               }
               return {
@@ -88,19 +86,19 @@ export class ProductsService {
                 blockPrice: product.flowerId.blockPrice,
                 auctionName: product.auctionName,
                 imagePath: product.flowerId.imagePath,
-                additionalInformation: additionalInformation
+                additionalInformation: additionalInformation,
               };
             }),
-            maxProducts: productData.maxProducts
+            maxProducts: productData.maxProducts,
           };
         })
       )
 
-      .subscribe(transformedProducts => {
+      .subscribe((transformedProducts) => {
         this.products = transformedProducts.products;
         this.productsUpdated.next({
           products: [...this.products],
-          productCount: transformedProducts.maxProducts
+          productCount: transformedProducts.maxProducts,
         });
       });
   }
@@ -145,13 +143,13 @@ export class ProductsService {
         blockPrice: blockPrice,
         auctionName: auctionName,
         imagePath: image,
-        additionalInformation: additionalInformation
+        additionalInformation: additionalInformation,
       };
     }
     console.log(product);
     this.http
-      .put<{ message: string}>(`http://localhost:9000/flowers/${id}`, product)
-      .subscribe(response => {
+      .put<{ message: string }>(`http://localhost:9000/flowers/${id}`, product)
+      .subscribe((response) => {
         this.snackBar.open(response.message, "Close", { duration: 3000 });
         this.getProducts(5, 1);
       });
@@ -164,20 +162,20 @@ export class ProductsService {
     this.http
       .get<{ product: Product }>(`http://localhost:9000/flowers/${editId}`)
 
-      .subscribe(result => {
+      .subscribe((result) => {
         this.editProduct.next({
-          product: result.product
+          product: result.product,
         });
       });
   }
 
   deleteProduct(deleteId: string) {
-    this.http.delete<{ message: string }>(
-      `http://localhost:9000/flowers/${deleteId}`
-    ).subscribe(response=>{
-      this.snackBar.open(response.message, "Close", { duration: 3000 });
-      this.getProducts(5, 1);
-    })
+    this.http
+      .delete<{ message: string }>(`http://localhost:9000/flowers/${deleteId}`)
+      .subscribe((response) => {
+        this.snackBar.open(response.message, "Close", { duration: 3000 });
+        this.getProducts(5, 1);
+      });
   }
   getEditProductListener() {
     return this.editProduct.asObservable();
